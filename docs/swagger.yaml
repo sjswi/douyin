@@ -1,0 +1,25 @@
+basePath: /douyin
+host: 127.0.0.1
+info:
+  contact:
+    email: support@swagger.io
+    name: 余晓兵
+    url: http://www.swagger.io/support
+  description: 青训营抖音大项目
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: douyin
+  version: "1.0"
+paths:
+  /douyin/favorite/list:
+    get:
+      responses:
+        "0":
+          description: ""
+          schema:
+            type: string
+      tags:
+      - 点赞列表
+swagger: "2.0"

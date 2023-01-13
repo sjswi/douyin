@@ -1,0 +1,37 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "青训营抖音大项目",
+        "title": "douyin",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "余晓兵",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "127.0.0.1",
+    "basePath": "/douyin",
+    "paths": {
+        "/douyin/favorite/list": {
+            "get": {
+                "tags": [
+                    "点赞列表"
+                ],
+                "responses": {
+                    "0": {
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
