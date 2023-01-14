@@ -24,23 +24,23 @@ func Home(r *gin.Engine) {
 			user.POST("/login", controllers.UserLogin)
 		}
 
-		publish := home.Group("/publish", middleware.Authorization)
+		publish := home.Group("/publish")
 		{
-			publish.POST("/action", controllers.PublishAction)
-			publish.GET("/list", controllers.PublishList)
+			publish.POST("/action", controllers.PublishAction).Use(middleware.PostAuthorization)
+			publish.GET("/list", controllers.PublishList).Use(middleware.GetAuthorization)
 		}
-		favorite := home.Group("/favorite", middleware.Authorization)
+		favorite := home.Group("/favorite", middleware.GetAuthorization)
 		{
 			favorite.POST("/action", controllers.FavoriteAction)
 			favorite.GET("/list", controllers.FavoriteList)
 
 		}
-		comment := home.Group("/comment", middleware.Authorization)
+		comment := home.Group("/comment", middleware.GetAuthorization)
 		{
 			comment.POST("/action", controllers.CommentAction)
 			comment.GET("/list", controllers.CommentList)
 		}
-		relation := home.Group("/relation", middleware.Authorization)
+		relation := home.Group("/relation", middleware.GetAuthorization)
 		{
 			relation.POST("/action", controllers.RelationAction)
 			//relation.GET("/list", controllers.RelationList)
@@ -48,7 +48,7 @@ func Home(r *gin.Engine) {
 			relation.GET("/follower/list", controllers.RelationFollowerList)
 			relation.GET("/friend/list", controllers.RelationFriendList)
 		}
-		message := home.Group("/message", middleware.Authorization)
+		message := home.Group("/message", middleware.GetAuthorization)
 		{
 			message.GET("/chat", controllers.MessageChat)
 			message.POST("/action", controllers.MessageAction)

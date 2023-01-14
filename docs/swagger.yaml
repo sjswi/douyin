@@ -85,6 +85,17 @@ definitions:
       token:
         type: string
     type: object
+  controllers.RelationList:
+    properties:
+      status_code:
+        type: integer
+      status_msg:
+        type: string
+      user_list:
+        items:
+          $ref: '#/definitions/controllers.User'
+        type: array
+    type: object
   controllers.User:
     properties:
       follow_count:
@@ -410,7 +421,7 @@ paths:
       parameters:
       - description: 用户id
         in: query
-        name: to_user_id
+        name: user_id
         required: true
         type: integer
       - description: token
@@ -422,11 +433,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/utils.Response'
+            $ref: '#/definitions/controllers.RelationList'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/utils.Response'
+            $ref: '#/definitions/controllers.RelationList'
       summary: 获取关注列表
       tags:
       - 关系
@@ -437,7 +448,7 @@ paths:
       parameters:
       - description: 用户id
         in: query
-        name: to_user_id
+        name: user_id
         required: true
         type: integer
       - description: token
@@ -449,11 +460,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/utils.Response'
+            $ref: '#/definitions/controllers.RelationList'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/utils.Response'
+            $ref: '#/definitions/controllers.RelationList'
       summary: 获取关注者列表
       tags:
       - 关系
@@ -464,7 +475,7 @@ paths:
       parameters:
       - description: 用户id
         in: query
-        name: to_user_id
+        name: user_id
         required: true
         type: integer
       - description: token
@@ -472,20 +483,15 @@ paths:
         name: token
         required: true
         type: string
-      - description: 操作类型
-        in: query
-        name: action_type
-        required: true
-        type: string
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/utils.Response'
+            $ref: '#/definitions/controllers.RelationList'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/utils.Response'
+            $ref: '#/definitions/controllers.RelationList'
       summary: 获取聊天记录
       tags:
       - 关系

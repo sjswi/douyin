@@ -431,7 +431,7 @@ const docTemplate = `{
                     {
                         "type": "integer",
                         "description": "用户id",
-                        "name": "to_user_id",
+                        "name": "user_id",
                         "in": "query",
                         "required": true
                     },
@@ -447,13 +447,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/utils.Response"
+                            "$ref": "#/definitions/controllers.RelationList"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/utils.Response"
+                            "$ref": "#/definitions/controllers.RelationList"
                         }
                     }
                 }
@@ -472,7 +472,7 @@ const docTemplate = `{
                     {
                         "type": "integer",
                         "description": "用户id",
-                        "name": "to_user_id",
+                        "name": "user_id",
                         "in": "query",
                         "required": true
                     },
@@ -488,13 +488,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/utils.Response"
+                            "$ref": "#/definitions/controllers.RelationList"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/utils.Response"
+                            "$ref": "#/definitions/controllers.RelationList"
                         }
                     }
                 }
@@ -513,7 +513,7 @@ const docTemplate = `{
                     {
                         "type": "integer",
                         "description": "用户id",
-                        "name": "to_user_id",
+                        "name": "user_id",
                         "in": "query",
                         "required": true
                     },
@@ -523,26 +523,19 @@ const docTemplate = `{
                         "name": "token",
                         "in": "query",
                         "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "操作类型",
-                        "name": "action_type",
-                        "in": "query",
-                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/utils.Response"
+                            "$ref": "#/definitions/controllers.RelationList"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/utils.Response"
+                            "$ref": "#/definitions/controllers.RelationList"
                         }
                     }
                 }
@@ -801,6 +794,23 @@ const docTemplate = `{
                 },
                 "token": {
                     "type": "string"
+                }
+            }
+        },
+        "controllers.RelationList": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "type": "string"
+                },
+                "user_list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/controllers.User"
+                    }
                 }
             }
         },

@@ -15,6 +15,6 @@ func TestGorm(t *testing.T) {
 	}
 
 	// 迁移 schema
-	db.AutoMigrate(&Video{})
+	db.AutoMigrate(&Relation{})
 
 }

@@ -39,7 +39,7 @@ func InitRedis() {
 		DB:         db,
 		MaxConnAge: 30 * time.Second,
 	})
-	//cache.CacheDb = cache.NewCacheDb(Redis)
+
 }
 
 // mysql connect
@@ -54,8 +54,6 @@ func mySql() *gorm.DB {
 	dbName := config.Config.GetString("douyin.mysql.dbName")
 
 	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local", user, password, host, dbName)
-	//dsn := "root:YYL521wxl@@tcp(47.105.50.53:3306)/go_blog?charset=utf8&parseTime=True&loc=Local"
-	//db, err := gorm.Open("mysql", "root:YYL521wxl@@tcp(47.105.50.53:3306)/go_blog?charset=utf8&parseTime=True&loc=Local")
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
