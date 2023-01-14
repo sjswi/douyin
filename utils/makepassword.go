@@ -46,11 +46,22 @@ func Salt() string {
 
 // VerifyUserPassword
 // 验证用户的密码是否正确
-func VerifyUserPassword(salt string, oldPsd string, oldPassword string) bool {
+func VerifyUserPassword(salt string, oldPsd string, cryptoPassword string) bool {
 	password := CryptUserPassword(oldPsd, salt)
-	if password == oldPassword {
+	if password == cryptoPassword {
 		return true
 	}
 
 	return false
+}
+
+// VerifyParam
+// TODO
+// 之后应该需要其他验证参数的地方，以后可以都写在这
+func VerifyParam(username, password string) bool {
+	if len(username) > 32 || len(password) > 32 {
+
+		return false
+	}
+	return true
 }

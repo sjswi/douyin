@@ -16,15 +16,14 @@ func Home(r *gin.Engine) {
 	{
 		// 首页
 		home.GET("/feed", controllers.Feed)
+		home.GET("/user", controllers.UserInfo)
 
-		// 个人中心
-		user := home.Group("/user", middleware.Authorization)
+		user := home.Group("/user")
 		{
-			user.GET("/", controllers.UserInfo)
 			user.POST("/register", controllers.UserRegister)
 			user.POST("/login", controllers.UserLogin)
-
 		}
+
 		publish := home.Group("/publish", middleware.Authorization)
 		{
 			publish.POST("/action", controllers.PublishAction)

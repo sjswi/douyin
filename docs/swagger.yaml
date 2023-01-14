@@ -98,6 +98,15 @@ definitions:
       user_name:
         type: string
     type: object
+  controllers.UserInfoResponse:
+    properties:
+      status_code:
+        type: integer
+      status_msg:
+        type: string
+      user:
+        $ref: '#/definitions/controllers.User'
+    type: object
   controllers.Video:
     properties:
       comment_count:
@@ -124,7 +133,7 @@ definitions:
       status_msg:
         type: string
     type: object
-host: 127.0.0.1
+host: 127.0.0.1:8080
 info:
   contact:
     email: support@swagger.io
@@ -480,26 +489,30 @@ paths:
       summary: 获取聊天记录
       tags:
       - 关系
-  /douyin/user/info:
+  /douyin/user:
     get:
       consumes:
       - application/x-json-stream
       parameters:
-      - description: 视频信息
-        in: body
-        name: publishAction
+      - description: 用户id
+        in: query
+        name: user_id
         required: true
-        schema:
-          $ref: '#/definitions/controllers.PostPublishActionForm'
+        type: integer
+      - description: token
+        in: query
+        name: token
+        required: true
+        type: string
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/utils.Response'
+            $ref: '#/definitions/controllers.UserInfoResponse'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/utils.Response'
+            $ref: '#/definitions/controllers.UserInfoResponse'
       summary: 用户信息
       tags:
       - 用户
@@ -535,12 +548,16 @@ paths:
       consumes:
       - application/x-json-stream
       parameters:
-      - description: 视频信息
-        in: body
-        name: publishAction
+      - description: 用户名
+        in: query
+        name: username
         required: true
-        schema:
-          $ref: '#/definitions/controllers.PostPublishActionForm'
+        type: string
+      - description: 密码
+        in: query
+        name: password
+        required: true
+        type: string
       responses:
         "200":
           description: OK

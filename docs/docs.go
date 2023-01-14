@@ -548,7 +548,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/douyin/user/info": {
+        "/douyin/user": {
             "get": {
                 "consumes": [
                     "application/x-json-stream"
@@ -559,26 +559,31 @@ const docTemplate = `{
                 "summary": "用户信息",
                 "parameters": [
                     {
-                        "description": "视频信息",
-                        "name": "publishAction",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/controllers.PostPublishActionForm"
-                        }
+                        "type": "integer",
+                        "description": "用户id",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/utils.Response"
+                            "$ref": "#/definitions/controllers.UserInfoResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/utils.Response"
+                            "$ref": "#/definitions/controllers.UserInfoResponse"
                         }
                     }
                 }
@@ -636,13 +641,18 @@ const docTemplate = `{
                 "summary": "用户注册",
                 "parameters": [
                     {
-                        "description": "视频信息",
-                        "name": "publishAction",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/controllers.PostPublishActionForm"
-                        }
+                        "type": "string",
+                        "description": "用户名",
+                        "name": "username",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "密码",
+                        "name": "password",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -814,6 +824,20 @@ const docTemplate = `{
                 }
             }
         },
+        "controllers.UserInfoResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/controllers.User"
+                }
+            }
+        },
         "controllers.Video": {
             "type": "object",
             "properties": {
@@ -860,7 +884,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "127.0.0.1",
+	Host:             "127.0.0.1:8080",
 	BasePath:         "/douyin",
 	Schemes:          []string{},
 	Title:            "douyin",
