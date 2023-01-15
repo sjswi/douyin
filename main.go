@@ -34,5 +34,5 @@ func main() {
 	//App.NoRoute(func(c *gin.Context) {
 	//	c.HTML(http.StatusOK, "404", nil)
 	//})
-	App.Run() // 监听并在 0.0.0.0:8080 上启动服务
+	App.Run(":" + config.Config.GetString("douyin.port")) // 监听并在 0.0.0.0:8080 上启动服务
 }
