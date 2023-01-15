@@ -72,13 +72,13 @@ func mySql() *gorm.DB {
 // InitOSS 初始化阿里云oss
 func InitOSS() {
 
-	Endpoint := config.Config.GetString("Endpoint")
+	Endpoint := config.Config.GetString("douyin.oss.endpoint")
 
-	AccessKeyId := config.Config.GetString("AccessKeyId")
+	AccessKeyId := config.Config.GetString("douyin.oss.accessKeyId")
 
-	AccessKeySecret := config.Config.GetString("AccessKeySecret")
+	AccessKeySecret := config.Config.GetString("douyin.oss.accessKeySecret")
 
-	Bucket := config.Config.GetString("Bucket")
+	Bucket := config.Config.GetString("douyin.oss.bucket")
 
 	client, err := oss.New(Endpoint, AccessKeyId, AccessKeySecret)
 	if err != nil {

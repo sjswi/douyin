@@ -42,49 +42,6 @@ definitions:
           $ref: '#/definitions/controllers.Video'
         type: array
     type: object
-  controllers.PostCommentActionForm:
-    properties:
-      action_type:
-        type: integer
-      comment_id:
-        type: string
-      comment_text:
-        type: string
-      token:
-        type: string
-      video_id:
-        type: integer
-    type: object
-  controllers.PostFavoriteActionForm:
-    properties:
-      action_type:
-        description: '1: 点赞，2:取消点赞'
-        type: integer
-      token:
-        type: string
-      video_id:
-        type: integer
-    type: object
-  controllers.PostMessageActionForm:
-    properties:
-      action_type:
-        type: integer
-      content:
-        type: string
-      to_user_id:
-        type: integer
-      token:
-        type: string
-    type: object
-  controllers.PostPublishActionForm:
-    properties:
-      content:
-        type: string
-      data:
-        type: integer
-      token:
-        type: string
-    type: object
   controllers.RelationList:
     properties:
       status_code:
@@ -120,6 +77,8 @@ definitions:
     type: object
   controllers.Video:
     properties:
+      author:
+        $ref: '#/definitions/controllers.User'
       comment_count:
         type: integer
       cover_url:
@@ -134,8 +93,6 @@ definitions:
         type: string
       title:
         type: string
-      user:
-        $ref: '#/definitions/controllers.User'
     type: object
   utils.Response:
     properties:
@@ -147,7 +104,7 @@ definitions:
 host: 127.0.0.1:8080
 info:
   contact:
-    email: support@swagger.io
+    email: 1903317091@qq.com
     name: 余晓兵
     url: http://www.swagger.io/support
   description: 青训营抖音大项目
@@ -163,12 +120,29 @@ paths:
       consumes:
       - application/x-json-stream
       parameters:
-      - description: 文章
-        in: body
-        name: commentAction
+      - description: 视频id
+        in: query
+        name: video_id
         required: true
-        schema:
-          $ref: '#/definitions/controllers.PostCommentActionForm'
+        type: integer
+      - description: token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: 操作类型
+        in: query
+        name: action_type
+        required: true
+        type: integer
+      - description: 评论内容
+        in: query
+        name: comment_text
+        type: string
+      - description: 评论id
+        in: query
+        name: comment_id
+        type: integer
       responses:
         "200":
           description: OK
@@ -211,12 +185,21 @@ paths:
       consumes:
       - application/x-json-stream
       parameters:
-      - description: 文章
-        in: body
-        name: favoriteAction
+      - description: token
+        in: query
+        name: token
         required: true
-        schema:
-          $ref: '#/definitions/controllers.PostFavoriteActionForm'
+        type: string
+      - description: 视频id
+        in: query
+        name: video_id
+        required: true
+        type: integer
+      - description: 事件类型，1点赞，2取消点赞
+        in: query
+        name: action_type
+        required: true
+        type: integer
       responses:
         "200":
           description: OK
@@ -264,7 +247,6 @@ paths:
       - description: 用户id
         in: query
         name: latest_time
-        required: true
         type: integer
       - description: token
         in: query
@@ -279,7 +261,7 @@ paths:
           description: Conflict
           schema:
             $ref: '#/definitions/controllers.FavoriteListResponse'
-      summary: 获取所有点赞过的视频
+      summary: 视频推流
       tags:
       - feed
   /douyin/message/action:
@@ -287,12 +269,26 @@ paths:
       consumes:
       - application/x-json-stream
       parameters:
-      - description: 消息
-        in: body
-        name: messageAction
+      - description: token
+        in: query
+        name: token
         required: true
-        schema:
-          $ref: '#/definitions/controllers.PostMessageActionForm'
+        type: string
+      - description: 对方用户id
+        in: query
+        name: to_user_id
+        required: true
+        type: integer
+      - description: 类型
+        in: query
+        name: action_type
+        required: true
+        type: integer
+      - description: 消息内容
+        in: query
+        name: content
+        required: true
+        type: string
       responses:
         "200":
           description: OK
@@ -337,12 +333,21 @@ paths:
       consumes:
       - application/x-json-stream
       parameters:
-      - description: 视频信息
-        in: body
-        name: publishAction
+      - description: token
+        in: formData
+        name: token
         required: true
-        schema:
-          $ref: '#/definitions/controllers.PostPublishActionForm'
+        type: string
+      - description: 视频
+        in: formData
+        name: data
+        required: true
+        type: file
+      - description: 标题
+        in: formData
+        name: title
+        required: true
+        type: string
       responses:
         "200":
           description: OK
@@ -352,7 +357,7 @@ paths:
           description: Conflict
           schema:
             $ref: '#/definitions/utils.Response'
-      summary: 获取聊天记录
+      summary: 发布视频
       tags:
       - 发布
   /douyin/publish/list:
@@ -379,7 +384,7 @@ paths:
           description: Conflict
           schema:
             $ref: '#/definitions/controllers.FavoriteListResponse'
-      summary: 获取聊天记录
+      summary: 获取发布视频列表
       tags:
       - 发布
   /douyin/relation/action:
@@ -492,7 +497,7 @@ paths:
           description: Conflict
           schema:
             $ref: '#/definitions/controllers.RelationList'
-      summary: 获取聊天记录
+      summary: 获取好友列表
       tags:
       - 关系
   /douyin/user:

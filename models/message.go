@@ -9,6 +9,6 @@ type Message struct {
 	gorm.Model
 	Content    string
 	UserID     uint
-	TargetId   uint
+	TargetID   uint
 	CreateTime time.Time
 }

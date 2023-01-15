@@ -14,7 +14,7 @@ const docTemplate = `{
         "contact": {
             "name": "余晓兵",
             "url": "http://www.swagger.io/support",
-            "email": "support@swagger.io"
+            "email": "1903317091@qq.com"
         },
         "license": {
             "name": "Apache 2.0",
@@ -36,13 +36,37 @@ const docTemplate = `{
                 "summary": "评论操作，删除或增加",
                 "parameters": [
                     {
-                        "description": "文章",
-                        "name": "commentAction",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/controllers.PostCommentActionForm"
-                        }
+                        "type": "integer",
+                        "description": "视频id",
+                        "name": "video_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "操作类型",
+                        "name": "action_type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "评论内容",
+                        "name": "comment_text",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "评论id",
+                        "name": "comment_id",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -110,13 +134,25 @@ const docTemplate = `{
                 "summary": "点赞操作，点赞或取消点赞",
                 "parameters": [
                     {
-                        "description": "文章",
-                        "name": "favoriteAction",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/controllers.PostFavoriteActionForm"
-                        }
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "视频id",
+                        "name": "video_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "事件类型，1点赞，2取消点赞",
+                        "name": "action_type",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -184,14 +220,13 @@ const docTemplate = `{
                 "tags": [
                     "feed"
                 ],
-                "summary": "获取所有点赞过的视频",
+                "summary": "视频推流",
                 "parameters": [
                     {
                         "type": "integer",
                         "description": "用户id",
                         "name": "latest_time",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     },
                     {
                         "type": "string",
@@ -227,13 +262,32 @@ const docTemplate = `{
                 "summary": "发送消息",
                 "parameters": [
                     {
-                        "description": "消息",
-                        "name": "messageAction",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/controllers.PostMessageActionForm"
-                        }
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "对方用户id",
+                        "name": "to_user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "类型",
+                        "name": "action_type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "消息内容",
+                        "name": "content",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -301,16 +355,28 @@ const docTemplate = `{
                 "tags": [
                     "发布"
                 ],
-                "summary": "获取聊天记录",
+                "summary": "发布视频",
                 "parameters": [
                     {
-                        "description": "视频信息",
-                        "name": "publishAction",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/controllers.PostPublishActionForm"
-                        }
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "视频",
+                        "name": "data",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "标题",
+                        "name": "title",
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -337,7 +403,7 @@ const docTemplate = `{
                 "tags": [
                     "发布"
                 ],
-                "summary": "获取聊天记录",
+                "summary": "获取发布视频列表",
                 "parameters": [
                     {
                         "type": "integer",
@@ -508,7 +574,7 @@ const docTemplate = `{
                 "tags": [
                     "关系"
                 ],
-                "summary": "获取聊天记录",
+                "summary": "获取好友列表",
                 "parameters": [
                     {
                         "type": "integer",
@@ -731,72 +797,6 @@ const docTemplate = `{
                 }
             }
         },
-        "controllers.PostCommentActionForm": {
-            "type": "object",
-            "properties": {
-                "action_type": {
-                    "type": "integer"
-                },
-                "comment_id": {
-                    "type": "string"
-                },
-                "comment_text": {
-                    "type": "string"
-                },
-                "token": {
-                    "type": "string"
-                },
-                "video_id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "controllers.PostFavoriteActionForm": {
-            "type": "object",
-            "properties": {
-                "action_type": {
-                    "description": "1: 点赞，2:取消点赞",
-                    "type": "integer"
-                },
-                "token": {
-                    "type": "string"
-                },
-                "video_id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "controllers.PostMessageActionForm": {
-            "type": "object",
-            "properties": {
-                "action_type": {
-                    "type": "integer"
-                },
-                "content": {
-                    "type": "string"
-                },
-                "to_user_id": {
-                    "type": "integer"
-                },
-                "token": {
-                    "type": "string"
-                }
-            }
-        },
-        "controllers.PostPublishActionForm": {
-            "type": "object",
-            "properties": {
-                "content": {
-                    "type": "string"
-                },
-                "data": {
-                    "type": "integer"
-                },
-                "token": {
-                    "type": "string"
-                }
-            }
-        },
         "controllers.RelationList": {
             "type": "object",
             "properties": {
@@ -851,6 +851,9 @@ const docTemplate = `{
         "controllers.Video": {
             "type": "object",
             "properties": {
+                "author": {
+                    "$ref": "#/definitions/controllers.User"
+                },
                 "comment_count": {
                     "type": "integer"
                 },
@@ -871,9 +874,6 @@ const docTemplate = `{
                 },
                 "title": {
                     "type": "string"
-                },
-                "user": {
-                    "$ref": "#/definitions/controllers.User"
                 }
             }
         },

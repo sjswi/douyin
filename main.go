@@ -14,7 +14,7 @@ import (
 
 // @contact.name 余晓兵
 // @contact.url http://www.swagger.io/support
-// @contact.email support@swagger.io
+// @contact.email 1903317091@qq.com
 
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
@@ -24,6 +24,7 @@ import (
 func main() {
 
 	App := gin.Default()
+	//App.MaxMultipartMemory =
 	config.InitConfig()
 	driver.InitConn("mysql")
 	driver.InitOSS()

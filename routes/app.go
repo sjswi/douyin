@@ -11,12 +11,13 @@ import (
 
 func Home(r *gin.Engine) {
 	docs.SwaggerInfo.BasePath = ""
+
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	home := r.Group("/douyin")
 	{
 		// 首页
 		home.GET("/feed", controllers.Feed)
-		home.GET("/user", controllers.UserInfo)
+		home.GET("/user", middleware.GetAuthorization, controllers.UserInfo)
 
 		user := home.Group("/user")
 		{
@@ -26,8 +27,8 @@ func Home(r *gin.Engine) {
 
 		publish := home.Group("/publish")
 		{
-			publish.POST("/action", controllers.PublishAction).Use(middleware.PostAuthorization)
-			publish.GET("/list", controllers.PublishList).Use(middleware.GetAuthorization)
+			publish.POST("/action", middleware.PostAuthorization, controllers.PublishAction)
+			publish.GET("/list", middleware.GetAuthorization, controllers.PublishList)
 		}
 		favorite := home.Group("/favorite", middleware.GetAuthorization)
 		{

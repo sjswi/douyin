@@ -6,6 +6,8 @@ import (
 
 var Config *viper.Viper
 
+var Number int
+
 func InitConfig() {
 	configPATH := "./douyin.yaml"
 	viper.SetConfigFile(configPATH)
@@ -20,5 +22,7 @@ func InitConfig() {
 		}
 		panic(err)
 	}
+	//TempPath = viper.GetString("douyin.video.tempPath")
+	Number = viper.GetInt("douyin.feed.number")
 	Config = viper.GetViper()
 }
