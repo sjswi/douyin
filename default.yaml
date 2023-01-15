@@ -1,0 +1,24 @@
+douyin:
+  mysql:
+    host: ip
+    port: port
+    password: 123456
+    dbName: douyin
+    user: root
+  redis:
+    host: ip
+    port: port
+    password: ''
+    db: 1
+  port: 8080
+  log:
+    mode: DEBUG
+  oss:
+    endPoint: dsfsdfs
+    accessKeyId: dsfsdfs
+    accessKeySecret: dsfsdfs
+    bucket: dsfsdfs
+  video:
+    tempPath: ./temp/
+  feed:
+    number: 30
