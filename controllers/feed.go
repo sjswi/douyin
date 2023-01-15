@@ -5,6 +5,7 @@ import (
 	"douyin/config"
 	"douyin/models"
 	"douyin/utils"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -14,7 +15,7 @@ import (
 type FeedResponse struct {
 	utils.Response
 	VideoList []Video `json:"video_list"`
-	NextTime  string  `json:"next_time"`
+	NextTime  int64   `json:"next_time"`
 }
 
 // Feed
@@ -35,7 +36,7 @@ func Feed(c *gin.Context) {
 			StatusMsg:  "",
 		},
 		VideoList: nil,
-		NextTime:  "",
+		NextTime:  0,
 	}
 	failureResponse := FeedResponse{
 		Response: utils.Response{
@@ -43,23 +44,26 @@ func Feed(c *gin.Context) {
 			StatusMsg:  "",
 		},
 		VideoList: nil,
-		NextTime:  "",
+		NextTime:  0,
 	}
 	// 1、解析参数
 	token := c.Query("token")
 	latestTime := c.Query("latest_time")
 	// 验证参数
 	var latest time.Time
-	if latestTime == "" {
+	if latestTime == "" || latestTime == "0" {
 		latest = time.Now()
 	} else {
+		//if len(latestTime) > 10 {
+		//	latestTime = latestTime[:10]
+		//}
 		lateUnix, err := strconv.Atoi(latestTime)
 		if err != nil {
 			failureResponse.StatusMsg = "时间戳必须为int，解析失败"
 			c.JSON(409, failureResponse)
 			return
 		}
-		latest = time.Unix(int64(lateUnix), 0)
+		latest = time.UnixMilli(int64(lateUnix))
 		if err != nil {
 			failureResponse.StatusMsg = "解析时间错误错误"
 			c.JSON(409, failureResponse)
@@ -113,8 +117,8 @@ func Feed(c *gin.Context) {
 			}
 			returnVideo[i] = Video{
 				Author: &User{
-					UserID:        author.ID,
-					UserName:      author.Name,
+					ID:            author.ID,
+					Name:          author.Name,
 					FollowCount:   author.FollowCount,
 					FollowerCount: author.FollowerCount,
 					IsFollow:      false,
@@ -134,7 +138,10 @@ func Feed(c *gin.Context) {
 				returnVideo[i].IsFavorite = true
 			}
 		}
-		successResponse.NextTime = videoList[len(videoList)-1].CreatedAt.Format("2006-01-02 15:04:05")
+		if len(returnVideo) > 0 {
+			successResponse.NextTime = videoList[len(videoList)-1].CreatedAt.Unix()
+
+		}
 		successResponse.VideoList = returnVideo
 	} else {
 		var videoList []models.Video
@@ -154,8 +161,8 @@ func Feed(c *gin.Context) {
 			}
 			returnVideo[i] = Video{
 				Author: &User{
-					UserID:        author.ID,
-					UserName:      author.Name,
+					ID:            author.ID,
+					Name:          author.Name,
 					FollowCount:   author.FollowCount,
 					FollowerCount: author.FollowerCount,
 					IsFollow:      false,
@@ -170,7 +177,10 @@ func Feed(c *gin.Context) {
 			}
 
 		}
-		successResponse.NextTime = videoList[len(videoList)-1].CreatedAt.Format("2006-01-02 15:04:05")
+		if len(returnVideo) > 0 {
+			successResponse.NextTime = videoList[len(videoList)-1].CreatedAt.UnixMilli()
+			fmt.Println(successResponse.NextTime)
+		}
 		successResponse.VideoList = returnVideo
 	}
 	// 4、装配返回值

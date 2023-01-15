@@ -12,15 +12,15 @@ import (
 )
 
 type User struct {
-	UserID        uint   `json:"user_id"`
-	UserName      string `json:"user_name"`
+	ID            uint   `json:"id"`
+	Name          string `json:"name"`
 	FollowCount   int    `json:"follow_count"`
 	FollowerCount int    `json:"follower_count"`
 	IsFollow      bool   `json:"is_follow"`
 }
 type Comment struct {
-	ID         uint `json:"id"`
-	User       *User
+	ID         uint   `json:"id"`
+	User       *User  `json:"user"`
 	Content    string `json:"content"`
 	CreateDate string `json:"create_date"`
 }
@@ -137,8 +137,8 @@ func CommentAction(c *gin.Context) {
 		returnComment = Comment{
 			ID: comment.ID,
 			User: &User{
-				UserID:        auth.UserID,
-				UserName:      auth.UserName,
+				ID:            auth.UserID,
+				Name:          auth.UserName,
 				FollowCount:   auth.FollowCount,
 				FollowerCount: auth.FollowerCount,
 				IsFollow:      false,
@@ -159,8 +159,8 @@ func CommentAction(c *gin.Context) {
 		returnComment = Comment{
 			ID: uint(commentID),
 			User: &User{
-				UserID:        auth.UserID,
-				UserName:      auth.UserName,
+				ID:            auth.UserID,
+				Name:          auth.UserName,
 				FollowCount:   auth.FollowCount,
 				FollowerCount: auth.FollowerCount,
 				IsFollow:      false,
@@ -256,8 +256,8 @@ func CommentList(c *gin.Context) {
 			return
 		}
 		returnComment[i].User = &User{
-			UserID:        user.ID,
-			UserName:      user.Name,
+			ID:            user.ID,
+			Name:          user.Name,
 			FollowCount:   user.FollowCount,
 			FollowerCount: user.FollowerCount,
 			IsFollow:      false,

@@ -5,6 +5,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"testing"
+	"time"
 )
 
 func TestGorm(t *testing.T) {
@@ -17,4 +18,11 @@ func TestGorm(t *testing.T) {
 	// 迁移 schema
 	db.AutoMigrate(&Relation{})
 
+}
+
+func TestTimeUnix(t *testing.T) {
+	now := time.Now()
+	fmt.Println(now)
+	ti := now.Unix()
+	fmt.Println(time.Unix(ti, 0))
 }

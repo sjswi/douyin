@@ -17,7 +17,7 @@ func GetAuthorization(c *gin.Context) {
 	// 验证失败，返回登录页面登录
 	if err != nil {
 		utils.Redirect(c, "/douyin/user/login")
-
+		return
 	}
 	c.Set("auth", *auth)
 	c.Next()
@@ -35,7 +35,7 @@ func PostAuthorization(c *gin.Context) {
 	// 验证失败，返回登录页面登录
 	if err != nil {
 		utils.Redirect(c, "/douyin/user/login")
-
+		return
 	}
 	c.Set("auth", *auth)
 	c.Next()

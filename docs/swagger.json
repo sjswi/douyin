@@ -816,13 +816,13 @@
                 "follower_count": {
                     "type": "integer"
                 },
+                "id": {
+                    "type": "integer"
+                },
                 "is_follow": {
                     "type": "boolean"
                 },
-                "user_id": {
-                    "type": "integer"
-                },
-                "user_name": {
+                "name": {
                     "type": "string"
                 }
             }

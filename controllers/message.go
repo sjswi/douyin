@@ -57,6 +57,9 @@ func MessageChat(c *gin.Context) {
 		c.JSON(409, failureResponse)
 		return
 	}
+	if id == 0 {
+		id = int(auth.UserID)
+	}
 	// 3、获取消息
 	var messageList []models.Message
 	if err := driver.Db.Debug().Model(models.Message{}).Where("user_id=? and target_id=?", auth.UserID, id).Or("user_id=? and target_id=?", id, auth.UserID).Order("create_time DESC").Find(&messageList).Error; err != nil {

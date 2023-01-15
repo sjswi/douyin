@@ -142,10 +142,13 @@ func PublishList(c *gin.Context) {
 	// 2、验证参数
 	// user_id必须为正整数
 	userID, err := strconv.Atoi(userId)
-	if err != nil {
+	if err != nil || userID < 0 {
 		failureResponse.StatusMsg = "user_id必须为正整数"
 		c.JSON(409, failureResponse)
 		return
+	}
+	if userID == 0 {
+		userID = int(auth.UserID)
 	}
 	// 3、具体业务
 	// 3.1、查询用户的所有视频
@@ -173,8 +176,8 @@ func PublishList(c *gin.Context) {
 			return
 		}
 		returnVideoList[i].Author = &User{
-			UserID:        author.ID,
-			UserName:      author.Name,
+			ID:            author.ID,
+			Name:          author.Name,
 			FollowCount:   author.FollowCount,
 			FollowerCount: author.FollowerCount,
 			IsFollow:      false,

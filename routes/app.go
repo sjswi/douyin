@@ -17,42 +17,41 @@ func Home(r *gin.Engine) {
 	{
 		// 首页
 		home.GET("/feed", controllers.Feed)
-		home.GET("/user", middleware.GetAuthorization, controllers.UserInfo)
+		home.GET("/user/", controllers.UserInfo)
 
 		user := home.Group("/user")
 		{
-			user.POST("/register", controllers.UserRegister)
-			user.POST("/login", controllers.UserLogin)
+			user.POST("/register/", controllers.UserRegister)
+			user.POST("/login/", controllers.UserLogin)
 		}
 
 		publish := home.Group("/publish")
 		{
-			publish.POST("/action", middleware.PostAuthorization, controllers.PublishAction)
-			publish.GET("/list", middleware.GetAuthorization, controllers.PublishList)
+			publish.POST("/action/", middleware.PostAuthorization, controllers.PublishAction)
+			publish.GET("/list/", middleware.GetAuthorization, controllers.PublishList)
 		}
 		favorite := home.Group("/favorite", middleware.GetAuthorization)
 		{
-			favorite.POST("/action", controllers.FavoriteAction)
-			favorite.GET("/list", controllers.FavoriteList)
+			favorite.POST("/action/", controllers.FavoriteAction)
+			favorite.GET("/list/", controllers.FavoriteList)
 
 		}
 		comment := home.Group("/comment", middleware.GetAuthorization)
 		{
-			comment.POST("/action", controllers.CommentAction)
-			comment.GET("/list", controllers.CommentList)
+			comment.POST("/action/", controllers.CommentAction)
+			comment.GET("/list/", controllers.CommentList)
 		}
 		relation := home.Group("/relation", middleware.GetAuthorization)
 		{
-			relation.POST("/action", controllers.RelationAction)
-			//relation.GET("/list", controllers.RelationList)
-			relation.GET("/follow/list", controllers.RelationFollowList)
-			relation.GET("/follower/list", controllers.RelationFollowerList)
-			relation.GET("/friend/list", controllers.RelationFriendList)
+			relation.POST("/action/", controllers.RelationAction)
+			relation.GET("/follow/list/", controllers.RelationFollowList)
+			relation.GET("/follower/list/", controllers.RelationFollowerList)
+			relation.GET("/friend/list/", controllers.RelationFriendList)
 		}
 		message := home.Group("/message", middleware.GetAuthorization)
 		{
-			message.GET("/chat", controllers.MessageChat)
-			message.POST("/action", controllers.MessageAction)
+			message.GET("/chat/", controllers.MessageChat)
+			message.POST("/action/", controllers.MessageAction)
 		}
 	}
 }

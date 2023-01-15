@@ -52,12 +52,14 @@ func UserInfo(c *gin.Context) {
 		c.JSON(409, failureResponse)
 	}
 	id, err := strconv.Atoi(userID)
-	if err != nil {
+	if err != nil || id < 0 {
 		failureResponse.StatusMsg = "user_id 非数字"
 		c.JSON(409, failureResponse)
 		return
 	}
-
+	if id == 0 {
+		id = int(auth.UserID)
+	}
 	// 2、查询数据库获取用户信息
 	var user models.User
 	if err := driver.Db.Debug().Model(user).Where(" id = ?", uint(id)).Find(&user).Error; err != nil {
@@ -66,25 +68,21 @@ func UserInfo(c *gin.Context) {
 		return
 	}
 	// 2.1、查询关注表，查看登录用户是否关注了user_id对应的用户
-	isFollow := true
+	isFollow := false
 	var relation models.Relation
-	if err := driver.Db.Debug().Model(relation).Where(" user_id = ? ", auth.UserID).Where("target_id = ?", user.ID).Find(&relation).Error; err != nil {
-		if err != gorm.ErrRecordNotFound {
-			failureResponse.StatusMsg = "查询数据库失败" + err.Error()
-			c.JSON(409, failureResponse)
-			return
-		}
-		if relation.Type != 1 {
-			isFollow = false
-		}
+	if err := driver.Db.Debug().Model(relation).Where(" user_id = ? ", auth.UserID).Where("target_id = ?", user.ID).Where("exist=1").Where("type=1 or type=2").Find(&relation).Error; err != nil {
+		failureResponse.StatusMsg = "查询数据库失败" + err.Error()
+		c.JSON(409, failureResponse)
+		return
+
 	}
-	if relation.ID == 0 {
-		isFollow = false
+	if relation.ID != 0 {
+		isFollow = true
 	}
 	// 3、填充返回的用户信息
 	returnUser := User{
-		UserID:        user.ID,
-		UserName:      user.Name,
+		ID:            user.ID,
+		Name:          user.Name,
 		FollowCount:   user.FollowCount,
 		FollowerCount: user.FollowerCount,
 		IsFollow:      isFollow,

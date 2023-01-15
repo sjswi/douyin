@@ -280,10 +280,13 @@ func RelationFollowList(c *gin.Context) {
 	userID := c.Query("user_id")
 	// 2、验证参数（确保user_id为正整数）
 	id, err := strconv.Atoi(userID)
-	if err != nil || id <= 0 {
+	if err != nil || id < 0 {
 		failureResponse.StatusMsg = "user_id必须为正整数"
 		c.JSON(http.StatusOK, failureResponse)
 		return
+	}
+	if id == 0 {
+		id = int(auth.UserID)
 	}
 	// 3、查询数据库获取该用的所有关注
 	var relations []models.Relation
@@ -302,13 +305,13 @@ func RelationFollowList(c *gin.Context) {
 		var user models.User
 		var relation models.Relation
 		// 此处为TargetID
-		userList[i].UserID = relations[i].TargetID
-		if err := driver.Db.Debug().Model(user).Where("id = ?", userList[i].UserID).Find(&user).Error; err != nil {
+		userList[i].ID = relations[i].TargetID
+		if err := driver.Db.Debug().Model(user).Where("id = ?", userList[i].ID).Find(&user).Error; err != nil {
 			failureResponse.StatusMsg = "查询数据库失败" + err.Error()
 			c.JSON(http.StatusOK, failureResponse)
 			return
 		}
-		userList[i].UserName = user.Name
+		userList[i].Name = user.Name
 		userList[i].FollowerCount = user.FollowerCount
 		userList[i].FollowCount = user.FollowCount
 		userList[i].IsFollow = false
@@ -359,10 +362,13 @@ func RelationFollowerList(c *gin.Context) {
 	userID := c.Query("user_id")
 	// 2、验证参数（确保user_id为正整数）
 	id, err := strconv.Atoi(userID)
-	if err != nil || id <= 0 {
+	if err != nil || id < 0 {
 		failureResponse.StatusMsg = "user_id必须为正整数"
 		c.JSON(http.StatusOK, failureResponse)
 		return
+	}
+	if id == 0 {
+		id = int(auth.UserID)
 	}
 	// 3、查询数据库获取该用的所有关注
 	var relations []models.Relation
@@ -381,17 +387,17 @@ func RelationFollowerList(c *gin.Context) {
 		var user models.User
 		var relation models.Relation
 		// 此处为UserID
-		userList[i].UserID = relations[i].UserID
-		if err := driver.Db.Debug().Model(user).Where("id = ?", userList[i].UserID).Find(&user).Error; err != nil {
+		userList[i].ID = relations[i].UserID
+		if err := driver.Db.Debug().Model(user).Where("id = ?", userList[i].ID).Find(&user).Error; err != nil {
 			failureResponse.StatusMsg = "查询数据库失败" + err.Error()
 			c.JSON(http.StatusOK, failureResponse)
 			return
 		}
-		userList[i].UserName = user.Name
+		userList[i].Name = user.Name
 		userList[i].FollowerCount = user.FollowerCount
 		userList[i].FollowCount = user.FollowCount
 		userList[i].IsFollow = false
-		if err := driver.Db.Debug().Model(relation).Where("user_id = ?", auth.UserID).Where("target_id = ?", relations[i].TargetID).Where("exist=1").Where("type=1 or type=2").Find(&relation).Error; err != nil {
+		if err := driver.Db.Debug().Model(relation).Where("user_id = ?", auth.UserID).Where("target_id = ?", relations[i].UserID).Where("exist=1").Where("type=1 or type=2").Find(&relation).Error; err != nil {
 			failureResponse.StatusMsg = "查询数据库失败" + err.Error()
 			c.JSON(http.StatusOK, failureResponse)
 			return
@@ -458,13 +464,13 @@ func RelationFriendList(c *gin.Context) {
 	for i := 0; i < len(relations); i++ {
 		var user models.User
 		var relation models.Relation
-		userList[i].UserID = relations[i].TargetID
-		if err := driver.Db.Debug().Model(user).Where("id = ?", userList[i].UserID).Find(&user).Error; err != nil {
+		userList[i].ID = relations[i].TargetID
+		if err := driver.Db.Debug().Model(user).Where("id = ?", userList[i].ID).Find(&user).Error; err != nil {
 			failureResponse.StatusMsg = "查询数据库失败" + err.Error()
 			c.JSON(http.StatusOK, failureResponse)
 			return
 		}
-		userList[i].UserName = user.Name
+		userList[i].Name = user.Name
 		userList[i].FollowerCount = user.FollowerCount
 		userList[i].FollowCount = user.FollowCount
 		userList[i].IsFollow = false

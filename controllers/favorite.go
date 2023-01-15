@@ -9,12 +9,6 @@ import (
 	"strconv"
 )
 
-type PostFavoriteActionForm struct {
-	Token      string `json:"token"`
-	VideoID    uint   `json:"video_id"`
-	ActionType int    `json:"action_type"` //1: 点赞，2:取消点赞
-}
-
 // FavoriteAction
 // @Summary 点赞操作，点赞或取消点赞
 // @Tags 点赞
@@ -67,6 +61,7 @@ func FavoriteAction(c *gin.Context) {
 	}()
 	// 3.2 查询数据库获取视频信息
 	if err := tx.Model(video).Set("gorm:query_option", "FOR UPDATE").Where("id = ?", videoID).Find(&video).Error; err != nil {
+		tx.Rollback()
 		failureResponse.StatusMsg = "查询数据库错误"
 		c.JSON(409, failureResponse)
 		return
@@ -76,6 +71,7 @@ func FavoriteAction(c *gin.Context) {
 	if action == 1 {
 		// 3.3.1 查看点赞是否存在，如果存在返回
 		if err := tx.Model(favorite).Where("user_id = ? and video_id = ?", auth.UserID, videoID).Find(&favorite).Error; err != nil {
+			tx.Rollback()
 			failureResponse.StatusMsg = "查询数据库错误"
 			c.JSON(409, failureResponse)
 			return
@@ -87,6 +83,7 @@ func FavoriteAction(c *gin.Context) {
 			favorite.VideoID = video.ID
 
 			if err := tx.Model(favorite).Create(&favorite).Error; err != nil {
+				tx.Rollback()
 				failureResponse.StatusMsg = "查询数据库错误"
 				c.JSON(409, failureResponse)
 				return
@@ -95,12 +92,14 @@ func FavoriteAction(c *gin.Context) {
 			// 3.3.3 之前点赞过后面取消了
 			favorite.Exist = true
 			if err := tx.Model(favorite).Updates(&favorite).Error; err != nil {
+				tx.Rollback()
 				failureResponse.StatusMsg = "更新favorite信息错误"
 				c.JSON(409, failureResponse)
 				return
 			}
 		} else {
 			// 3.3.4 赞现在存在
+			tx.Rollback()
 			failureResponse.StatusMsg = "点赞存在，无需再次点赞"
 			c.JSON(409, failureResponse)
 			return
@@ -109,12 +108,14 @@ func FavoriteAction(c *gin.Context) {
 	} else {
 		// 3.4.1 查看点赞是否存在，如果存在返回
 		if err := tx.Model(favorite).Where("user_id = ? and video_id = ?", auth.UserID, videoID).Find(&favorite).Error; err != nil {
+			tx.Rollback()
 			failureResponse.StatusMsg = "查询数据库错误"
 			c.JSON(409, failureResponse)
 			return
 		}
 		if favorite.ID == 0 || !favorite.Exist {
 			// 3.3.2 不存在，无法取消
+			tx.Rollback()
 			failureResponse.StatusMsg = "点赞存在，无需再次点赞"
 			c.JSON(409, failureResponse)
 			return
@@ -123,6 +124,7 @@ func FavoriteAction(c *gin.Context) {
 			// 3.3.4 赞现在存在
 			favorite.Exist = false
 			if err := tx.Model(favorite).Save(&favorite).Error; err != nil {
+				tx.Rollback()
 				failureResponse.StatusMsg = "存储favorite信息错误"
 				c.JSON(409, failureResponse)
 				return
@@ -132,11 +134,13 @@ func FavoriteAction(c *gin.Context) {
 	}
 	// 3.4 更新video信息
 	if err := tx.Model(video).Save(&video).Error; err != nil {
+		tx.Rollback()
 		failureResponse.StatusMsg = "存储video信息错误"
 		c.JSON(409, failureResponse)
 		return
 	}
 	if err := tx.Commit().Error; err != nil {
+		tx.Rollback()
 		failureResponse.StatusMsg = "事务提交错误"
 		c.JSON(409, failureResponse)
 		return
@@ -147,7 +151,7 @@ func FavoriteAction(c *gin.Context) {
 }
 
 type Video struct {
-	Author        *User
+	Author        *User  `json:"author"`
 	ID            uint   `json:"id"`
 	FavoriteCount int    `json:"favorite_count"`
 	CommentCount  int    `json:"comment_count"`
@@ -188,10 +192,13 @@ func FavoriteList(c *gin.Context) {
 
 	// 2、验证参数
 	userID, err := strconv.Atoi(userId)
-	if err != nil || userID <= 0 {
+	if err != nil || userID < 0 {
 		failureResponse.StatusMsg = "user_id必须大于等于0"
 		c.JSON(409, failureResponse)
 		return
+	}
+	if userID == 0 {
+		userID = int(auth.UserID)
 	}
 	//TODO
 	// mysql联表查询优化，redis缓存优化
@@ -230,8 +237,8 @@ func FavoriteList(c *gin.Context) {
 		}
 		returnFavorite[i] = Video{
 			Author: &User{
-				UserID:        author.ID,
-				UserName:      author.Name,
+				ID:            author.ID,
+				Name:          author.Name,
 				FollowCount:   author.FollowCount,
 				FollowerCount: author.FollowerCount,
 				IsFollow:      false,
