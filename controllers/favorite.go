@@ -1,9 +1,12 @@
 package controllers
 
 import (
+	auth2 "douyin/auth"
 	"douyin/bootstrap/driver"
 	"douyin/models"
+	"douyin/service"
 	"douyin/utils"
+	"douyin/vo"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -19,9 +22,9 @@ import (
 // @Param action_type query int true "事件类型，1点赞，2取消点赞"
 // @Success 200 object CommentActionResponse 成功后返回值
 // @Failure 409 object CommentActionResponse 失败后返回值
-// @Router /douyin/favorite/action [post]
+// @Router /douyin/favorite/action/ [post]
 func FavoriteAction(c *gin.Context) {
-	auth := Auth{}.GetAuth(c)
+	auth := auth2.Auth{}.GetAuth(c)
 	successResponse := utils.Response{
 		StatusCode: 0,
 		StatusMsg:  "",
@@ -51,97 +54,8 @@ func FavoriteAction(c *gin.Context) {
 	// 		1）查询视频是否存在，不存在直接返回
 	// 		2）查询点赞表查看是否点赞过，点赞过直接返回
 	//
-	var video models.Video
-	// 事务开始
-	tx := driver.Db.Debug().Begin()
-	defer func() {
-		if r := recover(); r != nil {
-			tx.Rollback()
-		}
-	}()
-	// 3.2 查询数据库获取视频信息
-	if err := tx.Model(video).Set("gorm:query_option", "FOR UPDATE").Where("id = ?", videoID).Find(&video).Error; err != nil {
-		tx.Rollback()
-		failureResponse.StatusMsg = "查询数据库错误"
-		c.JSON(409, failureResponse)
-		return
-	}
-	var favorite models.Favorite
-	// 3.3 查询favorite表获取信息，
-	if action == 1 {
-		// 3.3.1 查看点赞是否存在，如果存在返回
-		if err := tx.Model(favorite).Where("user_id = ? and video_id = ?", auth.UserID, videoID).Find(&favorite).Error; err != nil {
-			tx.Rollback()
-			failureResponse.StatusMsg = "查询数据库错误"
-			c.JSON(409, failureResponse)
-			return
-		}
-		if favorite.ID == 0 {
-			// 3.3.2 不存在，需要创建
-			favorite.UserID = auth.UserID
-			favorite.Exist = true
-			favorite.VideoID = video.ID
-
-			if err := tx.Model(favorite).Create(&favorite).Error; err != nil {
-				tx.Rollback()
-				failureResponse.StatusMsg = "查询数据库错误"
-				c.JSON(409, failureResponse)
-				return
-			}
-		} else if !favorite.Exist {
-			// 3.3.3 之前点赞过后面取消了
-			favorite.Exist = true
-			if err := tx.Model(favorite).Updates(&favorite).Error; err != nil {
-				tx.Rollback()
-				failureResponse.StatusMsg = "更新favorite信息错误"
-				c.JSON(409, failureResponse)
-				return
-			}
-		} else {
-			// 3.3.4 赞现在存在
-			tx.Rollback()
-			failureResponse.StatusMsg = "点赞存在，无需再次点赞"
-			c.JSON(409, failureResponse)
-			return
-		}
-		video.FavoriteCount += 1
-	} else {
-		// 3.4.1 查看点赞是否存在，如果存在返回
-		if err := tx.Model(favorite).Where("user_id = ? and video_id = ?", auth.UserID, videoID).Find(&favorite).Error; err != nil {
-			tx.Rollback()
-			failureResponse.StatusMsg = "查询数据库错误"
-			c.JSON(409, failureResponse)
-			return
-		}
-		if favorite.ID == 0 || !favorite.Exist {
-			// 3.3.2 不存在，无法取消
-			tx.Rollback()
-			failureResponse.StatusMsg = "点赞存在，无需再次点赞"
-			c.JSON(409, failureResponse)
-			return
-
-		} else {
-			// 3.3.4 赞现在存在
-			favorite.Exist = false
-			if err := tx.Model(favorite).Save(&favorite).Error; err != nil {
-				tx.Rollback()
-				failureResponse.StatusMsg = "存储favorite信息错误"
-				c.JSON(409, failureResponse)
-				return
-			}
-		}
-		video.FavoriteCount -= 1
-	}
-	// 3.4 更新video信息
-	if err := tx.Model(video).Save(&video).Error; err != nil {
-		tx.Rollback()
-		failureResponse.StatusMsg = "存储video信息错误"
-		c.JSON(409, failureResponse)
-		return
-	}
-	if err := tx.Commit().Error; err != nil {
-		tx.Rollback()
-		failureResponse.StatusMsg = "事务提交错误"
+	err = service.FavoriteActionPost(uint(videoID), action, auth)
+	if err != nil {
 		c.JSON(409, failureResponse)
 		return
 	}
@@ -150,19 +64,9 @@ func FavoriteAction(c *gin.Context) {
 	c.JSON(http.StatusOK, successResponse)
 }
 
-type Video struct {
-	Author        *User  `json:"author"`
-	ID            uint   `json:"id"`
-	FavoriteCount int    `json:"favorite_count"`
-	CommentCount  int    `json:"comment_count"`
-	IsFavorite    bool   `json:"is_favorite"`
-	Title         string `json:"title"`
-	PlayURL       string `json:"play_url"`
-	CoverURL      string `json:"cover_url"`
-}
 type FavoriteListResponse struct {
 	utils.Response
-	VideoList []Video `json:"video_list"`
+	VideoList []vo.Video `json:"video_list"`
 }
 
 // FavoriteList
@@ -174,9 +78,9 @@ type FavoriteListResponse struct {
 // @Param token query string true "token"
 // @Success 200 object FavoriteListResponse 成功后返回值
 // @Failure 409 object FavoriteListResponse 失败后返回值
-// @Router /douyin/favorite/list [get]
+// @Router /douyin/favorite/list/ [get]
 func FavoriteList(c *gin.Context) {
-	auth := Auth{}.GetAuth(c)
+	auth := auth2.Auth{}.GetAuth(c)
 	successResponse := FavoriteListResponse{
 		Response:  utils.Response{},
 		VideoList: nil,
@@ -211,7 +115,7 @@ func FavoriteList(c *gin.Context) {
 		c.JSON(409, failureResponse)
 		return
 	}
-	returnFavorite := make([]Video, len(favoriteList))
+	returnFavorite := make([]vo.Video, len(favoriteList))
 	for i := 0; i < len(favoriteList); i++ {
 		var video models.Video
 		var author models.User
@@ -235,8 +139,8 @@ func FavoriteList(c *gin.Context) {
 			c.JSON(409, failureResponse)
 			return
 		}
-		returnFavorite[i] = Video{
-			Author: &User{
+		returnFavorite[i] = vo.Video{
+			Author: &vo.User{
 				ID:            author.ID,
 				Name:          author.Name,
 				FollowCount:   author.FollowCount,

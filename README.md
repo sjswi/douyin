@@ -10,7 +10,12 @@
 
 ### 4、clone 项目
 
+
+
+
 ### 5、go mod tidy
+
+数据库表可以使用sql目录下的sql文件，创建数据库后运行sql.sql即可获得所有的数据库表
 
 ### 6、swagger安装（go mod）
  

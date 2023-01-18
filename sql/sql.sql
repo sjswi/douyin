@@ -60,6 +60,13 @@ create table relations
 create index idx_relations_deleted_at
     on relations (deleted_at);
 
+create table update_test
+(
+    id    int auto_increment
+        primary key,
+    value varchar(20) not null
+);
+
 create table users
 (
     id             bigint unsigned auto_increment

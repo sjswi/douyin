@@ -1,11 +1,9 @@
 package controllers
 
 import (
-	"douyin/bootstrap/driver"
-	"douyin/config"
-	"douyin/models"
+	"douyin/service"
 	"douyin/utils"
-	"fmt"
+	"douyin/vo"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -14,8 +12,8 @@ import (
 
 type FeedResponse struct {
 	utils.Response
-	VideoList []Video `json:"video_list"`
-	NextTime  int64   `json:"next_time"`
+	VideoList []vo.Video `json:"video_list"`
+	NextTime  int64      `json:"next_time"`
 }
 
 // Feed
@@ -27,7 +25,7 @@ type FeedResponse struct {
 // @Param token query string false "token"
 // @Success 200 object FavoriteListResponse 成功后返回值
 // @Failure 409 object FavoriteListResponse 失败后返回值
-// @Router /douyin/feed [get]
+// @Router /douyin/feed/ [get]
 func Feed(c *gin.Context) {
 	// feed允许未登录的用户调用，因此需要在这里判断是否登录了。而不能使用中间件
 	successResponse := FeedResponse{
@@ -86,102 +84,21 @@ func Feed(c *gin.Context) {
 		// 推荐算法
 
 		// 目前直接从video中获取给定数量的最新的视频
-		var videoList []models.Video
-		if err := driver.Db.Debug().Model(models.Video{}).Where("created_at<=?", latest).Limit(config.Number).Find(&videoList).Error; err != nil {
-			failureResponse.StatusMsg = "查询数据库错误" + err.Error()
-			c.JSON(409, failureResponse)
+		videos, nextTime, err := service.FeedGet(latest, auth)
+		if err != nil {
+			c.JSON(http.StatusOK, failureResponse)
 			return
 		}
-		returnVideo := make([]Video, len(videoList))
-		for i := 0; i < len(videoList); i++ {
-			var author models.User
-			var relation models.Relation
-			var favorite models.Favorite
-			// 查询每个视频的作者
-			if err := driver.Db.Debug().Model(author).Where("id=?", videoList[i].AuthorID).Find(&author).Error; err != nil {
-				failureResponse.StatusMsg = "查询数据库错误" + err.Error()
-				c.JSON(409, failureResponse)
-				return
-			}
-			// 查询auth用户是否关注了作者
-			if err := driver.Db.Debug().Model(relation).Where("exist=1 and (type=1 or type=2) and user_id=? and target_id=?", auth.UserID, author.ID).Find(&relation).Error; err != nil {
-				failureResponse.StatusMsg = "查询数据库错误" + err.Error()
-				c.JSON(409, failureResponse)
-				return
-			}
-			// 查询用户是否点赞该视频
-			if err := driver.Db.Debug().Model(favorite).Where("exist=1 and user_id=? and video_id=?", auth.UserID, videoList[i].ID).Find(&favorite).Error; err != nil {
-				failureResponse.StatusMsg = "查询数据库错误" + err.Error()
-				c.JSON(409, failureResponse)
-				return
-			}
-			returnVideo[i] = Video{
-				Author: &User{
-					ID:            author.ID,
-					Name:          author.Name,
-					FollowCount:   author.FollowCount,
-					FollowerCount: author.FollowerCount,
-					IsFollow:      false,
-				},
-				ID:            videoList[i].ID,
-				FavoriteCount: videoList[i].FavoriteCount,
-				CommentCount:  videoList[i].CommentCount,
-				IsFavorite:    false,
-				Title:         videoList[i].Title,
-				PlayURL:       videoList[i].PlayURL,
-				CoverURL:      videoList[i].CoverURL,
-			}
-			if relation.ID != 0 && relation.Exist {
-				returnVideo[i].Author.IsFollow = true
-			}
-			if favorite.ID != 0 && favorite.Exist {
-				returnVideo[i].IsFavorite = true
-			}
-		}
-		if len(returnVideo) > 0 {
-			successResponse.NextTime = videoList[len(videoList)-1].CreatedAt.Unix()
-
-		}
-		successResponse.VideoList = returnVideo
+		successResponse.VideoList = videos
+		successResponse.NextTime = nextTime
 	} else {
-		var videoList []models.Video
-		if err := driver.Db.Debug().Model(models.Video{}).Where("created_at<=?", latest).Limit(config.Number).Find(&videoList).Error; err != nil {
-			failureResponse.StatusMsg = "查询数据库错误" + err.Error()
-			c.JSON(409, failureResponse)
+		videos, nextTime, err := service.FeedGet(latest, nil)
+		if err != nil {
+			c.JSON(http.StatusOK, failureResponse)
 			return
 		}
-		returnVideo := make([]Video, len(videoList))
-		for i := 0; i < len(videoList); i++ {
-			var author models.User
-			// 查询每个视频的作者
-			if err := driver.Db.Debug().Model(author).Where("id=?", videoList[i].AuthorID).Find(&author).Error; err != nil {
-				failureResponse.StatusMsg = "查询数据库错误" + err.Error()
-				c.JSON(409, failureResponse)
-				return
-			}
-			returnVideo[i] = Video{
-				Author: &User{
-					ID:            author.ID,
-					Name:          author.Name,
-					FollowCount:   author.FollowCount,
-					FollowerCount: author.FollowerCount,
-					IsFollow:      false,
-				},
-				ID:            videoList[i].ID,
-				FavoriteCount: videoList[i].FavoriteCount,
-				CommentCount:  videoList[i].CommentCount,
-				IsFavorite:    false,
-				Title:         videoList[i].Title,
-				PlayURL:       videoList[i].PlayURL,
-				CoverURL:      videoList[i].CoverURL,
-			}
-
-		}
-		if len(returnVideo) > 0 {
-			successResponse.NextTime = videoList[len(videoList)-1].CreatedAt.UnixMilli()
-			fmt.Println(successResponse.NextTime)
-		}
-		successResponse.VideoList = returnVideo
+		successResponse.VideoList = videos
+		successResponse.NextTime = nextTime
 	}
 	// 4、装配返回值
 	c.JSON(http.StatusOK, successResponse)

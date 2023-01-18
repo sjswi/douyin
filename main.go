@@ -1,12 +1,5 @@
 package main
 
-import (
-	"douyin/bootstrap/driver"
-	"douyin/config"
-	"douyin/routes"
-	"github.com/gin-gonic/gin"
-)
-
 // @title douyin
 // @version 1.0
 // @description 青训营抖音大项目
@@ -21,18 +14,18 @@ import (
 
 // @host 127.0.0.1:8080
 // @BasePath /douyin
-func main() {
-
-	App := gin.Default()
-	//App.MaxMultipartMemory =
-	config.InitConfig()
-	driver.InitConn("mysql")
-	driver.InitOSS()
-	driver.InitRedis()
-
-	routes.Home(App)
-	//App.NoRoute(func(c *gin.Context) {
-	//	c.HTML(http.StatusOK, "404", nil)
-	//})
-	App.Run(":" + config.Config.GetString("douyin.port")) // 监听并在 0.0.0.0:8080 上启动服务
-}
+//func main() {
+//
+//	App := gin.Default()
+//	//App.MaxMultipartMemory =
+//	config.InitConfig()
+//	driver.InitConn("mysql")
+//	driver.InitOSS()
+//	driver.InitRedis()
+//
+//	routes.Home(App)
+//	//App.NoRoute(func(c *gin.Context) {
+//	//	c.HTML(http.StatusOK, "404", nil)
+//	//})
+//	App.Run(":" + config.Config.GetString("douyin.port")) // 监听并在 0.0.0.0:8080 上启动服务
+//}

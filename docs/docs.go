@@ -25,7 +25,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/douyin/comment/action": {
+        "/douyin/comment/action/": {
             "post": {
                 "consumes": [
                     "application/x-json-stream"
@@ -85,7 +85,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/douyin/comment/list": {
+        "/douyin/comment/list/": {
             "get": {
                 "tags": [
                     "评论"
@@ -123,7 +123,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/douyin/favorite/action": {
+        "/douyin/favorite/action/": {
             "post": {
                 "consumes": [
                     "application/x-json-stream"
@@ -171,7 +171,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/douyin/favorite/list": {
+        "/douyin/favorite/list/": {
             "get": {
                 "consumes": [
                     "application/x-json-stream"
@@ -212,7 +212,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/douyin/feed": {
+        "/douyin/feed/": {
             "get": {
                 "consumes": [
                     "application/x-json-stream"
@@ -251,7 +251,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/douyin/message/action": {
+        "/douyin/message/action/": {
             "post": {
                 "consumes": [
                     "application/x-json-stream"
@@ -306,7 +306,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/douyin/message/chat": {
+        "/douyin/message/chat/": {
             "get": {
                 "consumes": [
                     "application/x-json-stream"
@@ -319,7 +319,7 @@ const docTemplate = `{
                     {
                         "type": "integer",
                         "description": "用户id",
-                        "name": "user_id",
+                        "name": "to_user_id",
                         "in": "query",
                         "required": true
                     },
@@ -347,7 +347,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/douyin/publish/action": {
+        "/douyin/publish/action/": {
             "post": {
                 "consumes": [
                     "application/x-json-stream"
@@ -395,7 +395,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/douyin/publish/list": {
+        "/douyin/publish/list/": {
             "get": {
                 "consumes": [
                     "application/x-json-stream"
@@ -436,7 +436,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/douyin/relation/action": {
+        "/douyin/relation/action/": {
             "post": {
                 "consumes": [
                     "application/x-json-stream"
@@ -484,7 +484,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/douyin/relation/follow/list": {
+        "/douyin/relation/follow/list/": {
             "get": {
                 "consumes": [
                     "application/x-json-stream"
@@ -525,7 +525,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/douyin/relation/follower/list": {
+        "/douyin/relation/follower/list/": {
             "get": {
                 "consumes": [
                     "application/x-json-stream"
@@ -566,7 +566,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/douyin/relation/friend/list": {
+        "/douyin/relation/friend/list/": {
             "get": {
                 "consumes": [
                     "application/x-json-stream"
@@ -607,7 +607,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/douyin/user": {
+        "/douyin/user/": {
             "get": {
                 "consumes": [
                     "application/x-json-stream"
@@ -648,7 +648,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/douyin/user/login": {
+        "/douyin/user/login/": {
             "post": {
                 "consumes": [
                     "application/x-json-stream"
@@ -689,7 +689,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/douyin/user/register": {
+        "/douyin/user/register/": {
             "post": {
                 "consumes": [
                     "application/x-json-stream"
@@ -732,28 +732,11 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "controllers.Comment": {
-            "type": "object",
-            "properties": {
-                "content": {
-                    "type": "string"
-                },
-                "create_date": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "user": {
-                    "$ref": "#/definitions/controllers.User"
-                }
-            }
-        },
         "controllers.CommentActionResponse": {
             "type": "object",
             "properties": {
                 "comment": {
-                    "$ref": "#/definitions/controllers.Comment"
+                    "$ref": "#/definitions/vo.Comment"
                 },
                 "status_code": {
                     "type": "integer"
@@ -769,7 +752,7 @@ const docTemplate = `{
                 "comment_list": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/controllers.Comment"
+                        "$ref": "#/definitions/vo.Comment"
                     }
                 },
                 "status_code": {
@@ -792,7 +775,7 @@ const docTemplate = `{
                 "video_list": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/controllers.Video"
+                        "$ref": "#/definitions/vo.Video"
                     }
                 }
             }
@@ -809,12 +792,54 @@ const docTemplate = `{
                 "user_list": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/controllers.User"
+                        "$ref": "#/definitions/vo.User"
                     }
                 }
             }
         },
-        "controllers.User": {
+        "controllers.UserInfoResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/vo.User"
+                }
+            }
+        },
+        "utils.Response": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "type": "string"
+                }
+            }
+        },
+        "vo.Comment": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "create_date": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "user": {
+                    "$ref": "#/definitions/vo.User"
+                }
+            }
+        },
+        "vo.User": {
             "type": "object",
             "properties": {
                 "follow_count": {
@@ -834,25 +859,11 @@ const docTemplate = `{
                 }
             }
         },
-        "controllers.UserInfoResponse": {
-            "type": "object",
-            "properties": {
-                "status_code": {
-                    "type": "integer"
-                },
-                "status_msg": {
-                    "type": "string"
-                },
-                "user": {
-                    "$ref": "#/definitions/controllers.User"
-                }
-            }
-        },
-        "controllers.Video": {
+        "vo.Video": {
             "type": "object",
             "properties": {
                 "author": {
-                    "$ref": "#/definitions/controllers.User"
+                    "$ref": "#/definitions/vo.User"
                 },
                 "comment_count": {
                     "type": "integer"
@@ -873,17 +884,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "utils.Response": {
-            "type": "object",
-            "properties": {
-                "status_code": {
-                    "type": "integer"
-                },
-                "status_msg": {
                     "type": "string"
                 }
             }

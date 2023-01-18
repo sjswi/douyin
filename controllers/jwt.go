@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	auth2 "douyin/auth"
 	"errors"
 	"github.com/golang-jwt/jwt/v4"
 	"time"
@@ -8,8 +9,8 @@ import (
 
 var MySecret = []byte("手写的从前")
 
-func MakeToken(auth *Auth) (tokenString string, err error) {
-	claim := Auth{
+func MakeToken(auth *auth2.Auth) (tokenString string, err error) {
+	claim := auth2.Auth{
 		UserName:      auth.UserName,
 		UserID:        auth.UserID,
 		FollowCount:   auth.FollowCount,
@@ -31,8 +32,8 @@ func Secret() jwt.Keyfunc {
 	}
 }
 
-func ParseToken(originToken string) (*Auth, error) {
-	token, err := jwt.ParseWithClaims(originToken, &Auth{}, Secret())
+func ParseToken(originToken string) (*auth2.Auth, error) {
+	token, err := jwt.ParseWithClaims(originToken, &auth2.Auth{}, Secret())
 	if err != nil {
 		if ve, ok := err.(*jwt.ValidationError); ok {
 			if ve.Errors&jwt.ValidationErrorMalformed != 0 {
@@ -46,7 +47,7 @@ func ParseToken(originToken string) (*Auth, error) {
 			}
 		}
 	}
-	if claims, ok := token.Claims.(*Auth); ok && token.Valid {
+	if claims, ok := token.Claims.(*auth2.Auth); ok && token.Valid {
 		return claims, nil
 	}
 	return nil, errors.New("couldn't handle this token")

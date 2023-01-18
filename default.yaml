@@ -6,8 +6,7 @@ douyin:
     dbName: douyin
     user: root
   redis:
-    host: ip
-    port: port
+    host: 4.98.60.1:6379
     password: ''
     db: 1
   port: 8080

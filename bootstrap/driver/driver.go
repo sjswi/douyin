@@ -53,9 +53,13 @@ func mySql() *gorm.DB {
 
 	dbName := config.Config.GetString("douyin.mysql.dbName")
 
+	maxConn := config.Config.GetInt("douyin.mysql.maxConn")
+
+	maxIdle := config.Config.GetInt("douyin.mysql.maxIdle")
 	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local", user, password, host, dbName)
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+
 	if err != nil {
 		panic(err)
 	}
@@ -65,7 +69,12 @@ func mySql() *gorm.DB {
 	if mode == "DEBUG" {
 		db.Logger.LogMode(2)
 	}
-
+	sqlDb, err := db.DB()
+	if err != nil {
+		return nil
+	}
+	sqlDb.SetMaxIdleConns(maxIdle)
+	sqlDb.SetMaxOpenConns(maxConn)
 	return db
 }
 
