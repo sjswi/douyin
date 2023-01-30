@@ -1,0 +1,7 @@
+host: '192.168.56.102'
+port: 8848
+namespace: '18147820-cfb5-4d34-9140-c3845f3093ec'
+user: 'nacos'
+password: 'nacos'
+dataid: 'comment'
+group: 'COMMENT_GROUP'
