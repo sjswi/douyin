@@ -1,5 +1,7 @@
 package config
 
+import "douyin_rpc/common/config"
+
 type NacosConfig struct {
 	Host      string `mapstructure:"host"`
 	Port      uint64 `mapstructure:"port"`
@@ -35,16 +37,11 @@ type WXConfig struct {
 }
 
 type ServerConfig struct {
-	Name        string        `mapstructure:"name" json:"name"`
-	Host        string        `mapstructure:"host" json:"host"`
-	MysqlInfo   MysqlConfig   `mapstructure:"mysql" json:"mysql"`
-	OtelInfo    OtelConfig    `mapstructure:"otel" json:"otel"`
-	RedisInfo   RedisConfig   `mapstructure:"redis" json:"redis"`
-	WXInfo      WXConfig      `mapstructure:"wx_config" json:"wx_config"`
-	FeedNumber  int           `mapstructure:"feed_number" json:"feed_number"`
-	BlobSrvInfo BlobSrvConfig `mapstructure:"blob_srv" json:"blob_srv"`
-}
-
-type BlobSrvConfig struct {
-	Name string `mapstructure:"name" json:"name"`
+	Name        string              `mapstructure:"name" json:"name"`
+	Host        string              `mapstructure:"host" json:"host"`
+	MysqlInfo   MysqlConfig         `mapstructure:"mysql" json:"mysql"`
+	OtelInfo    OtelConfig          `mapstructure:"otel" json:"otel"`
+	RedisInfo   RedisConfig         `mapstructure:"redis" json:"redis"`
+	FeedNumber  int                 `mapstructure:"feed_number" json:"feed_number"`
+	UserSrvInfo config.RPCSrvConfig `mapstructure:"user_srv" json:"user_srv"`
 }

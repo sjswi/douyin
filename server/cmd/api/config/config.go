@@ -24,14 +24,15 @@ type ServerConfig struct {
 	Port            int          `mapstructure:"port" json:"port"`
 	JWTInfo         JWTConfig    `mapstructure:"jwt" json:"jwt"`
 	OtelInfo        OtelConfig   `mapstructure:"otel" json:"otel"`
-	UserSrvInfo     RPCSrvConfig `mapstructure:"user_srv" json:"auth_srv"`
-	VideoSrvInfo    RPCSrvConfig `mapstructure:"video_srv" json:"car_srv"`
-	MessageSrvInfo  RPCSrvConfig `mapstructure:"message_srv" json:"profile_srv"`
-	RelationSrvInfo RPCSrvConfig `mapstructure:"relation_srv" json:"trip_srv"`
+	UserSrvInfo     RPCSrvConfig `mapstructure:"user_srv" json:"user_srv"`
+	VideoSrvInfo    RPCSrvConfig `mapstructure:"video_srv" json:"video_srv"`
+	MessageSrvInfo  RPCSrvConfig `mapstructure:"message_srv" json:"message_srv"`
+	RelationSrvInfo RPCSrvConfig `mapstructure:"relation_srv" json:"relation_srv"`
 	FavoriteSrvInfo RPCSrvConfig `mapstructure:"favorite_srv" json:"favorite_srv"`
 	CommentSrvInfo  RPCSrvConfig `mapstructure:"comment_srv" json:"comment_srv"`
 }
 
 type RPCSrvConfig struct {
-	Name string `mapstructure:"name" json:"name"`
+	Name      string `mapstructure:"name" json:"name"`
+	Namespace string `mapstructure:"namespace" json:"namespace"`
 }

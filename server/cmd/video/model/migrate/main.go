@@ -3,7 +3,6 @@ package main
 import (
 	"douyin_rpc/server/cmd/video/model"
 	"gorm.io/driver/mysql"
-	"gorm.io/gen"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
@@ -36,13 +35,13 @@ func main() {
 		panic(err)
 	}
 
-	//_ = db.AutoMigrate(&model.Video{})
-	g := gen.NewGenerator(gen.Config{
-		OutPath:       "./server/cmd/video/dal", // output directory, default value is ./query
-		Mode:          gen.WithDefaultQuery | gen.WithQueryInterface,
-		FieldNullable: true,
-	})
-	g.UseDB(db)
-	g.ApplyBasic(&model.Video{})
-	g.Execute()
+	_ = db.AutoMigrate(&model.Video{})
+	//g := gen.NewGenerator(gen.Config{
+	//	OutPath:       "./server/cmd/video/dal", // output directory, default value is ./query
+	//	Mode:          gen.WithDefaultQuery | gen.WithQueryInterface,
+	//	FieldNullable: true,
+	//})
+	//g.UseDB(db)
+	//g.ApplyBasic(&model.Video{})
+	//g.Execute()
 }

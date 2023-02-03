@@ -6,18 +6,15 @@ const (
 	AccountID  = "accountID"
 	ID         = "id"
 
-	ApiConfigPath     = "./server/cmd/api/config.yaml"
-	AuthConfigPath    = "./server/cmd/auth/config.yaml"
-	BlobConfigPath    = "./server/cmd/blob/config.yaml"
-	CarConfigPath     = "./server/cmd/car/config.yaml"
-	ProfileConfigPath = "./server/cmd/profile/config.yaml"
-	TripConfigPath    = "./server/cmd/trip/config.yaml"
+	ApiConfigPath = "./config.yaml"
 
-	ApiGroup    = "API_GROUP"
-	AuthGroup   = "AUTH_GROUP"
-	BlobGroup   = "BLOB_GROUP"
-	CarGroup    = "CAR_GROUP"
-	RentalGroup = "RENTAL_GROUP"
+	ApiGroup      = "API_GROUP"
+	VideoGroup    = "VIDEO_GROUP"
+	FavoriteGroup = "FAVORITE_GROUP"
+	CommentGroup  = "COMMENT_GROUP"
+	RelationGroup = "RELATION_GROUP"
+	UserGroup     = "USER_GROUP"
+	MessageGroup  = "MESSAGE_GROUP"
 
 	NacosLogDir   = "tmp/nacos/log"
 	NacosCacheDir = "tmp/nacos/cache"
@@ -42,7 +39,7 @@ const (
 	FreePortAddress = "localhost:0"
 
 	DefaultLicNumber = "100000000001"
-	DefaultName      = "FreeCar"
+	DefaultName      = "douyin"
 	DefaultGender    = 1
 	DefaultBirth     = 631152000000
 )

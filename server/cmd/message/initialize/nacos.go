@@ -21,7 +21,7 @@ import (
 // InitNacos to init nacos
 func InitNacos(Port int) (registry.Registry, *registry.Info) {
 	v := viper.New()
-	v.SetConfigFile(consts.AuthConfigPath)
+	v.SetConfigFile(consts.MessageConfigPath)
 	if err := v.ReadInConfig(); err != nil {
 		klog.Fatalf("read viper config failed: %s", err.Error())
 	}
@@ -75,7 +75,7 @@ func InitNacos(Port int) (registry.Registry, *registry.Info) {
 		},
 	)
 
-	r := nacos.NewNacosRegistry(registryClient, nacos.WithGroup(consts.AuthGroup))
+	r := nacos.NewNacosRegistry(registryClient, nacos.WithGroup(consts.MessageGroup))
 
 	sf, err := snowflake.NewNode(2)
 	if err != nil {
