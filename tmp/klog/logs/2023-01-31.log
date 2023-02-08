@@ -1,0 +1,27 @@
+{"level":"info","msg":"KITEX: server listen at addr=[::]:8888","time":"2023-01-31T01:22:13Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:8888","time":"2023-01-31T02:48:39Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:8888","time":"2023-01-31T02:53:25Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:8888","time":"2023-01-31T05:46:13Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10002","time":"2023-01-31T05:51:49Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10006","time":"2023-01-31T05:52:54Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10006","time":"2023-01-31T07:26:48Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10005","time":"2023-01-31T07:27:25Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10004","time":"2023-01-31T07:38:19Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10005","time":"2023-01-31T07:38:27Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10006","time":"2023-01-31T07:38:33Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10003","time":"2023-01-31T07:39:27Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10002","time":"2023-01-31T07:39:39Z"}
+{"level":"error","msg":"KITEX: server listen failed, addr=0.0.0.0:10002 error=listen tcp 0.0.0.0:10002: bind: address already in use","time":"2023-01-31T07:40:02Z"}
+{"level":"error","msg":"KITEX: server start error: error=listen tcp 0.0.0.0:10002: bind: address already in use","time":"2023-01-31T07:40:02Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10001","time":"2023-01-31T07:40:10Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10001","time":"2023-01-31T07:42:42Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10001","time":"2023-01-31T08:12:02Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10002","time":"2023-01-31T08:12:26Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10003","time":"2023-01-31T08:12:33Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10004","time":"2023-01-31T08:12:39Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10005","time":"2023-01-31T08:12:45Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10006","time":"2023-01-31T08:12:51Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10002","time":"2023-01-31T08:16:38Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10002","time":"2023-01-31T08:56:03Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10002","time":"2023-01-31T08:59:25Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10002","time":"2023-01-31T08:59:40Z"}

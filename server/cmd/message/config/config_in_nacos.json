@@ -1,0 +1,48 @@
+//存储在nacos中的配置，复制到nacos即可
+{
+  "name": "douyin_message",
+  "host": "192.168.56.100",
+  "port": 10003,
+  "otel": {
+    "endpoint": "http://192.168.56.102:14268/api/traces"
+  },
+  "mysql": {
+    "host": "192.168.56.102",
+    "port": 3306,
+    "db": "douyin_message",
+    "user": "root",
+    "password": "123456",
+    "max_conn": 200,
+    "max_idle": 50
+  },
+  "redis": {
+    "address": "43.138.60.133:6379",
+    "db": 0,
+    "password": "",
+    "max_conn_age": "30"
+  },
+  "user_srv": {
+    "name": "douyin_user",
+    "namespace": "55f9bbf4-2052-4116-a3dd-a58fcfa80b32"
+  },
+  "comment_srv": {
+    "name": "douyin_comment",
+    "namespace": "18147820-cfb5-4d34-9140-c3845f3093ec"
+  },
+  "message_srv": {
+    "name": "douyin_message",
+    "namespace": "f590d013-dee0-4e0d-bff0-833624f124ac"
+  },
+  "relation_srv": {
+    "name": "douyin_relation",
+    "namespace": "fc5aa648-86a4-4188-a6af-77fc9be952da"
+  },
+  "video_srv": {
+    "name": "douyin_video",
+    "namespace": "0254574a-a379-479f-89a1-a71ff4ca4c9c"
+  },
+  "favorite_srv": {
+    "name": "douyin_favorite",
+    "namespace": "5f273203-7189-42d3-a13b-8122181dacd6"
+  }
+}

@@ -1,0 +1,713 @@
+definitions:
+  api.Code:
+    enum:
+    - 1
+    - 2
+    - 3
+    - 4
+    type: integer
+    x-enum-varnames:
+    - Code_Success
+    - Code_ParamInvalid
+    - Code_DBError
+    - Code_ServerError
+  api.Comment:
+    properties:
+      content:
+        type: string
+      create_date:
+        type: string
+      id:
+        type: integer
+      user:
+        $ref: '#/definitions/api.User'
+    type: object
+  api.CommentActionResponse:
+    properties:
+      comment:
+        $ref: '#/definitions/api.Comment'
+      status_code:
+        $ref: '#/definitions/api.Code'
+      status_msg:
+        type: string
+    type: object
+  api.CommentListResponse:
+    properties:
+      comment_list:
+        items:
+          $ref: '#/definitions/api.Comment'
+        type: array
+      status_code:
+        $ref: '#/definitions/api.Code'
+      status_msg:
+        type: string
+    type: object
+  api.FavoriteListResponse:
+    properties:
+      status_code:
+        $ref: '#/definitions/api.Code'
+      status_msg:
+        type: string
+      video_list:
+        items:
+          $ref: '#/definitions/api.Video'
+        type: array
+    type: object
+  api.FeedResponse:
+    properties:
+      next_time:
+        type: integer
+      status_code:
+        $ref: '#/definitions/api.Code'
+      status_msg:
+        type: string
+      video_list:
+        items:
+          $ref: '#/definitions/api.Video'
+        type: array
+    type: object
+  api.LoginResponse:
+    properties:
+      status_code:
+        $ref: '#/definitions/api.Code'
+      status_msg:
+        type: string
+      token:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  api.Message:
+    properties:
+      content:
+        type: string
+      create_time:
+        type: string
+      id:
+        type: integer
+    type: object
+  api.MessageActionResponse:
+    properties:
+      status_code:
+        $ref: '#/definitions/api.Code'
+      status_msg:
+        type: string
+    type: object
+  api.MessageListResponse:
+    properties:
+      message_list:
+        items:
+          $ref: '#/definitions/api.Message'
+        type: array
+      status_code:
+        $ref: '#/definitions/api.Code'
+      status_msg:
+        type: string
+    type: object
+  api.PublishActionResponse:
+    properties:
+      status_code:
+        $ref: '#/definitions/api.Code'
+      status_msg:
+        type: string
+    type: object
+  api.PublishListResponse:
+    properties:
+      status_code:
+        $ref: '#/definitions/api.Code'
+      status_msg:
+        type: string
+      video_list:
+        items:
+          $ref: '#/definitions/api.Video'
+        type: array
+    type: object
+  api.RegisterResponse:
+    properties:
+      status_code:
+        $ref: '#/definitions/api.Code'
+      status_msg:
+        type: string
+      token:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  api.RelationActionResponse:
+    properties:
+      status_code:
+        $ref: '#/definitions/api.Code'
+      status_msg:
+        type: string
+    type: object
+  api.RelationFollowListResponse:
+    properties:
+      status_code:
+        $ref: '#/definitions/api.Code'
+      status_msg:
+        type: string
+      user_list:
+        items:
+          $ref: '#/definitions/api.User'
+        type: array
+    type: object
+  api.RelationFollowerListResponse:
+    properties:
+      status_code:
+        $ref: '#/definitions/api.Code'
+      status_msg:
+        type: string
+      user_list:
+        items:
+          $ref: '#/definitions/api.User'
+        type: array
+    type: object
+  api.RelationFriendListResponse:
+    properties:
+      status_code:
+        $ref: '#/definitions/api.Code'
+      status_msg:
+        type: string
+      user_list:
+        items:
+          $ref: '#/definitions/api.User'
+        type: array
+    type: object
+  api.User:
+    properties:
+      follow_count:
+        type: integer
+      follower_count:
+        type: integer
+      id:
+        type: integer
+      is_follow:
+        type: boolean
+      name:
+        type: string
+    type: object
+  api.UserResponse:
+    properties:
+      status_code:
+        $ref: '#/definitions/api.Code'
+      status_msg:
+        type: string
+      user:
+        $ref: '#/definitions/api.User'
+    type: object
+  api.Video:
+    properties:
+      author:
+        $ref: '#/definitions/api.User'
+      comment_count:
+        type: integer
+      cover_url:
+        type: string
+      favorite_count:
+        type: integer
+      id:
+        type: integer
+      is_favorite:
+        type: boolean
+      play_url:
+        type: string
+      title:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /douyin/comment/action/:
+    post:
+      consumes:
+      - application/x-json-stream
+      parameters:
+      - description: 视频id
+        in: query
+        name: video_id
+        required: true
+        type: integer
+      - description: token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: 操作类型
+        in: query
+        name: action_type
+        required: true
+        type: integer
+      - description: 评论内容
+        in: query
+        name: comment_text
+        type: string
+      - description: 评论id
+        in: query
+        name: comment_id
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.CommentActionResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/api.CommentActionResponse'
+      summary: 评论操作，删除或增加
+      tags:
+      - 评论
+  /douyin/comment/list/:
+    get:
+      parameters:
+      - description: 视频id
+        in: query
+        name: video_id
+        required: true
+        type: integer
+      - description: token
+        in: query
+        name: token
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.CommentListResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/api.CommentListResponse'
+      summary: 获取所有评论
+      tags:
+      - 评论
+  /douyin/favorite/action/:
+    post:
+      consumes:
+      - application/x-json-stream
+      parameters:
+      - description: token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: 视频id
+        in: query
+        name: video_id
+        required: true
+        type: integer
+      - description: 事件类型，1点赞，2取消点赞
+        in: query
+        name: action_type
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.CommentActionResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/api.CommentActionResponse'
+      summary: 点赞操作，点赞或取消点赞
+      tags:
+      - 点赞
+  /douyin/favorite/list/:
+    get:
+      consumes:
+      - application/x-json-stream
+      parameters:
+      - description: 用户id
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: token
+        in: query
+        name: token
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.FavoriteListResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/api.FavoriteListResponse'
+      summary: 获取所有点赞过的视频
+      tags:
+      - 点赞
+  /douyin/feed/:
+    get:
+      consumes:
+      - application/x-json-stream
+      parameters:
+      - description: 用户id
+        in: query
+        name: latest_time
+        type: integer
+      - description: token
+        in: query
+        name: token
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.FeedResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/api.FeedResponse'
+      summary: 视频推流
+      tags:
+      - feed
+  /douyin/message/action/:
+    post:
+      consumes:
+      - application/x-json-stream
+      parameters:
+      - description: token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: 对方用户id
+        in: query
+        name: to_user_id
+        required: true
+        type: integer
+      - description: 类型
+        in: query
+        name: action_type
+        required: true
+        type: integer
+      - description: 消息内容
+        in: query
+        name: content
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.MessageActionResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/api.MessageActionResponse'
+      summary: 发送消息
+      tags:
+      - 消息
+  /douyin/message/chat/:
+    get:
+      consumes:
+      - application/x-json-stream
+      parameters:
+      - description: 用户id
+        in: query
+        name: to_user_id
+        required: true
+        type: integer
+      - description: token
+        in: query
+        name: token
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.MessageListResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/api.MessageListResponse'
+      summary: 获取聊天记录
+      tags:
+      - 消息
+  /douyin/message/list/:
+    get:
+      consumes:
+      - application/x-json-stream
+      parameters:
+      - description: 用户id
+        in: query
+        name: to_user_id
+        required: true
+        type: integer
+      - description: token
+        in: query
+        name: token
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.MessageListResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/api.MessageListResponse'
+      summary: 获取聊天记录
+      tags:
+      - 消息
+  /douyin/publish/action/:
+    post:
+      consumes:
+      - application/x-json-stream
+      parameters:
+      - description: token
+        in: formData
+        name: token
+        required: true
+        type: string
+      - description: 视频
+        in: formData
+        name: data
+        required: true
+        type: file
+      - description: 标题
+        in: formData
+        name: title
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.PublishActionResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/api.PublishActionResponse'
+      summary: 发布视频
+      tags:
+      - 发布
+  /douyin/publish/list/:
+    get:
+      consumes:
+      - application/x-json-stream
+      parameters:
+      - description: 用户id
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: token
+        in: query
+        name: token
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.PublishListResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/api.PublishListResponse'
+      summary: 获取发布视频列表
+      tags:
+      - 发布
+  /douyin/relation/action/:
+    post:
+      consumes:
+      - application/x-json-stream
+      parameters:
+      - description: 用户id
+        in: query
+        name: to_user_id
+        required: true
+        type: integer
+      - description: token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: 操作类型
+        in: query
+        name: action_type
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.RelationActionResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/api.RelationActionResponse'
+      summary: 关注和取消关注操作
+      tags:
+      - 关系
+  /douyin/relation/follow/list/:
+    get:
+      consumes:
+      - application/x-json-stream
+      parameters:
+      - description: 用户id
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: token
+        in: query
+        name: token
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.RelationFollowListResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/api.RelationFollowListResponse'
+      summary: 获取关注列表
+      tags:
+      - 关系
+  /douyin/relation/follower/list/:
+    get:
+      consumes:
+      - application/x-json-stream
+      parameters:
+      - description: 用户id
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: token
+        in: query
+        name: token
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.RelationFollowerListResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/api.RelationFollowerListResponse'
+      summary: 获取关注者列表
+      tags:
+      - 关系
+  /douyin/relation/friend/list/:
+    get:
+      consumes:
+      - application/x-json-stream
+      parameters:
+      - description: 用户id
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: token
+        in: query
+        name: token
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.RelationFriendListResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/api.RelationFriendListResponse'
+      summary: 获取好友列表
+      tags:
+      - 关系
+  /douyin/user/:
+    get:
+      consumes:
+      - application/x-json-stream
+      parameters:
+      - description: 用户id
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: token
+        in: query
+        name: token
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.UserResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/api.UserResponse'
+      summary: 用户信息
+      tags:
+      - 用户
+  /douyin/user/login/:
+    post:
+      consumes:
+      - application/x-json-stream
+      parameters:
+      - description: 用户名
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: 密码
+        in: query
+        name: password
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.LoginResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/api.LoginResponse'
+      summary: 用户登录
+      tags:
+      - 用户
+  /douyin/user/register/:
+    post:
+      consumes:
+      - application/x-json-stream
+      parameters:
+      - description: 用户名
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: 密码
+        in: query
+        name: password
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.RegisterResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/api.RegisterResponse'
+      summary: 用户注册
+      tags:
+      - 用户
+swagger: "2.0"

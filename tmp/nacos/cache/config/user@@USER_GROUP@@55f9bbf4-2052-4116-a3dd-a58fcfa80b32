@@ -1,0 +1,23 @@
+{
+  "name": "douyin_user",
+  "host": "192.168.56.100",
+  "port": 10005,
+  "otel": {
+    "endpoint": "http://192.168.56.102:14268/api/traces"
+  },
+  "mysql": {
+    "host": "192.168.56.102",
+    "port": 3306,
+    "db": "douyin_user",
+    "user": "root",
+    "password": "123456",
+    "max_conn": 200,
+    "max_idle": 50
+  },
+  "redis": {
+    "address": "43.138.60.133:6379",
+    "db": 0,
+    "password": "",
+    "max_conn_age": "30"
+  }
+}

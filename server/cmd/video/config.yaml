@@ -1,0 +1,7 @@
+host: '192.168.56.102'
+port: 8848
+namespace: '0254574a-a379-479f-89a1-a71ff4ca4c9c'
+user: 'nacos'
+password: 'nacos'
+dataid: 'video'
+group: 'VIDEO_GROUP'
