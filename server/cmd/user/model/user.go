@@ -31,7 +31,7 @@ func (b *User) BeforeCreate(_ *gorm.DB) (err error) {
 const UserCachePrefix string = "user:user_"
 
 // queryUserByID 查询数据库的user
-func queryUserByID(tx *gorm.DB, userID uint) (*User, error) {
+func queryUserByID(tx *gorm.DB, userID int64) (*User, error) {
 	// 直接查询数据库
 	var user User
 	if err := tx.Table("user").Where("id=?", userID).Find(&user).Error; err != nil {
@@ -41,7 +41,7 @@ func queryUserByID(tx *gorm.DB, userID uint) (*User, error) {
 }
 
 // QueryUserByIDWithCache 通过视频id查询视频信息
-func QueryUserByIDWithCache(tx *gorm.DB, userId uint) (*User, error) {
+func QueryUserByIDWithCache(tx *gorm.DB, userId int64) (*User, error) {
 	key := UserCachePrefix + "ID_" + strconv.Itoa(int(userId))
 	// 查看key是否存在
 	//不存在

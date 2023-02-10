@@ -1,7 +1,7 @@
 package rpc
 
 import (
-	"douyin_rpc/client/kitex_gen/user/userservice"
+	"douyin_rpc/client/kitex_gen/video/feedservice"
 	"douyin_rpc/common/middleware"
 	"douyin_rpc/server/cmd/comment/global"
 	consts "douyin_rpc/server/cmd/user/constant"
@@ -15,7 +15,7 @@ import (
 	"github.com/nacos-group/nacos-sdk-go/vo"
 )
 
-func initUser() {
+func initVideo() {
 	// init resolver
 	// Read configuration information from nacos
 	sc := []constant.ServerConfig{
@@ -51,18 +51,18 @@ func initUser() {
 	//)
 
 	// create a new client
-	c, err := userservice.NewClient(
-		global.ServerConfig.UserSrvInfo.Name,
+	c, err := feedservice.NewClient(
+		global.ServerConfig.VideoSrvInfo.Name,
 		client.WithResolver(r),                                     // service discovery
 		client.WithLoadBalancer(loadbalance.NewWeightedBalancer()), // load balance
 		client.WithMuxConnection(1),                                // multiplexing
 		client.WithMiddleware(middleware.CommonMiddleware),
 		client.WithInstanceMW(middleware.ClientMiddleware),
 		//client.WithSuite(tracing.NewClientSuite()),
-		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.UserSrvInfo.Name}),
+		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.VideoSrvInfo.Name}),
 	)
 	if err != nil {
 		klog.Fatalf("ERROR: cannot init client: %v\n", err)
 	}
-	global.UserClient = c
+	global.VideoClient = c
 }

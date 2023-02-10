@@ -39,7 +39,7 @@ func InitNacos(Port int) (registry.Registry, *registry.Info) {
 	}
 
 	cc := constant.ClientConfig{
-		NamespaceId:         "user",
+		NamespaceId:         global.NacosConfig.Namespace,
 		TimeoutMs:           5000,
 		NotLoadCacheAtStart: true,
 		LogDir:              consts.NacosLogDir,

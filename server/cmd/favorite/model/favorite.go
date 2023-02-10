@@ -30,7 +30,7 @@ func (b *Favorite) BeforeCreate(_ *gorm.DB) (err error) {
 
 const FavoriteCachePrefix string = "favorite:favorite_"
 
-func queryFavoriteByUserID(tx *gorm.DB, userID uint) ([]Favorite, error) {
+func queryFavoriteByUserID(tx *gorm.DB, userID int64) ([]Favorite, error) {
 	var Favorites []Favorite
 	if err := tx.Table("favorite").Where("exist=1").Where("user_id=?", userID).Find(&Favorites).Error; err != nil {
 		return nil, err
@@ -38,7 +38,7 @@ func queryFavoriteByUserID(tx *gorm.DB, userID uint) ([]Favorite, error) {
 	return Favorites, nil
 }
 
-func QueryFavoriteByUserIDWithCache(tx *gorm.DB, userID uint) ([]Favorite, error) {
+func QueryFavoriteByUserIDWithCache(tx *gorm.DB, userID int64) ([]Favorite, error) {
 	key := FavoriteCachePrefix + "UserID_" + strconv.Itoa(int(userID))
 	// 查看key是否存在
 	//不存在
@@ -85,15 +85,21 @@ func QueryFavoriteByUserIDWithCache(tx *gorm.DB, userID uint) ([]Favorite, error
 	return Favorites, nil
 }
 
-func queryFavoriteByVideoID(tx *gorm.DB, videoID uint) ([]Favorite, error) {
+func queryFavoriteByVideoID(tx *gorm.DB, videoID int64) ([]Favorite, error) {
 	var Favorites []Favorite
 	if err := tx.Table("favorite").Where("exist=1").Where("video_id=?", videoID).Find(&Favorites).Error; err != nil {
 		return nil, err
 	}
 	return Favorites, nil
 }
-
-func QueryFavoriteByVideoIDWithCache(tx *gorm.DB, videoID uint) ([]Favorite, error) {
+func CountFavoriteByVideoID(tx *gorm.DB, videoID int64) (int64, error) {
+	var count int64
+	if err := tx.Table("favorite").Where("exist=1").Where("video_id=?", videoID).Count(&count).Error; err != nil {
+		return -1, err
+	}
+	return count, nil
+}
+func QueryFavoriteByVideoIDWithCache(tx *gorm.DB, videoID int64) ([]Favorite, error) {
 	key := FavoriteCachePrefix + "videoID_" + strconv.Itoa(int(videoID))
 	// 查看key是否存在
 	//不存在
@@ -140,7 +146,7 @@ func QueryFavoriteByVideoIDWithCache(tx *gorm.DB, videoID uint) ([]Favorite, err
 	return Favorites, nil
 }
 
-func queryFavoriteByUserIDAndVideoID(tx *gorm.DB, userID, videoID uint) (*Favorite, error) {
+func queryFavoriteByUserIDAndVideoID(tx *gorm.DB, userID, videoID int64) (*Favorite, error) {
 	var Favorites Favorite
 	if err := tx.Table("favorite").Where("exist=1").Where("user_id=? and video_id=?", userID, videoID).Find(&Favorites).Error; err != nil {
 		return nil, err
@@ -148,7 +154,7 @@ func queryFavoriteByUserIDAndVideoID(tx *gorm.DB, userID, videoID uint) (*Favori
 	return &Favorites, nil
 }
 
-func QueryFavoriteByUserIDAndVideoIDWithCache(tx *gorm.DB, userID, videoID uint) (*Favorite, error) {
+func QueryFavoriteByUserIDAndVideoIDWithCache(tx *gorm.DB, userID, videoID int64) (*Favorite, error) {
 	key := FavoriteCachePrefix + "UserID_" + strconv.Itoa(int(userID)) + "_VideoID_" + strconv.Itoa(int(videoID))
 	var result string
 	var Favorite *Favorite
@@ -196,6 +202,8 @@ func QueryFavoriteByUserIDAndVideoIDWithCache(tx *gorm.DB, userID, videoID uint)
 }
 
 func UpdateFavorite(tx *gorm.DB, favorite Favorite) error {
+	//TODO
+	// 删除缓存
 	if err := tx.Save(&favorite).Error; err != nil {
 		return err
 	}

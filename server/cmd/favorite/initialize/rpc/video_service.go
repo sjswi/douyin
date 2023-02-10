@@ -1,10 +1,11 @@
 package rpc
 
 import (
-	consts "douyin_rpc/server/cmd/api/constant"
-	"douyin_rpc/server/cmd/api/global"
-	"douyin_rpc/server/cmd/api/kitex_gen/video/feedservice"
-	"douyin_rpc/server/cmd/api/middleware"
+	"douyin_rpc/client/kitex_gen/video/feedservice"
+	"douyin_rpc/common/middleware"
+	consts "douyin_rpc/server/cmd/user/constant"
+
+	"douyin_rpc/server/cmd/favorite/global"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/loadbalance"
@@ -52,14 +53,14 @@ func initVideo() {
 
 	// create a new client
 	c, err := feedservice.NewClient(
-		global.ServerConfig.UserSrvInfo.Name,
+		global.ServerConfig.VideoSrvInfo.Name,
 		client.WithResolver(r),                                     // service discovery
 		client.WithLoadBalancer(loadbalance.NewWeightedBalancer()), // load balance
 		client.WithMuxConnection(1),                                // multiplexing
 		client.WithMiddleware(middleware.CommonMiddleware),
 		client.WithInstanceMW(middleware.ClientMiddleware),
 		//client.WithSuite(tracing.NewClientSuite()),
-		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.UserSrvInfo.Name}),
+		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.VideoSrvInfo.Name}),
 	)
 	if err != nil {
 		klog.Fatalf("ERROR: cannot init client: %v\n", err)

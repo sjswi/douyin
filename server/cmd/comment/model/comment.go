@@ -30,7 +30,7 @@ func (b *Comment) BeforeCreate(_ *gorm.DB) (err error) {
 
 const CommentCachePrefix string = "comment:comment_"
 
-func queryCommentByUserID(tx *gorm.DB, userID uint) ([]Comment, error) {
+func queryCommentByUserID(tx *gorm.DB, userID int64) ([]Comment, error) {
 	var Comments []Comment
 	if err := tx.Table("comment").Where("user_id=?", userID).Find(&Comments).Error; err != nil {
 		return nil, err
@@ -38,7 +38,7 @@ func queryCommentByUserID(tx *gorm.DB, userID uint) ([]Comment, error) {
 	return Comments, nil
 }
 
-func QueryCommentByUserIDWithCache(tx *gorm.DB, userID uint) ([]Comment, error) {
+func QueryCommentByUserIDWithCache(tx *gorm.DB, userID int64) ([]Comment, error) {
 	key := CommentCachePrefix + "UserID_" + strconv.Itoa(int(userID))
 	// 查看key是否存在
 	//不存在
@@ -85,7 +85,7 @@ func QueryCommentByUserIDWithCache(tx *gorm.DB, userID uint) ([]Comment, error) 
 	return Comments, nil
 }
 
-func queryCommentByID(tx *gorm.DB, ID uint) (*Comment, error) {
+func queryCommentByID(tx *gorm.DB, ID int64) (*Comment, error) {
 	var Comments *Comment
 	if err := tx.Table("comment").Where("id=?", ID).Find(&Comments).Error; err != nil {
 		return nil, err
@@ -93,7 +93,7 @@ func queryCommentByID(tx *gorm.DB, ID uint) (*Comment, error) {
 	return Comments, nil
 }
 
-func QueryCommentByIDWithCache(tx *gorm.DB, ID uint) (*Comment, error) {
+func QueryCommentByIDWithCache(tx *gorm.DB, ID int64) (*Comment, error) {
 	key := CommentCachePrefix + "ID_" + strconv.Itoa(int(ID))
 	// 查看key是否存在
 	//不存在
@@ -140,15 +140,21 @@ func QueryCommentByIDWithCache(tx *gorm.DB, ID uint) (*Comment, error) {
 	return Comments, nil
 }
 
-func queryCommentByVideoID(tx *gorm.DB, videoID uint) ([]Comment, error) {
+func queryCommentByVideoID(tx *gorm.DB, videoID int64) ([]Comment, error) {
 	var Comments []Comment
 	if err := tx.Table("comment").Where("video_id=?", videoID).Order("created_at DESC").Find(&Comments).Error; err != nil {
 		return nil, err
 	}
 	return Comments, nil
 }
-
-func QueryCommentByVideoIDWithCache(tx *gorm.DB, videoID uint) ([]Comment, error) {
+func CountCommentByVideoID(tx *gorm.DB, videoID int64) (*int64, error) {
+	var count *int64
+	if err := tx.Table("comment").Where("video_id=?", videoID).Count(count).Error; err != nil {
+		return nil, err
+	}
+	return count, nil
+}
+func QueryCommentByVideoIDWithCache(tx *gorm.DB, videoID int64) ([]Comment, error) {
 	key := CommentCachePrefix + "VideoID_" + strconv.Itoa(int(videoID))
 	// 查看key是否存在
 	//不存在
@@ -195,7 +201,7 @@ func QueryCommentByVideoIDWithCache(tx *gorm.DB, videoID uint) ([]Comment, error
 	return Comments, nil
 }
 
-func queryCommentByUserIDAndVideoID(tx *gorm.DB, userID, videoID uint) (*Comment, error) {
+func queryCommentByUserIDAndVideoID(tx *gorm.DB, userID, videoID int64) (*Comment, error) {
 	var Comments Comment
 	if err := tx.Table("comment").Where("user_id=? and video_id=?", userID, videoID).Find(&Comments).Error; err != nil {
 		return nil, err
@@ -203,7 +209,7 @@ func queryCommentByUserIDAndVideoID(tx *gorm.DB, userID, videoID uint) (*Comment
 	return &Comments, nil
 }
 
-func QueryCommentByUserIDAndVideoIDWithCache(tx *gorm.DB, userID, videoID uint) (*Comment, error) {
+func QueryCommentByUserIDAndVideoIDWithCache(tx *gorm.DB, userID, videoID int64) (*Comment, error) {
 	key := CommentCachePrefix + "UserID_" + strconv.Itoa(int(userID)) + "_videoID_" + strconv.Itoa(int(videoID))
 	var result string
 	var Comment *Comment
@@ -271,7 +277,7 @@ func DeleteComment(tx *gorm.DB, comment Comment) error {
 	return nil
 }
 
-func DeleteCommentByID(tx *gorm.DB, commentID uint) error {
+func DeleteCommentByID(tx *gorm.DB, commentID int64) error {
 	if err := tx.Table("comment").Delete(&Comment{}, commentID).Error; err != nil {
 		return err
 	}

@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	relation2 "douyin_rpc/client/kitex_gen/relation"
 	"douyin_rpc/server/cmd/user/global"
 	user "douyin_rpc/server/cmd/user/kitex_gen/user"
 	"douyin_rpc/server/cmd/user/model"
@@ -87,12 +88,45 @@ func (s *UserServiceImpl) Register(ctx context.Context, req *user.RegisterReques
 // GetUser implements the UserServiceImpl interface.
 // 该接口用于rpc内部获得用户信息，供其他rpc服务调用
 func (s *UserServiceImpl) GetUser(ctx context.Context, req *user.GetUserRequest) (resp *user.GetUserResponse, err error) {
-	// TODO: Your code here...
-	return
+	tx := global.DB.Debug()
+	if req.QueryType == 1 {
+		cache, err := model.QueryUserByIDWithCache(tx, req.UserId)
+		if err != nil {
+			return nil, err
+		}
+	} else if req.QueryType == 2 {
+		cache, err := model.QueryUserByNameWithCache(tx, req.Username)
+		if err != nil {
+			return nil, err
+		}
+	}
+	resp.User = &user.User1{
+		Id:        0,
+		Name:      "",
+		Password:  "",
+		CreatedAt: 0,
+		UpdatedAt: 0,
+		Salt:      "",
+	}
 }
 
 // User implements the UserServiceImpl interface.
 func (s *UserServiceImpl) User(ctx context.Context, req *user.UserRequest) (resp *user.UserResponse, err error) {
-	// TODO: Your code here...
+	tx := global.DB.Debug()
+	cache, err := model.QueryUserByIDWithCache(tx, req.UserId)
+	if err != nil {
+		return nil, err
+	}
+	relation, err := global.RelationClient.GetCount(ctx, &relation2.GetCountRequest{})
+	if err != nil {
+		return nil, err
+	}
+	resp.User = &user.User{
+		Id:            0,
+		Name:          "",
+		FollowCount:   0,
+		FollowerCount: 0,
+		IsFollow:      false,
+	}
 	return
 }

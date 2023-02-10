@@ -4,48 +4,48 @@
     <option name="openedFilesInfos">
       <list>
         <OpenedFileInfo>
-          <option name="caretOffset" value="2924" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/api/biz/handler/api/user_service.go" />
+          <option name="caretOffset" value="592" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/video/config/config.go" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="1863" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/user/handler.go" />
+          <option name="caretOffset" value="253" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/comment/global/global.go" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="2600" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/user/model/user.go" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="66" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/api/Makefile" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="0" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/client/Makefile" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="438" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/Makefile" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="0" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/api/router.go" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="0" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/client/kitex_gen/comment/comment.go" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="2808" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/client/kitex_gen/comment/commentservice/client.go" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="0" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/comment/main.go" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="0" />
+          <option name="caretOffset" value="5663" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/comment/handler.go" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="19314" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/comment/kitex_gen/comment/comment.go" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="4192" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/comment/model/comment.go" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="2134" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/message/handler.go" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="3584" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/message/model/message.go" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="6663" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/relation/handler.go" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="4657" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/relation/model/relation.go" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="1184" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/relation/kitex_gen/relation/relation.go" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="0" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/relation/global/global.go" />
         </OpenedFileInfo>
       </list>
     </option>

@@ -30,7 +30,7 @@ func (b *Message) BeforeCreate(_ *gorm.DB) (err error) {
 
 const MessageCachePrefix string = "message:message_"
 
-func queryMessageByUserID(tx *gorm.DB, userID uint) ([]Message, error) {
+func queryMessageByUserID(tx *gorm.DB, userID int64) ([]Message, error) {
 	var Messages []Message
 	if err := tx.Table("message").Where("user_id=?", userID).Find(&Messages).Error; err != nil {
 		return nil, err
@@ -38,7 +38,7 @@ func queryMessageByUserID(tx *gorm.DB, userID uint) ([]Message, error) {
 	return Messages, nil
 }
 
-func QueryMessageByUserIDWithCache(tx *gorm.DB, userID uint) ([]Message, error) {
+func QueryMessageByUserIDWithCache(tx *gorm.DB, userID int64) ([]Message, error) {
 	key := MessageCachePrefix + "UserID_" + strconv.Itoa(int(userID))
 	// 查看key是否存在
 	//不存在
@@ -85,7 +85,7 @@ func QueryMessageByUserIDWithCache(tx *gorm.DB, userID uint) ([]Message, error) 
 	return Messages, nil
 }
 
-func queryMessageByTargetID(tx *gorm.DB, targetID uint) ([]Message, error) {
+func queryMessageByTargetID(tx *gorm.DB, targetID int64) ([]Message, error) {
 	var Messages []Message
 	if err := tx.Table("message").Where("target_id=?", targetID).Find(&Messages).Error; err != nil {
 		return nil, err
@@ -93,7 +93,7 @@ func queryMessageByTargetID(tx *gorm.DB, targetID uint) ([]Message, error) {
 	return Messages, nil
 }
 
-func QueryMessageByTargetIDWithCache(tx *gorm.DB, targetID uint) ([]Message, error) {
+func QueryMessageByTargetIDWithCache(tx *gorm.DB, targetID int64) ([]Message, error) {
 	key := MessageCachePrefix + "TargetID_" + strconv.Itoa(int(targetID))
 	// 查看key是否存在
 	//不存在
@@ -140,7 +140,7 @@ func QueryMessageByTargetIDWithCache(tx *gorm.DB, targetID uint) ([]Message, err
 	return Messages, nil
 }
 
-func queryMessageByUserIDAndTargetID(tx *gorm.DB, userID, targetID uint) ([]Message, error) {
+func queryMessageByUserIDAndTargetID(tx *gorm.DB, userID, targetID int64) ([]Message, error) {
 	var messages []Message
 	if err := tx.Table("message").Where("user_id=? and target_id=?", userID, targetID).Find(&messages).Error; err != nil {
 		return nil, err
@@ -148,7 +148,7 @@ func queryMessageByUserIDAndTargetID(tx *gorm.DB, userID, targetID uint) ([]Mess
 	return messages, nil
 }
 
-func QueryMessageByUserIDAndTargetIDWithCache(tx *gorm.DB, userID, targetID uint) ([]Message, error) {
+func QueryMessageByUserIDAndTargetIDWithCache(tx *gorm.DB, userID, targetID int64) ([]Message, error) {
 	key := MessageCachePrefix + "UserID_" + strconv.Itoa(int(userID)) + "_TargetID_" + strconv.Itoa(int(targetID))
 	var result string
 	var messages []Message

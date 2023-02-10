@@ -35,7 +35,7 @@ func (b *Video) BeforeCreate(_ *gorm.DB) (err error) {
 const VideoCachePrefix string = "video:video_"
 
 // queryVideoByID 查询数据库的video
-func queryVideoByID(tx *gorm.DB, videoId uint) (*Video, error) {
+func queryVideoByID(tx *gorm.DB, videoId int64) (*Video, error) {
 	// 直接查询数据库
 	var video Video
 	if err := tx.Model(Video{}).Where("id=?", videoId).Find(&video).Error; err != nil {
@@ -45,7 +45,7 @@ func queryVideoByID(tx *gorm.DB, videoId uint) (*Video, error) {
 }
 
 // QueryVideoByIDWithCache 通过视频id查询视频信息
-func QueryVideoByIDWithCache(tx *gorm.DB, videoID uint) (*Video, error) {
+func QueryVideoByIDWithCache(tx *gorm.DB, videoID int64) (*Video, error) {
 	key := VideoCachePrefix + "ID_" + strconv.Itoa(int(videoID))
 	// 查看key是否存在
 	//不存在
@@ -101,7 +101,7 @@ func UpdateVideo(tx *gorm.DB, video *Video) error {
 }
 
 // queryVideoByAuthorID 通过videoID查询video
-func queryVideoByAuthorID(tx *gorm.DB, authorID uint) ([]Video, error) {
+func queryVideoByAuthorID(tx *gorm.DB, authorID int64) ([]Video, error) {
 	var videos []Video
 	if err := tx.Model(Video{}).Where("video_id=?", authorID).Find(&videos).Error; err != nil {
 		return nil, err
@@ -110,7 +110,7 @@ func queryVideoByAuthorID(tx *gorm.DB, authorID uint) ([]Video, error) {
 }
 
 // QueryVideoByAuthorIDWithCache 先查缓存再查数据库
-func QueryVideoByAuthorIDWithCache(tx *gorm.DB, authorID uint) ([]Video, error) {
+func QueryVideoByAuthorIDWithCache(tx *gorm.DB, authorID int64) ([]Video, error) {
 	key := VideoCachePrefix + "AuthorID_" + strconv.Itoa(int(authorID))
 	// 查看key是否存在
 

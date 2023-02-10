@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	r, info := initialize.InitNacos(10005)
+	r, info := initialize.InitNacos(10002)
 	initialize.InitDB()
 	initialize.InitRedis()
 	initialize.InitLogger()
@@ -23,7 +23,7 @@ func main() {
 	//	provider.WithInsecure(),
 	//)
 	//defer p.Shutdown(context.Background())
-	addr, err := net.ResolveTCPAddr("tcp", "0.0.0.0:10005")
+	addr, err := net.ResolveTCPAddr("tcp", "0.0.0.0:10002")
 	if err != nil {
 		return
 	}

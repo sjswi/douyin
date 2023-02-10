@@ -26,9 +26,9 @@ struct Video {
 }
 
 struct FavoriteActionRequest{
-    1: required string video_id;
+    1: required i64 video_id;
     2: required i64 auth_id;
-    3: required string action_type;
+    3: required i32 action_type;
 }
 
 struct FavoriteActionResponse{
@@ -37,7 +37,7 @@ struct FavoriteActionResponse{
 }
 struct FavoriteListRequest{
     1: required i64 auth_id;
-    2: required string user_id;
+    2: required i64 user_id;
 }
 
 struct FavoriteListResponse{

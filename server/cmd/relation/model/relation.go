@@ -33,7 +33,7 @@ func (b *Relation) BeforeCreate(_ *gorm.DB) (err error) {
 
 const RelationCachePrefix string = "relation:relation_"
 
-func queryRelationByUserID(tx *gorm.DB, userID uint) ([]Relation, error) {
+func queryRelationByUserID(tx *gorm.DB, userID int64) ([]Relation, error) {
 	var relations []Relation
 	if err := tx.Table("relation").Where("exist=1").Where("type=1 or type=2").Where("user_id=?", userID).Find(&relations).Error; err != nil {
 		return nil, err
@@ -41,7 +41,7 @@ func queryRelationByUserID(tx *gorm.DB, userID uint) ([]Relation, error) {
 	return relations, nil
 }
 
-func QueryRelationByUserIDWithCache(tx *gorm.DB, userID uint) ([]Relation, error) {
+func QueryRelationByUserIDWithCache(tx *gorm.DB, userID int64) ([]Relation, error) {
 	key := RelationCachePrefix + "UserID_" + strconv.Itoa(int(userID))
 	// 查看key是否存在
 	//不存在
@@ -88,14 +88,14 @@ func QueryRelationByUserIDWithCache(tx *gorm.DB, userID uint) ([]Relation, error
 	return relations, nil
 }
 
-func queryRelationByTargetID(tx *gorm.DB, targetID uint) ([]Relation, error) {
+func queryRelationByTargetID(tx *gorm.DB, targetID int64) ([]Relation, error) {
 	var relations []Relation
 	if err := tx.Table("relation").Where("exist=1").Where("type=1 or type=2").Where("target_id=?", targetID).Find(&relations).Error; err != nil {
 		return nil, err
 	}
 	return relations, nil
 }
-func QueryRelationIsFriend(tx *gorm.DB, userId uint) ([]Relation, error) {
+func QueryRelationIsFriend(tx *gorm.DB, userId int64) ([]Relation, error) {
 	relations, err := QueryRelationByUserIDWithCache(tx, userId)
 	if err != nil {
 		return nil, err
@@ -110,7 +110,7 @@ func QueryRelationIsFriend(tx *gorm.DB, userId uint) ([]Relation, error) {
 	}
 	return returnR[:j], nil
 }
-func QueryRelationByTargetIDWithCache(tx *gorm.DB, targetID uint) ([]Relation, error) {
+func QueryRelationByTargetIDWithCache(tx *gorm.DB, targetID int64) ([]Relation, error) {
 	key := RelationCachePrefix + "TargetID_" + strconv.Itoa(int(targetID))
 	// 查看key是否存在
 	//不存在
@@ -157,15 +157,26 @@ func QueryRelationByTargetIDWithCache(tx *gorm.DB, targetID uint) ([]Relation, e
 	return relations, nil
 }
 
-func queryRelationByUserIDAndTargetID(tx *gorm.DB, userID, targetID uint) (*Relation, error) {
+func queryRelationByUserIDAndTargetID(tx *gorm.DB, userID, targetID int64) (*Relation, error) {
 	var relations Relation
 	if err := tx.Table("relation").Where("exist=1").Where("type=1 or type=2").Where("user_id=? and target_id=?", userID, targetID).Find(&relations).Error; err != nil {
 		return nil, err
 	}
 	return &relations, nil
 }
-
-func QueryRelationByUserIDAndTargetIDWithCache(tx *gorm.DB, userID, targetID uint) (*Relation, error) {
+func CountRelation(tx *gorm.DB, userID int64) (friendCount, followCount, followerCount int64, err error) {
+	if err = tx.Table("relation").Where("exist=1").Where("type=1 or type=2").Where("user_id=?", userID).Count(&followCount).Error; err != nil {
+		return
+	}
+	if err = tx.Table("relation").Where("exist=1").Where("type=1 or type=2").Where("target_id=?", userID).Count(&followerCount).Error; err != nil {
+		return
+	}
+	if err = tx.Table("relation").Where("exist=1").Where("type=2").Where("user_id=?", userID).Count(&friendCount).Error; err != nil {
+		return
+	}
+	return
+}
+func QueryRelationByUserIDAndTargetIDWithCache(tx *gorm.DB, userID, targetID int64) (*Relation, error) {
 	key := RelationCachePrefix + "UserID_" + strconv.Itoa(int(userID)) + "_TargetID_" + strconv.Itoa(int(targetID))
 	var result string
 	var relation *Relation
