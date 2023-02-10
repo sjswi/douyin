@@ -21,11 +21,11 @@ struct Comment {
   4: string create_date;
 }
 struct CommentActionRequest{
-    1: required string video_id;
+    1: required i64 video_id;
     2: required i64 auth_id;
-    3: required string action_type;
+    3: required i32 action_type;
     4: string comment_text;
-    5: string comment_id;
+    5: i64 comment_id;
 }
 
 struct CommentActionResponse{
@@ -35,7 +35,7 @@ struct CommentActionResponse{
 }
 struct CommentListRequest{
     1: required i64 auth_id;
-    2: required string user_id;
+    2: required i64 video_id;
 }
 
 struct CommentListResponse{
@@ -50,8 +50,14 @@ struct Comment1{
     3: i64 video_id
     4: i64 created_at
     5: i64 updated_at
+    6: string content
 }
-
+/*
+    query_type=1  根据id查询
+    query_type=2  根据user_id查询
+    query_type=3  根据video_id查询
+    query_type=4  根据video_id和user_id查询
+*/
 struct GetCommentRequest {
     1: i64 id
     2: i64 user_id

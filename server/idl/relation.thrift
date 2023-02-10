@@ -16,7 +16,7 @@ struct User {
 
 struct RelationActionRequest{
     1: required i64 auth_id;
-    2: required string to_user_id;
+    2: required i64 to_user_id;
     3: required i32 action_type;
 }
 
@@ -27,7 +27,7 @@ struct RelationActionResponse{
 
 struct RelationFollowListRequest{
     1: required i64 auth_id;
-    2: required string user_id;
+    2: required i64 user_id;
 }
 
 struct RelationFollowListResponse{
@@ -38,7 +38,7 @@ struct RelationFollowListResponse{
 
 struct RelationFollowerListRequest{
     1: required i64 auth_id;
-    2: required string user_id;
+    2: required i64 user_id;
 }
 
 struct RelationFollowerListResponse{
@@ -49,7 +49,7 @@ struct RelationFollowerListResponse{
 
 struct RelationFriendListRequest{
     1: required i64 auth_id;
-    2: required string user_id;
+    2: required i64 user_id;
 }
 
 struct RelationFriendListResponse{
@@ -64,7 +64,13 @@ struct Relation1{
     3: i64 target_id
     4: i32 type
 }
-
+/*
+    query_type=1  根据id查询
+    query_type=2  根据user_id查询
+    query_type=3  根据target_id查询
+    query_type=4  根据user_id和target_id查询
+    relation_type暂时不需要，考虑拿掉
+*/
 struct GetRelationRequest {
     1: i64 id
     2: i64 user_id

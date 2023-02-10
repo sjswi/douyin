@@ -6,6 +6,7 @@ import (
 	"context"
 	"douyin_rpc/server/cmd/api/global"
 	"douyin_rpc/server/cmd/api/kitex_gen/message"
+	"strconv"
 
 	api "douyin_rpc/server/cmd/api/biz/model/api"
 	"github.com/cloudwego/hertz/pkg/app"
@@ -21,8 +22,8 @@ import (
 // @Param to_user_id query int true "对方用户id"
 // @Param action_type query int true "类型"
 // @Param content query string true "消息内容"
-// @Success 200 object api.MessageActionResponse 成功后返回值
-// @Failure 409 object api.MessageActionResponse 失败后返回值
+// @Success 200 object message.MessageActionResponse 成功后返回值
+// @Failure 409 object message.MessageActionResponse 失败后返回值
 // @Router /douyin/message/action/ [post]
 // @router /douyin/message/action/ [POST]
 func MessageAction(ctx context.Context, c *app.RequestContext) {
@@ -37,10 +38,18 @@ func MessageAction(ctx context.Context, c *app.RequestContext) {
 	if !exist {
 		return
 	}
+	toUserID, err := strconv.ParseInt(req.ToUserID, 0, 64)
+	if err != nil {
+		return
+	}
+	actionType, err := strconv.ParseInt(req.ToUserID, 0, 32)
+	if err != nil {
+		return
+	}
 	resp, err := global.MessageClient.MessageAction(ctx, &message.MessageActionRequest{
-		ToUserId:   req.ToUserID,
+		ToUserId:   toUserID,
 		AuthId:     value.(int64),
-		ActionType: req.ActionType,
+		ActionType: int32(actionType),
 		Content:    req.Content,
 	})
 	if err != nil {
@@ -58,8 +67,8 @@ func MessageAction(ctx context.Context, c *app.RequestContext) {
 // @Accept application/x-json-stream
 // @Param to_user_id query int true "用户id"
 // @Param token query string true "token"
-// @Success 200 object api.MessageListResponse 成功后返回值
-// @Failure 409 object api.MessageListResponse 失败后返回值
+// @Success 200 object message.MessageListResponse 成功后返回值
+// @Failure 409 object message.MessageListResponse 失败后返回值
 // @Router /douyin/message/chat/ [get]
 // @router /douyin/message/list/ [GET]
 func MessageList(ctx context.Context, c *app.RequestContext) {
@@ -74,9 +83,13 @@ func MessageList(ctx context.Context, c *app.RequestContext) {
 	if !exist {
 		return
 	}
+	toUserID, err := strconv.ParseInt(req.ToUserID, 0, 64)
+	if err != nil {
+		return
+	}
 	resp, err := global.MessageClient.MessageList(ctx, &message.MessageListRequest{
 		AuthId:   value.(int64),
-		ToUserId: req.ToUserID,
+		ToUserId: toUserID,
 	})
 	if err != nil {
 		return

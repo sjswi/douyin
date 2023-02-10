@@ -42,7 +42,7 @@ struct RegisterResponse {
   3: i64 user_id;
 }
 struct UserRequest{
-    1: required string user_id;
+    1: required i64 user_id;
     2: required i64 auth_id;
 }
 
@@ -51,6 +51,10 @@ struct UserResponse {
   2: string status_msg;
   3: User user;
 }
+/*
+* query_type=1 根据user_id查询用户
+* query_type=2 根据username查询用户
+* */
 struct GetUserRequest {
     1: i64 user_id
     2: string username

@@ -2,7 +2,6 @@
 {
   "name": "douyin_favorite",
   "host": "192.168.56.100",
-  "port": 10002,
   "otel": {
     "endpoint": "http://192.168.56.102:14268/api/traces"
   },
@@ -33,4 +32,8 @@
     "name": "douyin_video",
     "namespace": "0254574a-a379-479f-89a1-a71ff4ca4c9c"
   },
+  "comment_srv": {
+    "name": "douyin_comment",
+    "namespace": "18147820-cfb5-4d34-9140-c3845f3093ec"
+  }
 }

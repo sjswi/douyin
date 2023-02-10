@@ -1,7 +1,7 @@
 package initialize
 
 import (
-	"douyin_rpc/server/cmd/user/global"
+	"douyin_rpc/server/cmd/video/global"
 	"github.com/go-redis/redis/v8"
 	"time"
 )

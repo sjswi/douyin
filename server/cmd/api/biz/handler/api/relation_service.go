@@ -6,6 +6,7 @@ import (
 	"context"
 	"douyin_rpc/server/cmd/api/global"
 	"douyin_rpc/server/cmd/api/kitex_gen/relation"
+	"strconv"
 
 	api "douyin_rpc/server/cmd/api/biz/model/api"
 	"github.com/cloudwego/hertz/pkg/app"
@@ -20,8 +21,8 @@ import (
 // @Param to_user_id query int true "用户id"
 // @Param token query string true "token"
 // @Param action_type query int true "操作类型"
-// @Success 200 object api.RelationActionResponse 成功后返回值
-// @Failure 409 object api.RelationActionResponse 失败后返回值
+// @Success 200 object relation.RelationActionResponse 成功后返回值
+// @Failure 409 object relation.RelationActionResponse 失败后返回值
 // @Router /douyin/relation/action/ [post]
 // @router /douyin/relation/action/ [POST]
 func Action(ctx context.Context, c *app.RequestContext) {
@@ -36,9 +37,13 @@ func Action(ctx context.Context, c *app.RequestContext) {
 	if !exist {
 		return
 	}
+	toUserID, err := strconv.ParseInt(req.ToUserID, 0, 64)
+	if err != nil {
+		return
+	}
 	resp, err := global.RelationClient.Action(ctx, &relation.RelationActionRequest{
 		AuthId:     value.(int64),
-		ToUserId:   req.ToUserID,
+		ToUserId:   toUserID,
 		ActionType: req.ActionType,
 	})
 	if err != nil {
@@ -73,9 +78,13 @@ func FollowList(ctx context.Context, c *app.RequestContext) {
 	if !exist {
 		return
 	}
+	userID, err := strconv.ParseInt(req.UserID, 0, 64)
+	if err != nil {
+		return
+	}
 	resp, err := global.RelationClient.FollowList(ctx, &relation.RelationFollowListRequest{
 		AuthId: value.(int64),
-		UserId: req.UserID,
+		UserId: userID,
 	})
 	if err != nil {
 		return
@@ -108,9 +117,13 @@ func FollowerList(ctx context.Context, c *app.RequestContext) {
 	if !exist {
 		return
 	}
+	userID, err := strconv.ParseInt(req.UserID, 0, 64)
+	if err != nil {
+		return
+	}
 	resp, err := global.RelationClient.FollowerList(ctx, &relation.RelationFollowerListRequest{
 		AuthId: value.(int64),
-		UserId: req.UserID,
+		UserId: userID,
 	})
 	if err != nil {
 		return
@@ -143,9 +156,13 @@ func FriendList(ctx context.Context, c *app.RequestContext) {
 	if !exist {
 		return
 	}
+	userID, err := strconv.ParseInt(req.UserID, 0, 64)
+	if err != nil {
+		return
+	}
 	resp, err := global.RelationClient.FriendList(ctx, &relation.RelationFriendListRequest{
 		AuthId: value.(int64),
-		UserId: req.UserID,
+		UserId: userID,
 	})
 	if err != nil {
 		return

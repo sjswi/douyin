@@ -53,7 +53,12 @@ struct Favorite1{
     4: i64 created_at
     5: i64 updated_at
 }
-
+/*
+    query_type=1  根据id查询
+    query_type=2  根据user_id查询
+    query_type=3  根据video_id查询
+    query_type=4  根据video_id和user_id查询
+*/
 struct GetFavoriteRequest {
     1: i64 id
     2: i64 user_id

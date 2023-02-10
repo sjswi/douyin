@@ -56,7 +56,6 @@ func (s *UserServiceImpl) Register(ctx context.Context, req *user.RegisterReques
 			tx.Rollback()
 		}
 	}()
-	fmt.Println("sdfajkhvyasygdusdaiusaidu")
 	user1, err := model.QueryUserByNameWithCache(tx, req.Username)
 	fmt.Println(user1)
 	if err != nil {
@@ -94,20 +93,29 @@ func (s *UserServiceImpl) GetUser(ctx context.Context, req *user.GetUserRequest)
 		if err != nil {
 			return nil, err
 		}
+		resp.User = &user.User1{
+			Id:        cache.ID,
+			Name:      cache.Name,
+			Password:  cache.Password,
+			CreatedAt: cache.CreatedAt.Unix(),
+			UpdatedAt: cache.UpdatedAt.Unix(),
+			Salt:      cache.Salt,
+		}
 	} else if req.QueryType == 2 {
 		cache, err := model.QueryUserByNameWithCache(tx, req.Username)
 		if err != nil {
 			return nil, err
 		}
+		resp.User = &user.User1{
+			Id:        cache.ID,
+			Name:      cache.Name,
+			Password:  cache.Password,
+			CreatedAt: cache.CreatedAt.Unix(),
+			UpdatedAt: cache.UpdatedAt.Unix(),
+			Salt:      cache.Salt,
+		}
 	}
-	resp.User = &user.User1{
-		Id:        0,
-		Name:      "",
-		Password:  "",
-		CreatedAt: 0,
-		UpdatedAt: 0,
-		Salt:      "",
-	}
+	return
 }
 
 // User implements the UserServiceImpl interface.
@@ -117,15 +125,22 @@ func (s *UserServiceImpl) User(ctx context.Context, req *user.UserRequest) (resp
 	if err != nil {
 		return nil, err
 	}
-	relation, err := global.RelationClient.GetCount(ctx, &relation2.GetCountRequest{})
+	count, err := global.RelationClient.GetCount(ctx, &relation2.GetCountRequest{UserId: req.UserId})
 	if err != nil {
 		return nil, err
 	}
+	global.RelationClient.GetRelation(ctx, &relation2.GetRelationRequest{
+		Id:           0,
+		UserId:       req.AuthId,
+		TargetId:     req.UserId,
+		RelationType: 1,
+		QueryType:    1,
+	})
 	resp.User = &user.User{
-		Id:            0,
-		Name:          "",
-		FollowCount:   0,
-		FollowerCount: 0,
+		Id:            cache.ID,
+		Name:          cache.Name,
+		FollowCount:   count.FollowCount,
+		FollowerCount: count.FollowerCount,
 		IsFollow:      false,
 	}
 	return

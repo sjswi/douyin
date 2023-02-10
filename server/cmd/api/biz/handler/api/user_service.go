@@ -10,6 +10,7 @@ import (
 	"douyin_rpc/server/cmd/api/middleware"
 	"douyin_rpc/server/cmd/api/models"
 	"github.com/golang-jwt/jwt"
+	"strconv"
 	"time"
 
 	api "douyin_rpc/server/cmd/api/biz/model/api"
@@ -24,8 +25,8 @@ import (
 // @Accept application/x-json-stream
 // @Param username query string true "用户名"
 // @Param password query string true "密码"
-// @Success 200 object api.LoginResponse 成功后返回值
-// @Failure 409 object api.LoginResponse 失败后返回值
+// @Success 200 object user.LoginResponse 成功后返回值
+// @Failure 409 object user.LoginResponse 失败后返回值
 // @Router /douyin/user/login/ [post]
 // @router /douyin/user/login/ [POST]
 func Login(ctx context.Context, c *app.RequestContext) {
@@ -72,8 +73,8 @@ func Login(ctx context.Context, c *app.RequestContext) {
 // @Accept application/x-json-stream
 // @Param username query string true "用户名"
 // @Param password query string true "密码"
-// @Success 200 object api.RegisterResponse 成功后返回值
-// @Failure 409 object api.RegisterResponse 失败后返回值
+// @Success 200 object user.RegisterResponse 成功后返回值
+// @Failure 409 object user.RegisterResponse 失败后返回值
 // @Router /douyin/user/register/ [post]
 // @router /douyin/user/register/ [POST]
 func Register(ctx context.Context, c *app.RequestContext) {
@@ -123,8 +124,8 @@ func Register(ctx context.Context, c *app.RequestContext) {
 // @Accept application/x-json-stream
 // @Param user_id query int true "用户id"
 // @Param token query string true "token"
-// @Success 200 object api.UserResponse 成功后返回值
-// @Failure 409 object api.UserResponse 失败后返回值
+// @Success 200 object user.UserResponse 成功后返回值
+// @Failure 409 object user.UserResponse 失败后返回值
 // @Router /douyin/user/ [get]
 // @router /douyin/user/ [GET]
 func GetUser(ctx context.Context, c *app.RequestContext) {
@@ -139,8 +140,12 @@ func GetUser(ctx context.Context, c *app.RequestContext) {
 	if !exist {
 		return
 	}
+	userID, err := strconv.ParseInt(req.UserID, 0, 64)
+	if err != nil {
+		return
+	}
 	resp, err := global.UserClient.User(ctx, &user.UserRequest{
-		UserId: req.UserID,
+		UserId: userID,
 		AuthId: value.(int64),
 	})
 	if err != nil {

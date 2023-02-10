@@ -3,6 +3,8 @@ package main
 import (
 	"bytes"
 	"context"
+	"douyin_rpc/client/kitex_gen/comment"
+	"douyin_rpc/client/kitex_gen/favorite"
 	relation2 "douyin_rpc/client/kitex_gen/relation"
 	user "douyin_rpc/client/kitex_gen/user"
 	"douyin_rpc/server/cmd/video/global"
@@ -20,7 +22,7 @@ type FeedServiceImpl struct{}
 // Feed implements the FeedServiceImpl interface.
 func (s *FeedServiceImpl) Feed(ctx context.Context, req *video.FeedRequest) (resp *video.FeedResponse, err error) {
 	tx := global.DB.Debug()
-	latestTime, err := time.Parse("", req.LatestTime)
+	latestTime := time.Unix(req.LatestTime, 0)
 	if err != nil {
 		return nil, err
 	}
@@ -37,7 +39,7 @@ func (s *FeedServiceImpl) Feed(ctx context.Context, req *video.FeedRequest) (res
 		go func() {
 			defer wg.Done()
 			// 查询每个视频的作者，rpc调用user服务
-			getUserResp, err := global.UserClient.GetUser(ctx, &user.GetUserRequest{
+			author, err := global.UserClient.GetUser(ctx, &user.GetUserRequest{
 				UserId:    videos[i].AuthorID,
 				Username:  "",
 				QueryType: 0, // 0根据id查询，1根据名字查询
@@ -48,8 +50,8 @@ func (s *FeedServiceImpl) Feed(ctx context.Context, req *video.FeedRequest) (res
 			}
 			resp.VideoList[i] = &video.Video{
 				Author: &video.User{
-					Id:            getUserResp.User.Id,
-					Name:          getUserResp.User.Name,
+					Id:            author.User.Id,
+					Name:          author.User.Name,
 					FollowCount:   0,
 					FollowerCount: 0,
 					IsFollow:      false,
@@ -62,43 +64,84 @@ func (s *FeedServiceImpl) Feed(ctx context.Context, req *video.FeedRequest) (res
 				PlayUrl:       videos[i].PlayURL,
 				CoverUrl:      videos[i].CoverURL,
 			}
+			// 异步查询出关注数，粉丝数，是否关注视频作者，是否给该视频点赞，视频点赞数，视频评论数
 			var wg1 sync.WaitGroup
 			wg1.Add(5)
-			var tempErr error
+
 			go func(followCount, followerCount *int64) {
 				// 查询FollowCount和FollowerCount
 				defer wg.Done()
-
+				count, err1 := global.RelationClient.GetCount(ctx, &relation2.GetCountRequest{UserId: author.User.Id})
+				if err1 != nil {
+					err = err1
+					return
+				}
+				*followCount = count.FollowCount
+				*followerCount = count.FollowerCount
 			}(&resp.VideoList[i].Author.FollowCount, &resp.VideoList[i].Author.FollowerCount)
 			go func(favoriteCount *int64) {
 				// 查询FavoriteCount
 				defer wg.Done()
-
+				count, err1 := global.FavoriteClient.GetFavoriteCount(ctx, &favorite.GetFavoriteCountRequest{VideoId: videos[i].ID})
+				if err1 != nil {
+					err = err1
+					return
+				}
+				*favoriteCount = count.Count
 			}(&resp.VideoList[i].FavoriteCount)
 			go func(commentCount *int64) {
 				// 查询CommentCount
 				defer wg.Done()
-
+				count, err1 := global.CommentClient.GetCommentCount(ctx, &comment.GetCommentCountRequest{VideoId: videos[i].ID})
+				if err1 != nil {
+					err = err1
+					return
+				}
+				*commentCount = count.Count
 			}(&resp.VideoList[i].CommentCount)
 			go func(isFavorite *bool) {
 				// 查询登录用户是否点赞该视频
 				defer wg.Done()
 				if req.AuthId != -1 {
+					cache, err1 := global.FavoriteClient.GetFavorite(ctx, &favorite.GetFavoriteRequest{
+						Id:        0,
+						UserId:    req.AuthId,
+						VideoId:   videos[i].ID,
+						QueryType: 4,
+					})
+					if err1 != nil {
 
+						err = err1
+						return
+					}
+					if cache.Favorites[0].Id != 0 {
+						*isFavorite = true
+					}
 				}
 			}(&resp.VideoList[i].IsFavorite)
 			go func(isFollow *bool) {
 				//查询登录用户是否关注该视频作者
 				defer wg.Done()
 				if req.AuthId != -1 {
+					relation1, err1 := global.RelationClient.GetRelation(ctx, &relation2.GetRelationRequest{
+						Id:           0,
+						UserId:       req.AuthId,
+						TargetId:     author.User.Id,
+						RelationType: 0,
+						QueryType:    1,
+					})
+					if err1 != nil {
 
+						err = err1
+						return
+					}
+					if relation1.Relations[0].Id != 0 {
+						*isFollow = true
+					}
 				}
 			}(&resp.VideoList[i].Author.IsFollow)
 			wg1.Wait()
-			if tempErr != nil {
-				err = tempErr
-				return
-			}
+
 			//if c.AuthUser != nil {
 			//	favorite, err := global.FavoriteClient.GetFavorite(tx, author.ID, videos[i].ID)
 			//	if err != nil {
@@ -167,11 +210,12 @@ func (s *FeedServiceImpl) PublishAction(ctx context.Context, req *video.PublishA
 // PublishList implements the FeedServiceImpl interface.
 func (s *FeedServiceImpl) PublishList(ctx context.Context, req *video.PublishListRequest) (resp *video.PublishListResponse, err error) {
 	tx := global.DB.Debug()
-	videos, err := model.QueryVideoByAuthorIDWithCache(tx, req.AuthId)
-	if err != nil {
-		return err
+	videos, err1 := model.QueryVideoByAuthorIDWithCache(tx, req.AuthId)
+	if err1 != nil {
+		err = err1
+		return
 	}
-	var errList error
+
 	var wg sync.WaitGroup
 	// 3.2、查询视频的作者，填充返回的视频信息
 	resp.VideoList = make([]*video.Video, len(videos))
@@ -187,13 +231,13 @@ func (s *FeedServiceImpl) PublishList(ctx context.Context, req *video.PublishLis
 			resp.VideoList[i].PlayUrl = videos[i].PlayURL
 			resp.VideoList[i].FavoriteCount = 0
 			resp.VideoList[i].IsFavorite = false
-			author, err := global.UserClient.GetUser(ctx, &user.GetUserRequest{
+			author, err1 := global.UserClient.GetUser(ctx, &user.GetUserRequest{
 				UserId:    0,
 				Username:  "",
 				QueryType: 0,
 			})
-			if err != nil {
-				errList = err
+			if err1 != nil {
+				err = err1
 				return
 			}
 
@@ -213,20 +257,10 @@ func (s *FeedServiceImpl) PublishList(ctx context.Context, req *video.PublishLis
 				IsFavorite:    false,
 				Title:         videos[i].Title,
 			}
-			relation, err := global.RelationClient.GetRelation(ctx, &relation2.GetRelationRequest{
-				Id:           0,
-				UserId:       0,
-				TargetId:     0,
-				RelationType: 0,
-				QueryType:    0,
-			})
-			if err != nil {
-				errList = err
-				return
-			}
+
 			var wg1 sync.WaitGroup
 			wg1.Add(5)
-			var tempErr error
+
 			go func(followCount, followerCount *int64) {
 				// 查询FollowCount和FollowerCount
 				defer wg.Done()
@@ -257,17 +291,11 @@ func (s *FeedServiceImpl) PublishList(ctx context.Context, req *video.PublishLis
 				}
 			}(&resp.VideoList[i].Author.IsFollow)
 			wg1.Wait()
-			if tempErr != nil {
-				err = tempErr
-				return
-			}
+
 		}()
 	}
 	wg.Wait()
-	if errList != nil {
-		err = errList
 
-	}
 	return
 }
 
@@ -276,9 +304,10 @@ func (s *FeedServiceImpl) GetVideo(ctx context.Context, req *video.GetVideoReque
 	// 根据video_id 查询video
 	tx := global.DB.Debug()
 	if req.QueryType == 1 {
-		cache, err := model.QueryVideoByIDWithCache(tx, req.VideoId)
-		if err != nil {
-			return nil, err
+		cache, err1 := model.QueryVideoByIDWithCache(tx, req.VideoId)
+		if err1 != nil {
+			err = err1
+			return
 		}
 		resp.Video = make([]*video.Video1, 1)
 		resp.Video[0] = &video.Video1{
@@ -291,9 +320,10 @@ func (s *FeedServiceImpl) GetVideo(ctx context.Context, req *video.GetVideoReque
 			UpdatedAt: cache.UpdatedAt.Unix(),
 		}
 	} else if req.QueryType == 2 {
-		cache, err := model.QueryVideoByAuthorIDWithCache(tx, req.AuthorId)
-		if err != nil {
-			return nil, err
+		cache, err1 := model.QueryVideoByAuthorIDWithCache(tx, req.AuthorId)
+		if err1 != nil {
+			err = err1
+			return
 		}
 		resp.Video = make([]*video.Video1, len(cache))
 		var wg sync.WaitGroup

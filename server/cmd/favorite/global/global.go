@@ -1,6 +1,7 @@
 package global
 
 import (
+	"douyin_rpc/client/kitex_gen/comment/commentservice"
 	"douyin_rpc/client/kitex_gen/relation/relationservice"
 	"douyin_rpc/client/kitex_gen/user/userservice"
 	"douyin_rpc/client/kitex_gen/video/feedservice"
@@ -18,4 +19,5 @@ var (
 	UserClient     userservice.Client
 	VideoClient    feedservice.Client
 	RelationClient relationservice.Client
+	CommentClient  commentservice.Client
 )

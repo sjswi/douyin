@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	r, info := initialize.InitNacos(10006)
+	r, info := initialize.InitNacos(10001)
 	initialize.InitDB()
 	initialize.InitRedis()
 	initialize.InitLogger()
@@ -23,8 +23,9 @@ func main() {
 	//	provider.WithInsecure(),
 	//)
 	//defer p.Shutdown(context.Background())
-	addr, err := net.ResolveTCPAddr("tcp", "0.0.0.0:10006")
+	addr, err := net.ResolveTCPAddr("tcp", "0.0.0.0:10001")
 	if err != nil {
+		log.Println(err.Error())
 		return
 	}
 	svr := comment.NewServer(new(CommentServiceImpl),

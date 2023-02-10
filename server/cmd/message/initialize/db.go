@@ -1,7 +1,7 @@
 package initialize
 
 import (
-	"douyin_rpc/server/cmd/user/global"
+	"douyin_rpc/server/cmd/message/global"
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"

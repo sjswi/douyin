@@ -201,59 +201,60 @@ func QueryCommentByVideoIDWithCache(tx *gorm.DB, videoID int64) ([]Comment, erro
 	return Comments, nil
 }
 
-func queryCommentByUserIDAndVideoID(tx *gorm.DB, userID, videoID int64) (*Comment, error) {
-	var Comments Comment
+func queryCommentByUserIDAndVideoID(tx *gorm.DB, userID, videoID int64) ([]Comment, error) {
+	var Comments []Comment
 	if err := tx.Table("comment").Where("user_id=? and video_id=?", userID, videoID).Find(&Comments).Error; err != nil {
 		return nil, err
 	}
-	return &Comments, nil
+	return Comments, nil
 }
 
-func QueryCommentByUserIDAndVideoIDWithCache(tx *gorm.DB, userID, videoID int64) (*Comment, error) {
-	key := CommentCachePrefix + "UserID_" + strconv.Itoa(int(userID)) + "_videoID_" + strconv.Itoa(int(videoID))
-	var result string
-	var Comment *Comment
-	var err error
-	// 查看key是否存在
-	//不存在
-	if !cache.Exist(key) {
-		Comment, err = queryCommentByUserIDAndVideoID(tx, userID, videoID)
-		if err != nil {
-			return nil, err
-		}
-		// 从数据库查出，放进redis
-		err := cache.Set(key, Comment)
-		if err != nil {
-			return nil, err
-		}
-		return Comment, nil
-	}
-	//TODO
-	// lua脚本优化，保证原子性
-
-	//查询redis
-	if result, err = cache.Get(key); err != nil {
-		// 极端情况：在判断存在后查询前过期了
-		if err.Error() == "redis: nil" {
-			Comment, err = queryCommentByUserIDAndVideoID(tx, userID, videoID)
-			if err != nil {
-				return nil, err
-			}
-			// 从数据库查出，放进redis
-			err := cache.Set(key, Comment)
-			if err != nil {
-				return nil, err
-			}
-			return Comment, nil
-		}
-		return nil, err
-	}
-	// 反序列化
-	err = json.Unmarshal(strings.StringToBytes(result), &Comment)
-	if err != nil {
-		return nil, err
-	}
-	return Comment, nil
+func QueryCommentByUserIDAndVideoIDWithCache(tx *gorm.DB, userID, videoID int64) ([]Comment, error) {
+	return queryCommentByUserIDAndVideoID(tx, userID, videoID)
+	//key := CommentCachePrefix + "UserID_" + strconv.Itoa(int(userID)) + "_videoID_" + strconv.Itoa(int(videoID))
+	//var result string
+	//var Comment *Comment
+	//var err error
+	//// 查看key是否存在
+	////不存在
+	//if !cache.Exist(key) {
+	//	comments, err = queryCommentByUserIDAndVideoID(tx, userID, videoID)
+	//	if err != nil {
+	//		return nil, err
+	//	}
+	//	// 从数据库查出，放进redis
+	//	err := cache.Set(key, Comment)
+	//	if err != nil {
+	//		return nil, err
+	//	}
+	//	return Comment, nil
+	//}
+	////TODO
+	//// lua脚本优化，保证原子性
+	//
+	////查询redis
+	//if result, err = cache.Get(key); err != nil {
+	//	// 极端情况：在判断存在后查询前过期了
+	//	if err.Error() == "redis: nil" {
+	//		Comment, err = queryCommentByUserIDAndVideoID(tx, userID, videoID)
+	//		if err != nil {
+	//			return nil, err
+	//		}
+	//		// 从数据库查出，放进redis
+	//		err := cache.Set(key, Comment)
+	//		if err != nil {
+	//			return nil, err
+	//		}
+	//		return Comment, nil
+	//	}
+	//	return nil, err
+	//}
+	//// 反序列化
+	//err = json.Unmarshal(strings.StringToBytes(result), &Comment)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//return Comment, nil
 }
 
 func UpdateComment(tx *gorm.DB, comment Comment) error {

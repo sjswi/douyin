@@ -1,6 +1,7 @@
 package global
 
 import (
+	"douyin_rpc/client/kitex_gen/relation/relationservice"
 	"douyin_rpc/client/kitex_gen/user/userservice"
 	"douyin_rpc/client/kitex_gen/video/feedservice"
 	common "douyin_rpc/common/config"
@@ -10,10 +11,11 @@ import (
 )
 
 var (
-	DB           *gorm.DB
-	ServerConfig config.ServerConfig
-	NacosConfig  common.NacosConfig
-	Redis        *redis.Client
-	UserClient   userservice.Client
-	VideoClient  feedservice.Client
+	DB             *gorm.DB
+	ServerConfig   config.ServerConfig
+	NacosConfig    common.NacosConfig
+	Redis          *redis.Client
+	UserClient     userservice.Client
+	VideoClient    feedservice.Client
+	RelationClient relationservice.Client
 )

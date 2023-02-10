@@ -1963,8 +1963,8 @@ func (p *RegisterResponse) Field3DeepEqual(src int64) bool {
 }
 
 type UserRequest struct {
-	UserId string `thrift:"user_id,1,required" frugal:"1,required,string" json:"user_id"`
-	AuthId int64  `thrift:"auth_id,2,required" frugal:"2,required,i64" json:"auth_id"`
+	UserId int64 `thrift:"user_id,1,required" frugal:"1,required,i64" json:"user_id"`
+	AuthId int64 `thrift:"auth_id,2,required" frugal:"2,required,i64" json:"auth_id"`
 }
 
 func NewUserRequest() *UserRequest {
@@ -1975,14 +1975,14 @@ func (p *UserRequest) InitDefault() {
 	*p = UserRequest{}
 }
 
-func (p *UserRequest) GetUserId() (v string) {
+func (p *UserRequest) GetUserId() (v int64) {
 	return p.UserId
 }
 
 func (p *UserRequest) GetAuthId() (v int64) {
 	return p.AuthId
 }
-func (p *UserRequest) SetUserId(val string) {
+func (p *UserRequest) SetUserId(val int64) {
 	p.UserId = val
 }
 func (p *UserRequest) SetAuthId(val int64) {
@@ -2016,7 +2016,7 @@ func (p *UserRequest) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -2079,7 +2079,7 @@ RequiredFieldNotSetError:
 }
 
 func (p *UserRequest) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.UserId = v
@@ -2130,10 +2130,10 @@ WriteStructEndError:
 }
 
 func (p *UserRequest) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("user_id", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("user_id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.UserId); err != nil {
+	if err := oprot.WriteI64(p.UserId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -2185,9 +2185,9 @@ func (p *UserRequest) DeepEqual(ano *UserRequest) bool {
 	return true
 }
 
-func (p *UserRequest) Field1DeepEqual(src string) bool {
+func (p *UserRequest) Field1DeepEqual(src int64) bool {
 
-	if strings.Compare(p.UserId, src) != 0 {
+	if p.UserId != src {
 		return false
 	}
 	return true

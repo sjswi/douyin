@@ -26,7 +26,7 @@ struct User {
 
 struct FeedRequest{
     1: i64 auth_id;
-    2: string latest_time;
+    2: i64 latest_time;
 }
 
 struct FeedResponse{
@@ -36,7 +36,7 @@ struct FeedResponse{
     4: i64 next_time;
 }
 struct PublishActionRequest{
-    1: required binary data;
+    1: required binary data; //注意thrift没有定义multipart.FILE
     2: required i64 auth_id;
     3: required string title;
     4: required string filename;
@@ -48,7 +48,7 @@ struct PublishActionResponse{
 }
 struct PublishListRequest{
     1: required i64 auth_id;
-    2: required string user_id;
+    2: required i64 user_id;
 }
 
 struct PublishListResponse{
@@ -65,6 +65,12 @@ struct Video1 {
     6: i64 created_at
     7: i64 updated_at
 }
+/**
+* query_type=1 根据视频id查询
+* query_type=2 根据作者id查询
+*
+**/
+
 struct GetVideoRequest {
     1: i64 video_id
     2: i64 author_id

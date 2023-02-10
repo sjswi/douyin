@@ -1,23 +1,36 @@
 {
-    "name": "douyin_comment",
-    "host": "192.168.56.100",
-    "mysql": {
-        "db": "douyin_comment",
-        "user": "root",
-        "password": "123456",
-        "max_conn": 200,
-        "max_idle": 50,
-        "host": "192.168.56.102",
-        "port": 3306
-    },
-    "otel": {
-        "endpoint": "http://192.168.56.102:14268/api/traces"
-    },
-    "redis": {
-        "address": "43.138.60.133:6379",
-        "db": 0,
-        "password": "",
-        "max_conn_age": "10"
-    },
-    "feed_number": 30
+  "name": "douyin_comment",
+  "host": "192.168.56.100",
+  "port": 10001,
+  "otel": {
+    "endpoint": "http://192.168.56.102:14268/api/traces"
+  },
+  "mysql": {
+    "host": "192.168.56.102",
+    "port": 3306,
+    "db": "douyin_comment",
+    "user": "root",
+    "password": "123456",
+    "max_conn": 200,
+    "max_idle": 50
+  },
+  "redis": {
+    "address": "43.138.60.133:6379",
+    "db": 0,
+    "password": "",
+    "max_conn_age": "30"
+  },
+  "user_srv": {
+    "name": "douyin_user",
+    "namespace": "55f9bbf4-2052-4116-a3dd-a58fcfa80b32"
+  },
+  "relation_srv": {
+    "name": "douyin_relation",
+    "namespace": "fc5aa648-86a4-4188-a6af-77fc9be952da"
+  },
+  "video_srv": {
+    "name": "douyin_video",
+    "namespace": "0254574a-a379-479f-89a1-a71ff4ca4c9c"
+  }
+
 }

@@ -1050,8 +1050,8 @@ func (p *User) Field5DeepEqual(src bool) bool {
 }
 
 type FeedRequest struct {
-	AuthId     int64  `thrift:"auth_id,1" frugal:"1,default,i64" json:"auth_id"`
-	LatestTime string `thrift:"latest_time,2" frugal:"2,default,string" json:"latest_time"`
+	AuthId     int64 `thrift:"auth_id,1" frugal:"1,default,i64" json:"auth_id"`
+	LatestTime int64 `thrift:"latest_time,2" frugal:"2,default,i64" json:"latest_time"`
 }
 
 func NewFeedRequest() *FeedRequest {
@@ -1066,13 +1066,13 @@ func (p *FeedRequest) GetAuthId() (v int64) {
 	return p.AuthId
 }
 
-func (p *FeedRequest) GetLatestTime() (v string) {
+func (p *FeedRequest) GetLatestTime() (v int64) {
 	return p.LatestTime
 }
 func (p *FeedRequest) SetAuthId(val int64) {
 	p.AuthId = val
 }
-func (p *FeedRequest) SetLatestTime(val string) {
+func (p *FeedRequest) SetLatestTime(val int64) {
 	p.LatestTime = val
 }
 
@@ -1111,7 +1111,7 @@ func (p *FeedRequest) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 2:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -1160,7 +1160,7 @@ func (p *FeedRequest) ReadField1(iprot thrift.TProtocol) error {
 }
 
 func (p *FeedRequest) ReadField2(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.LatestTime = v
@@ -1219,10 +1219,10 @@ WriteFieldEndError:
 }
 
 func (p *FeedRequest) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("latest_time", thrift.STRING, 2); err != nil {
+	if err = oprot.WriteFieldBegin("latest_time", thrift.I64, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.LatestTime); err != nil {
+	if err := oprot.WriteI64(p.LatestTime); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1264,9 +1264,9 @@ func (p *FeedRequest) Field1DeepEqual(src int64) bool {
 	}
 	return true
 }
-func (p *FeedRequest) Field2DeepEqual(src string) bool {
+func (p *FeedRequest) Field2DeepEqual(src int64) bool {
 
-	if strings.Compare(p.LatestTime, src) != 0 {
+	if p.LatestTime != src {
 		return false
 	}
 	return true
@@ -2232,8 +2232,8 @@ func (p *PublishActionResponse) Field2DeepEqual(src string) bool {
 }
 
 type PublishListRequest struct {
-	AuthId int64  `thrift:"auth_id,1,required" frugal:"1,required,i64" json:"auth_id"`
-	UserId string `thrift:"user_id,2,required" frugal:"2,required,string" json:"user_id"`
+	AuthId int64 `thrift:"auth_id,1,required" frugal:"1,required,i64" json:"auth_id"`
+	UserId int64 `thrift:"user_id,2,required" frugal:"2,required,i64" json:"user_id"`
 }
 
 func NewPublishListRequest() *PublishListRequest {
@@ -2248,13 +2248,13 @@ func (p *PublishListRequest) GetAuthId() (v int64) {
 	return p.AuthId
 }
 
-func (p *PublishListRequest) GetUserId() (v string) {
+func (p *PublishListRequest) GetUserId() (v int64) {
 	return p.UserId
 }
 func (p *PublishListRequest) SetAuthId(val int64) {
 	p.AuthId = val
 }
-func (p *PublishListRequest) SetUserId(val string) {
+func (p *PublishListRequest) SetUserId(val int64) {
 	p.UserId = val
 }
 
@@ -2296,7 +2296,7 @@ func (p *PublishListRequest) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 2:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -2357,7 +2357,7 @@ func (p *PublishListRequest) ReadField1(iprot thrift.TProtocol) error {
 }
 
 func (p *PublishListRequest) ReadField2(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.UserId = v
@@ -2416,10 +2416,10 @@ WriteFieldEndError:
 }
 
 func (p *PublishListRequest) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("user_id", thrift.STRING, 2); err != nil {
+	if err = oprot.WriteFieldBegin("user_id", thrift.I64, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.UserId); err != nil {
+	if err := oprot.WriteI64(p.UserId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -2461,9 +2461,9 @@ func (p *PublishListRequest) Field1DeepEqual(src int64) bool {
 	}
 	return true
 }
-func (p *PublishListRequest) Field2DeepEqual(src string) bool {
+func (p *PublishListRequest) Field2DeepEqual(src int64) bool {
 
-	if strings.Compare(p.UserId, src) != 0 {
+	if p.UserId != src {
 		return false
 	}
 	return true

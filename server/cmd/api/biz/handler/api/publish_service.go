@@ -6,6 +6,7 @@ import (
 	"context"
 	"douyin_rpc/server/cmd/api/global"
 	"douyin_rpc/server/cmd/api/kitex_gen/video"
+	"strconv"
 
 	api "douyin_rpc/server/cmd/api/biz/model/api"
 	"github.com/cloudwego/hertz/pkg/app"
@@ -20,8 +21,8 @@ import (
 // @Param token formData string true "token"
 // @Param data formData file true "视频"
 // @Param title formData string true "标题"
-// @Success 200 object api.PublishActionResponse 成功后返回值
-// @Failure 409 object api.PublishActionResponse 失败后返回值
+// @Success 200 object video.PublishActionResponse 成功后返回值
+// @Failure 409 object video.PublishActionResponse 失败后返回值
 // @Router /douyin/publish/action/ [post]
 // @router /douyin/publish/action/ [POST]
 func PublishAction(ctx context.Context, c *app.RequestContext) {
@@ -56,8 +57,8 @@ func PublishAction(ctx context.Context, c *app.RequestContext) {
 // @Accept application/x-json-stream
 // @Param user_id query int true "用户id"
 // @Param token query string true "token"
-// @Success 200 object api.PublishListResponse 成功后返回值
-// @Failure 409 object api.PublishListResponse 失败后返回值
+// @Success 200 object video.PublishListResponse 成功后返回值
+// @Failure 409 object video.PublishListResponse 失败后返回值
 // @Router /douyin/publish/list/ [get]
 // @router /douyin/publish/list/ [GET]
 func PublishList(ctx context.Context, c *app.RequestContext) {
@@ -72,9 +73,13 @@ func PublishList(ctx context.Context, c *app.RequestContext) {
 	if !exist {
 		return
 	}
+	userID, err := strconv.ParseInt(req.UserID, 0, 64)
+	if err != nil {
+		return
+	}
 	resp, err := global.VideoClient.PublishList(ctx, &video.PublishListRequest{
 		AuthId: value.(int64),
-		UserId: req.UserID,
+		UserId: userID,
 	})
 	if err != nil {
 		return

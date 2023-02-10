@@ -464,9 +464,9 @@ func (p *User) Field5DeepEqual(src bool) bool {
 }
 
 type RelationActionRequest struct {
-	AuthId     int64  `thrift:"auth_id,1,required" frugal:"1,required,i64" json:"auth_id"`
-	ToUserId   string `thrift:"to_user_id,2,required" frugal:"2,required,string" json:"to_user_id"`
-	ActionType int32  `thrift:"action_type,3,required" frugal:"3,required,i32" json:"action_type"`
+	AuthId     int64 `thrift:"auth_id,1,required" frugal:"1,required,i64" json:"auth_id"`
+	ToUserId   int64 `thrift:"to_user_id,2,required" frugal:"2,required,i64" json:"to_user_id"`
+	ActionType int32 `thrift:"action_type,3,required" frugal:"3,required,i32" json:"action_type"`
 }
 
 func NewRelationActionRequest() *RelationActionRequest {
@@ -481,7 +481,7 @@ func (p *RelationActionRequest) GetAuthId() (v int64) {
 	return p.AuthId
 }
 
-func (p *RelationActionRequest) GetToUserId() (v string) {
+func (p *RelationActionRequest) GetToUserId() (v int64) {
 	return p.ToUserId
 }
 
@@ -491,7 +491,7 @@ func (p *RelationActionRequest) GetActionType() (v int32) {
 func (p *RelationActionRequest) SetAuthId(val int64) {
 	p.AuthId = val
 }
-func (p *RelationActionRequest) SetToUserId(val string) {
+func (p *RelationActionRequest) SetToUserId(val int64) {
 	p.ToUserId = val
 }
 func (p *RelationActionRequest) SetActionType(val int32) {
@@ -538,7 +538,7 @@ func (p *RelationActionRequest) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 2:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -615,7 +615,7 @@ func (p *RelationActionRequest) ReadField1(iprot thrift.TProtocol) error {
 }
 
 func (p *RelationActionRequest) ReadField2(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.ToUserId = v
@@ -687,10 +687,10 @@ WriteFieldEndError:
 }
 
 func (p *RelationActionRequest) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("to_user_id", thrift.STRING, 2); err != nil {
+	if err = oprot.WriteFieldBegin("to_user_id", thrift.I64, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.ToUserId); err != nil {
+	if err := oprot.WriteI64(p.ToUserId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -752,9 +752,9 @@ func (p *RelationActionRequest) Field1DeepEqual(src int64) bool {
 	}
 	return true
 }
-func (p *RelationActionRequest) Field2DeepEqual(src string) bool {
+func (p *RelationActionRequest) Field2DeepEqual(src int64) bool {
 
-	if strings.Compare(p.ToUserId, src) != 0 {
+	if p.ToUserId != src {
 		return false
 	}
 	return true
@@ -991,8 +991,8 @@ func (p *RelationActionResponse) Field2DeepEqual(src string) bool {
 }
 
 type RelationFollowListRequest struct {
-	AuthId int64  `thrift:"auth_id,1,required" frugal:"1,required,i64" json:"auth_id"`
-	UserId string `thrift:"user_id,2,required" frugal:"2,required,string" json:"user_id"`
+	AuthId int64 `thrift:"auth_id,1,required" frugal:"1,required,i64" json:"auth_id"`
+	UserId int64 `thrift:"user_id,2,required" frugal:"2,required,i64" json:"user_id"`
 }
 
 func NewRelationFollowListRequest() *RelationFollowListRequest {
@@ -1007,13 +1007,13 @@ func (p *RelationFollowListRequest) GetAuthId() (v int64) {
 	return p.AuthId
 }
 
-func (p *RelationFollowListRequest) GetUserId() (v string) {
+func (p *RelationFollowListRequest) GetUserId() (v int64) {
 	return p.UserId
 }
 func (p *RelationFollowListRequest) SetAuthId(val int64) {
 	p.AuthId = val
 }
-func (p *RelationFollowListRequest) SetUserId(val string) {
+func (p *RelationFollowListRequest) SetUserId(val int64) {
 	p.UserId = val
 }
 
@@ -1055,7 +1055,7 @@ func (p *RelationFollowListRequest) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 2:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -1116,7 +1116,7 @@ func (p *RelationFollowListRequest) ReadField1(iprot thrift.TProtocol) error {
 }
 
 func (p *RelationFollowListRequest) ReadField2(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.UserId = v
@@ -1175,10 +1175,10 @@ WriteFieldEndError:
 }
 
 func (p *RelationFollowListRequest) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("user_id", thrift.STRING, 2); err != nil {
+	if err = oprot.WriteFieldBegin("user_id", thrift.I64, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.UserId); err != nil {
+	if err := oprot.WriteI64(p.UserId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1220,9 +1220,9 @@ func (p *RelationFollowListRequest) Field1DeepEqual(src int64) bool {
 	}
 	return true
 }
-func (p *RelationFollowListRequest) Field2DeepEqual(src string) bool {
+func (p *RelationFollowListRequest) Field2DeepEqual(src int64) bool {
 
-	if strings.Compare(p.UserId, src) != 0 {
+	if p.UserId != src {
 		return false
 	}
 	return true
@@ -1536,8 +1536,8 @@ func (p *RelationFollowListResponse) Field3DeepEqual(src []*User) bool {
 }
 
 type RelationFollowerListRequest struct {
-	AuthId int64  `thrift:"auth_id,1,required" frugal:"1,required,i64" json:"auth_id"`
-	UserId string `thrift:"user_id,2,required" frugal:"2,required,string" json:"user_id"`
+	AuthId int64 `thrift:"auth_id,1,required" frugal:"1,required,i64" json:"auth_id"`
+	UserId int64 `thrift:"user_id,2,required" frugal:"2,required,i64" json:"user_id"`
 }
 
 func NewRelationFollowerListRequest() *RelationFollowerListRequest {
@@ -1552,13 +1552,13 @@ func (p *RelationFollowerListRequest) GetAuthId() (v int64) {
 	return p.AuthId
 }
 
-func (p *RelationFollowerListRequest) GetUserId() (v string) {
+func (p *RelationFollowerListRequest) GetUserId() (v int64) {
 	return p.UserId
 }
 func (p *RelationFollowerListRequest) SetAuthId(val int64) {
 	p.AuthId = val
 }
-func (p *RelationFollowerListRequest) SetUserId(val string) {
+func (p *RelationFollowerListRequest) SetUserId(val int64) {
 	p.UserId = val
 }
 
@@ -1600,7 +1600,7 @@ func (p *RelationFollowerListRequest) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 2:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -1661,7 +1661,7 @@ func (p *RelationFollowerListRequest) ReadField1(iprot thrift.TProtocol) error {
 }
 
 func (p *RelationFollowerListRequest) ReadField2(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.UserId = v
@@ -1720,10 +1720,10 @@ WriteFieldEndError:
 }
 
 func (p *RelationFollowerListRequest) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("user_id", thrift.STRING, 2); err != nil {
+	if err = oprot.WriteFieldBegin("user_id", thrift.I64, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.UserId); err != nil {
+	if err := oprot.WriteI64(p.UserId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1765,9 +1765,9 @@ func (p *RelationFollowerListRequest) Field1DeepEqual(src int64) bool {
 	}
 	return true
 }
-func (p *RelationFollowerListRequest) Field2DeepEqual(src string) bool {
+func (p *RelationFollowerListRequest) Field2DeepEqual(src int64) bool {
 
-	if strings.Compare(p.UserId, src) != 0 {
+	if p.UserId != src {
 		return false
 	}
 	return true
@@ -2081,8 +2081,8 @@ func (p *RelationFollowerListResponse) Field3DeepEqual(src []*User) bool {
 }
 
 type RelationFriendListRequest struct {
-	AuthId int64  `thrift:"auth_id,1,required" frugal:"1,required,i64" json:"auth_id"`
-	UserId string `thrift:"user_id,2,required" frugal:"2,required,string" json:"user_id"`
+	AuthId int64 `thrift:"auth_id,1,required" frugal:"1,required,i64" json:"auth_id"`
+	UserId int64 `thrift:"user_id,2,required" frugal:"2,required,i64" json:"user_id"`
 }
 
 func NewRelationFriendListRequest() *RelationFriendListRequest {
@@ -2097,13 +2097,13 @@ func (p *RelationFriendListRequest) GetAuthId() (v int64) {
 	return p.AuthId
 }
 
-func (p *RelationFriendListRequest) GetUserId() (v string) {
+func (p *RelationFriendListRequest) GetUserId() (v int64) {
 	return p.UserId
 }
 func (p *RelationFriendListRequest) SetAuthId(val int64) {
 	p.AuthId = val
 }
-func (p *RelationFriendListRequest) SetUserId(val string) {
+func (p *RelationFriendListRequest) SetUserId(val int64) {
 	p.UserId = val
 }
 
@@ -2145,7 +2145,7 @@ func (p *RelationFriendListRequest) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 2:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -2206,7 +2206,7 @@ func (p *RelationFriendListRequest) ReadField1(iprot thrift.TProtocol) error {
 }
 
 func (p *RelationFriendListRequest) ReadField2(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.UserId = v
@@ -2265,10 +2265,10 @@ WriteFieldEndError:
 }
 
 func (p *RelationFriendListRequest) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("user_id", thrift.STRING, 2); err != nil {
+	if err = oprot.WriteFieldBegin("user_id", thrift.I64, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.UserId); err != nil {
+	if err := oprot.WriteI64(p.UserId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -2310,9 +2310,9 @@ func (p *RelationFriendListRequest) Field1DeepEqual(src int64) bool {
 	}
 	return true
 }
-func (p *RelationFriendListRequest) Field2DeepEqual(src string) bool {
+func (p *RelationFriendListRequest) Field2DeepEqual(src int64) bool {
 
-	if strings.Compare(p.UserId, src) != 0 {
+	if p.UserId != src {
 		return false
 	}
 	return true

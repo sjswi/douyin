@@ -9,7 +9,16 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "contact": {},
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "余晓兵",
+            "url": "http://www.swagger.io/support",
+            "email": "1903317091@qq.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
@@ -63,13 +72,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.CommentActionResponse"
+                            "$ref": "#/definitions/comment.CommentActionResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/api.CommentActionResponse"
+                            "$ref": "#/definitions/comment.CommentActionResponse"
                         }
                     }
                 }
@@ -101,13 +110,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.CommentListResponse"
+                            "$ref": "#/definitions/comment.CommentListResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/api.CommentListResponse"
+                            "$ref": "#/definitions/comment.CommentListResponse"
                         }
                     }
                 }
@@ -149,13 +158,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.CommentActionResponse"
+                            "$ref": "#/definitions/favorite.FavoriteActionRequest"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/api.CommentActionResponse"
+                            "$ref": "#/definitions/favorite.FavoriteActionRequest"
                         }
                     }
                 }
@@ -190,13 +199,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.FavoriteListResponse"
+                            "$ref": "#/definitions/favorite.FavoriteListResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/api.FavoriteListResponse"
+                            "$ref": "#/definitions/favorite.FavoriteListResponse"
                         }
                     }
                 }
@@ -229,13 +238,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.FeedResponse"
+                            "$ref": "#/definitions/video.FeedResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/api.FeedResponse"
+                            "$ref": "#/definitions/video.FeedResponse"
                         }
                     }
                 }
@@ -284,13 +293,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.MessageActionResponse"
+                            "$ref": "#/definitions/message.MessageActionResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/api.MessageActionResponse"
+                            "$ref": "#/definitions/message.MessageActionResponse"
                         }
                     }
                 }
@@ -325,13 +334,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.MessageListResponse"
+                            "$ref": "#/definitions/message.MessageListResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/api.MessageListResponse"
+                            "$ref": "#/definitions/message.MessageListResponse"
                         }
                     }
                 }
@@ -366,13 +375,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.MessageListResponse"
+                            "$ref": "#/definitions/message.MessageListResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/api.MessageListResponse"
+                            "$ref": "#/definitions/message.MessageListResponse"
                         }
                     }
                 }
@@ -414,13 +423,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.PublishActionResponse"
+                            "$ref": "#/definitions/video.PublishActionResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/api.PublishActionResponse"
+                            "$ref": "#/definitions/video.PublishActionResponse"
                         }
                     }
                 }
@@ -455,13 +464,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.PublishListResponse"
+                            "$ref": "#/definitions/video.PublishListResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/api.PublishListResponse"
+                            "$ref": "#/definitions/video.PublishListResponse"
                         }
                     }
                 }
@@ -503,13 +512,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.RelationActionResponse"
+                            "$ref": "#/definitions/relation.RelationActionResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/api.RelationActionResponse"
+                            "$ref": "#/definitions/relation.RelationActionResponse"
                         }
                     }
                 }
@@ -667,13 +676,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.UserResponse"
+                            "$ref": "#/definitions/user.UserResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/api.UserResponse"
+                            "$ref": "#/definitions/user.UserResponse"
                         }
                     }
                 }
@@ -708,13 +717,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.LoginResponse"
+                            "$ref": "#/definitions/user.LoginResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/api.LoginResponse"
+                            "$ref": "#/definitions/user.LoginResponse"
                         }
                     }
                 }
@@ -749,13 +758,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.RegisterResponse"
+                            "$ref": "#/definitions/user.RegisterResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/api.RegisterResponse"
+                            "$ref": "#/definitions/user.RegisterResponse"
                         }
                     }
                 }
@@ -777,206 +786,6 @@ const docTemplate = `{
                 "Code_DBError",
                 "Code_ServerError"
             ]
-        },
-        "api.Comment": {
-            "type": "object",
-            "properties": {
-                "content": {
-                    "type": "string"
-                },
-                "create_date": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "user": {
-                    "$ref": "#/definitions/api.User"
-                }
-            }
-        },
-        "api.CommentActionResponse": {
-            "type": "object",
-            "properties": {
-                "comment": {
-                    "$ref": "#/definitions/api.Comment"
-                },
-                "status_code": {
-                    "$ref": "#/definitions/api.Code"
-                },
-                "status_msg": {
-                    "type": "string"
-                }
-            }
-        },
-        "api.CommentListResponse": {
-            "type": "object",
-            "properties": {
-                "comment_list": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/api.Comment"
-                    }
-                },
-                "status_code": {
-                    "$ref": "#/definitions/api.Code"
-                },
-                "status_msg": {
-                    "type": "string"
-                }
-            }
-        },
-        "api.FavoriteListResponse": {
-            "type": "object",
-            "properties": {
-                "status_code": {
-                    "$ref": "#/definitions/api.Code"
-                },
-                "status_msg": {
-                    "type": "string"
-                },
-                "video_list": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/api.Video"
-                    }
-                }
-            }
-        },
-        "api.FeedResponse": {
-            "type": "object",
-            "properties": {
-                "next_time": {
-                    "type": "integer"
-                },
-                "status_code": {
-                    "$ref": "#/definitions/api.Code"
-                },
-                "status_msg": {
-                    "type": "string"
-                },
-                "video_list": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/api.Video"
-                    }
-                }
-            }
-        },
-        "api.LoginResponse": {
-            "type": "object",
-            "properties": {
-                "status_code": {
-                    "$ref": "#/definitions/api.Code"
-                },
-                "status_msg": {
-                    "type": "string"
-                },
-                "token": {
-                    "type": "string"
-                },
-                "user_id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "api.Message": {
-            "type": "object",
-            "properties": {
-                "content": {
-                    "type": "string"
-                },
-                "create_time": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "api.MessageActionResponse": {
-            "type": "object",
-            "properties": {
-                "status_code": {
-                    "$ref": "#/definitions/api.Code"
-                },
-                "status_msg": {
-                    "type": "string"
-                }
-            }
-        },
-        "api.MessageListResponse": {
-            "type": "object",
-            "properties": {
-                "message_list": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/api.Message"
-                    }
-                },
-                "status_code": {
-                    "$ref": "#/definitions/api.Code"
-                },
-                "status_msg": {
-                    "type": "string"
-                }
-            }
-        },
-        "api.PublishActionResponse": {
-            "type": "object",
-            "properties": {
-                "status_code": {
-                    "$ref": "#/definitions/api.Code"
-                },
-                "status_msg": {
-                    "type": "string"
-                }
-            }
-        },
-        "api.PublishListResponse": {
-            "type": "object",
-            "properties": {
-                "status_code": {
-                    "$ref": "#/definitions/api.Code"
-                },
-                "status_msg": {
-                    "type": "string"
-                },
-                "video_list": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/api.Video"
-                    }
-                }
-            }
-        },
-        "api.RegisterResponse": {
-            "type": "object",
-            "properties": {
-                "status_code": {
-                    "$ref": "#/definitions/api.Code"
-                },
-                "status_msg": {
-                    "type": "string"
-                },
-                "token": {
-                    "type": "string"
-                },
-                "user_id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "api.RelationActionResponse": {
-            "type": "object",
-            "properties": {
-                "status_code": {
-                    "$ref": "#/definitions/api.Code"
-                },
-                "status_msg": {
-                    "type": "string"
-                }
-            }
         },
         "api.RelationFollowListResponse": {
             "type": "object",
@@ -1049,25 +858,432 @@ const docTemplate = `{
                 }
             }
         },
-        "api.UserResponse": {
+        "comment.Code": {
+            "type": "integer",
+            "enum": [
+                1,
+                2,
+                3,
+                4
+            ],
+            "x-enum-varnames": [
+                "Code_Success",
+                "Code_ParamInvalid",
+                "Code_DBError",
+                "Code_ServerError"
+            ]
+        },
+        "comment.Comment": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "create_date": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "user": {
+                    "$ref": "#/definitions/comment.User"
+                }
+            }
+        },
+        "comment.CommentActionResponse": {
+            "type": "object",
+            "properties": {
+                "comment": {
+                    "$ref": "#/definitions/comment.Comment"
+                },
+                "status_code": {
+                    "$ref": "#/definitions/comment.Code"
+                },
+                "status_msg": {
+                    "type": "string"
+                }
+            }
+        },
+        "comment.CommentListResponse": {
+            "type": "object",
+            "properties": {
+                "comment_list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/comment.Comment"
+                    }
+                },
+                "status_code": {
+                    "$ref": "#/definitions/comment.Code"
+                },
+                "status_msg": {
+                    "type": "string"
+                }
+            }
+        },
+        "comment.User": {
+            "type": "object",
+            "properties": {
+                "follow_count": {
+                    "type": "integer"
+                },
+                "follower_count": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_follow": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "favorite.Code": {
+            "type": "integer",
+            "enum": [
+                1,
+                2,
+                3,
+                4
+            ],
+            "x-enum-varnames": [
+                "Code_Success",
+                "Code_ParamInvalid",
+                "Code_DBError",
+                "Code_ServerError"
+            ]
+        },
+        "favorite.FavoriteActionRequest": {
+            "type": "object",
+            "properties": {
+                "action_type": {
+                    "type": "integer"
+                },
+                "auth_id": {
+                    "type": "integer"
+                },
+                "video_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "favorite.FavoriteListResponse": {
             "type": "object",
             "properties": {
                 "status_code": {
-                    "$ref": "#/definitions/api.Code"
+                    "$ref": "#/definitions/favorite.Code"
+                },
+                "status_msg": {
+                    "type": "string"
+                },
+                "video_list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/favorite.Video"
+                    }
+                }
+            }
+        },
+        "favorite.User": {
+            "type": "object",
+            "properties": {
+                "follow_count": {
+                    "type": "integer"
+                },
+                "follower_count": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_follow": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "favorite.Video": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "$ref": "#/definitions/favorite.User"
+                },
+                "comment_count": {
+                    "type": "integer"
+                },
+                "cover_url": {
+                    "type": "string"
+                },
+                "favorite_count": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_favorite": {
+                    "type": "boolean"
+                },
+                "play_url": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "message.Code": {
+            "type": "integer",
+            "enum": [
+                1,
+                2,
+                3,
+                4
+            ],
+            "x-enum-varnames": [
+                "Code_Success",
+                "Code_ParamInvalid",
+                "Code_DBError",
+                "Code_ServerError"
+            ]
+        },
+        "message.Message": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "create_time": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "message.MessageActionResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "$ref": "#/definitions/message.Code"
+                },
+                "status_msg": {
+                    "type": "string"
+                }
+            }
+        },
+        "message.MessageListResponse": {
+            "type": "object",
+            "properties": {
+                "message_list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/message.Message"
+                    }
+                },
+                "status_code": {
+                    "$ref": "#/definitions/message.Code"
+                },
+                "status_msg": {
+                    "type": "string"
+                }
+            }
+        },
+        "relation.Code": {
+            "type": "integer",
+            "enum": [
+                1,
+                2,
+                3,
+                4
+            ],
+            "x-enum-varnames": [
+                "Code_Success",
+                "Code_ParamInvalid",
+                "Code_DBError",
+                "Code_ServerError"
+            ]
+        },
+        "relation.RelationActionResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "$ref": "#/definitions/relation.Code"
+                },
+                "status_msg": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.Code": {
+            "type": "integer",
+            "enum": [
+                1,
+                2,
+                3,
+                4
+            ],
+            "x-enum-varnames": [
+                "Code_Success",
+                "Code_ParamInvalid",
+                "Code_DBError",
+                "Code_ServerError"
+            ]
+        },
+        "user.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "$ref": "#/definitions/user.Code"
+                },
+                "status_msg": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "user.RegisterResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "$ref": "#/definitions/user.Code"
+                },
+                "status_msg": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "user.User": {
+            "type": "object",
+            "properties": {
+                "follow_count": {
+                    "type": "integer"
+                },
+                "follower_count": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_follow": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.UserResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "$ref": "#/definitions/user.Code"
                 },
                 "status_msg": {
                     "type": "string"
                 },
                 "user": {
-                    "$ref": "#/definitions/api.User"
+                    "$ref": "#/definitions/user.User"
                 }
             }
         },
-        "api.Video": {
+        "video.Code": {
+            "type": "integer",
+            "enum": [
+                1,
+                2,
+                3,
+                4
+            ],
+            "x-enum-varnames": [
+                "Code_Success",
+                "Code_ParamInvalid",
+                "Code_DBError",
+                "Code_ServerError"
+            ]
+        },
+        "video.FeedResponse": {
+            "type": "object",
+            "properties": {
+                "next_time": {
+                    "type": "integer"
+                },
+                "status_code": {
+                    "$ref": "#/definitions/video.Code"
+                },
+                "status_msg": {
+                    "type": "string"
+                },
+                "video_list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/video.Video"
+                    }
+                }
+            }
+        },
+        "video.PublishActionResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "$ref": "#/definitions/video.Code"
+                },
+                "status_msg": {
+                    "type": "string"
+                }
+            }
+        },
+        "video.PublishListResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "$ref": "#/definitions/video.Code"
+                },
+                "status_msg": {
+                    "type": "string"
+                },
+                "video_list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/video.Video"
+                    }
+                }
+            }
+        },
+        "video.User": {
+            "type": "object",
+            "properties": {
+                "follow_count": {
+                    "type": "integer"
+                },
+                "follower_count": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_follow": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "video.Video": {
             "type": "object",
             "properties": {
                 "author": {
-                    "$ref": "#/definitions/api.User"
+                    "$ref": "#/definitions/video.User"
                 },
                 "comment_count": {
                     "type": "integer"
@@ -1097,12 +1313,12 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
-	Host:             "",
-	BasePath:         "",
+	Version:          "1.0",
+	Host:             "192.168.56.100:10000",
+	BasePath:         "/douyin",
 	Schemes:          []string{},
-	Title:            "",
-	Description:      "",
+	Title:            "douyin",
+	Description:      "青训营抖音大项目",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }

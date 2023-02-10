@@ -1,7 +1,7 @@
 package rpc
 
 import (
-	"douyin_rpc/client/kitex_gen/relation/relationservice"
+	"douyin_rpc/client/kitex_gen/comment/commentservice"
 	"douyin_rpc/common/middleware"
 	"douyin_rpc/server/cmd/favorite/global"
 	consts "douyin_rpc/server/cmd/user/constant"
@@ -15,7 +15,7 @@ import (
 	"github.com/nacos-group/nacos-sdk-go/vo"
 )
 
-func initRelation() {
+func initComment() {
 	// init resolver
 	// Read configuration information from nacos
 	sc := []constant.ServerConfig{
@@ -26,7 +26,7 @@ func initRelation() {
 	}
 
 	cc := constant.ClientConfig{
-		NamespaceId:         global.ServerConfig.UserSrvInfo.Namespace,
+		NamespaceId:         global.ServerConfig.CommentSrvInfo.Namespace,
 		TimeoutMs:           5000,
 		NotLoadCacheAtStart: true,
 		LogDir:              consts.NacosLogDir,
@@ -39,7 +39,7 @@ func initRelation() {
 			ClientConfig:  &cc,
 			ServerConfigs: sc,
 		})
-	r := nacos.NewNacosResolver(nacosCli, nacos.WithGroup(consts.RelationGroup))
+	r := nacos.NewNacosResolver(nacosCli, nacos.WithGroup(consts.CommentGroup))
 	if err != nil {
 		klog.Fatalf("new consul client failed: %s", err.Error())
 	}
@@ -51,18 +51,18 @@ func initRelation() {
 	//)
 
 	// create a new client
-	c, err := relationservice.NewClient(
-		global.ServerConfig.RelationSrvInfo.Name,
+	c, err := commentservice.NewClient(
+		global.ServerConfig.CommentSrvInfo.Name,
 		client.WithResolver(r),                                     // service discovery
 		client.WithLoadBalancer(loadbalance.NewWeightedBalancer()), // load balance
 		client.WithMuxConnection(1),                                // multiplexing
 		client.WithMiddleware(middleware.CommonMiddleware),
 		client.WithInstanceMW(middleware.ClientMiddleware),
 		//client.WithSuite(tracing.NewClientSuite()),
-		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.RelationSrvInfo.Name}),
+		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.CommentSrvInfo.Name}),
 	)
 	if err != nil {
 		klog.Fatalf("ERROR: cannot init client: %v\n", err)
 	}
-	global.RelationClient = c
+	global.CommentClient = c
 }

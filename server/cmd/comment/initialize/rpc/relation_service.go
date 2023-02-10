@@ -3,7 +3,7 @@ package rpc
 import (
 	"douyin_rpc/client/kitex_gen/relation/relationservice"
 	"douyin_rpc/common/middleware"
-	"douyin_rpc/server/cmd/favorite/global"
+	"douyin_rpc/server/cmd/comment/global"
 	consts "douyin_rpc/server/cmd/user/constant"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -26,7 +26,7 @@ func initRelation() {
 	}
 
 	cc := constant.ClientConfig{
-		NamespaceId:         global.ServerConfig.UserSrvInfo.Namespace,
+		NamespaceId:         global.ServerConfig.RelationSrvInfo.Namespace,
 		TimeoutMs:           5000,
 		NotLoadCacheAtStart: true,
 		LogDir:              consts.NacosLogDir,
@@ -39,7 +39,7 @@ func initRelation() {
 			ClientConfig:  &cc,
 			ServerConfigs: sc,
 		})
-	r := nacos.NewNacosResolver(nacosCli, nacos.WithGroup(consts.RelationGroup))
+	r := nacos.NewNacosResolver(nacosCli, nacos.WithGroup(consts.UserGroup))
 	if err != nil {
 		klog.Fatalf("new consul client failed: %s", err.Error())
 	}

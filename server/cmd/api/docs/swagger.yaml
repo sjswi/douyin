@@ -1,3 +1,4 @@
+basePath: /douyin
 definitions:
   api.Code:
     enum:
@@ -11,135 +12,6 @@ definitions:
     - Code_ParamInvalid
     - Code_DBError
     - Code_ServerError
-  api.Comment:
-    properties:
-      content:
-        type: string
-      create_date:
-        type: string
-      id:
-        type: integer
-      user:
-        $ref: '#/definitions/api.User'
-    type: object
-  api.CommentActionResponse:
-    properties:
-      comment:
-        $ref: '#/definitions/api.Comment'
-      status_code:
-        $ref: '#/definitions/api.Code'
-      status_msg:
-        type: string
-    type: object
-  api.CommentListResponse:
-    properties:
-      comment_list:
-        items:
-          $ref: '#/definitions/api.Comment'
-        type: array
-      status_code:
-        $ref: '#/definitions/api.Code'
-      status_msg:
-        type: string
-    type: object
-  api.FavoriteListResponse:
-    properties:
-      status_code:
-        $ref: '#/definitions/api.Code'
-      status_msg:
-        type: string
-      video_list:
-        items:
-          $ref: '#/definitions/api.Video'
-        type: array
-    type: object
-  api.FeedResponse:
-    properties:
-      next_time:
-        type: integer
-      status_code:
-        $ref: '#/definitions/api.Code'
-      status_msg:
-        type: string
-      video_list:
-        items:
-          $ref: '#/definitions/api.Video'
-        type: array
-    type: object
-  api.LoginResponse:
-    properties:
-      status_code:
-        $ref: '#/definitions/api.Code'
-      status_msg:
-        type: string
-      token:
-        type: string
-      user_id:
-        type: integer
-    type: object
-  api.Message:
-    properties:
-      content:
-        type: string
-      create_time:
-        type: string
-      id:
-        type: integer
-    type: object
-  api.MessageActionResponse:
-    properties:
-      status_code:
-        $ref: '#/definitions/api.Code'
-      status_msg:
-        type: string
-    type: object
-  api.MessageListResponse:
-    properties:
-      message_list:
-        items:
-          $ref: '#/definitions/api.Message'
-        type: array
-      status_code:
-        $ref: '#/definitions/api.Code'
-      status_msg:
-        type: string
-    type: object
-  api.PublishActionResponse:
-    properties:
-      status_code:
-        $ref: '#/definitions/api.Code'
-      status_msg:
-        type: string
-    type: object
-  api.PublishListResponse:
-    properties:
-      status_code:
-        $ref: '#/definitions/api.Code'
-      status_msg:
-        type: string
-      video_list:
-        items:
-          $ref: '#/definitions/api.Video'
-        type: array
-    type: object
-  api.RegisterResponse:
-    properties:
-      status_code:
-        $ref: '#/definitions/api.Code'
-      status_msg:
-        type: string
-      token:
-        type: string
-      user_id:
-        type: integer
-    type: object
-  api.RelationActionResponse:
-    properties:
-      status_code:
-        $ref: '#/definitions/api.Code'
-      status_msg:
-        type: string
-    type: object
   api.RelationFollowListResponse:
     properties:
       status_code:
@@ -186,19 +58,111 @@ definitions:
       name:
         type: string
     type: object
-  api.UserResponse:
+  comment.Code:
+    enum:
+    - 1
+    - 2
+    - 3
+    - 4
+    type: integer
+    x-enum-varnames:
+    - Code_Success
+    - Code_ParamInvalid
+    - Code_DBError
+    - Code_ServerError
+  comment.Comment:
     properties:
+      content:
+        type: string
+      create_date:
+        type: string
+      id:
+        type: integer
+      user:
+        $ref: '#/definitions/comment.User'
+    type: object
+  comment.CommentActionResponse:
+    properties:
+      comment:
+        $ref: '#/definitions/comment.Comment'
       status_code:
-        $ref: '#/definitions/api.Code'
+        $ref: '#/definitions/comment.Code'
       status_msg:
         type: string
-      user:
-        $ref: '#/definitions/api.User'
     type: object
-  api.Video:
+  comment.CommentListResponse:
+    properties:
+      comment_list:
+        items:
+          $ref: '#/definitions/comment.Comment'
+        type: array
+      status_code:
+        $ref: '#/definitions/comment.Code'
+      status_msg:
+        type: string
+    type: object
+  comment.User:
+    properties:
+      follow_count:
+        type: integer
+      follower_count:
+        type: integer
+      id:
+        type: integer
+      is_follow:
+        type: boolean
+      name:
+        type: string
+    type: object
+  favorite.Code:
+    enum:
+    - 1
+    - 2
+    - 3
+    - 4
+    type: integer
+    x-enum-varnames:
+    - Code_Success
+    - Code_ParamInvalid
+    - Code_DBError
+    - Code_ServerError
+  favorite.FavoriteActionRequest:
+    properties:
+      action_type:
+        type: integer
+      auth_id:
+        type: integer
+      video_id:
+        type: integer
+    type: object
+  favorite.FavoriteListResponse:
+    properties:
+      status_code:
+        $ref: '#/definitions/favorite.Code'
+      status_msg:
+        type: string
+      video_list:
+        items:
+          $ref: '#/definitions/favorite.Video'
+        type: array
+    type: object
+  favorite.User:
+    properties:
+      follow_count:
+        type: integer
+      follower_count:
+        type: integer
+      id:
+        type: integer
+      is_follow:
+        type: boolean
+      name:
+        type: string
+    type: object
+  favorite.Video:
     properties:
       author:
-        $ref: '#/definitions/api.User'
+        $ref: '#/definitions/favorite.User'
       comment_count:
         type: integer
       cover_url:
@@ -214,8 +178,204 @@ definitions:
       title:
         type: string
     type: object
+  message.Code:
+    enum:
+    - 1
+    - 2
+    - 3
+    - 4
+    type: integer
+    x-enum-varnames:
+    - Code_Success
+    - Code_ParamInvalid
+    - Code_DBError
+    - Code_ServerError
+  message.Message:
+    properties:
+      content:
+        type: string
+      create_time:
+        type: string
+      id:
+        type: integer
+    type: object
+  message.MessageActionResponse:
+    properties:
+      status_code:
+        $ref: '#/definitions/message.Code'
+      status_msg:
+        type: string
+    type: object
+  message.MessageListResponse:
+    properties:
+      message_list:
+        items:
+          $ref: '#/definitions/message.Message'
+        type: array
+      status_code:
+        $ref: '#/definitions/message.Code'
+      status_msg:
+        type: string
+    type: object
+  relation.Code:
+    enum:
+    - 1
+    - 2
+    - 3
+    - 4
+    type: integer
+    x-enum-varnames:
+    - Code_Success
+    - Code_ParamInvalid
+    - Code_DBError
+    - Code_ServerError
+  relation.RelationActionResponse:
+    properties:
+      status_code:
+        $ref: '#/definitions/relation.Code'
+      status_msg:
+        type: string
+    type: object
+  user.Code:
+    enum:
+    - 1
+    - 2
+    - 3
+    - 4
+    type: integer
+    x-enum-varnames:
+    - Code_Success
+    - Code_ParamInvalid
+    - Code_DBError
+    - Code_ServerError
+  user.LoginResponse:
+    properties:
+      status_code:
+        $ref: '#/definitions/user.Code'
+      status_msg:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  user.RegisterResponse:
+    properties:
+      status_code:
+        $ref: '#/definitions/user.Code'
+      status_msg:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  user.User:
+    properties:
+      follow_count:
+        type: integer
+      follower_count:
+        type: integer
+      id:
+        type: integer
+      is_follow:
+        type: boolean
+      name:
+        type: string
+    type: object
+  user.UserResponse:
+    properties:
+      status_code:
+        $ref: '#/definitions/user.Code'
+      status_msg:
+        type: string
+      user:
+        $ref: '#/definitions/user.User'
+    type: object
+  video.Code:
+    enum:
+    - 1
+    - 2
+    - 3
+    - 4
+    type: integer
+    x-enum-varnames:
+    - Code_Success
+    - Code_ParamInvalid
+    - Code_DBError
+    - Code_ServerError
+  video.FeedResponse:
+    properties:
+      next_time:
+        type: integer
+      status_code:
+        $ref: '#/definitions/video.Code'
+      status_msg:
+        type: string
+      video_list:
+        items:
+          $ref: '#/definitions/video.Video'
+        type: array
+    type: object
+  video.PublishActionResponse:
+    properties:
+      status_code:
+        $ref: '#/definitions/video.Code'
+      status_msg:
+        type: string
+    type: object
+  video.PublishListResponse:
+    properties:
+      status_code:
+        $ref: '#/definitions/video.Code'
+      status_msg:
+        type: string
+      video_list:
+        items:
+          $ref: '#/definitions/video.Video'
+        type: array
+    type: object
+  video.User:
+    properties:
+      follow_count:
+        type: integer
+      follower_count:
+        type: integer
+      id:
+        type: integer
+      is_follow:
+        type: boolean
+      name:
+        type: string
+    type: object
+  video.Video:
+    properties:
+      author:
+        $ref: '#/definitions/video.User'
+      comment_count:
+        type: integer
+      cover_url:
+        type: string
+      favorite_count:
+        type: integer
+      id:
+        type: integer
+      is_favorite:
+        type: boolean
+      play_url:
+        type: string
+      title:
+        type: string
+    type: object
+host: 192.168.56.100:10000
 info:
-  contact: {}
+  contact:
+    email: 1903317091@qq.com
+    name: 余晓兵
+    url: http://www.swagger.io/support
+  description: 青训营抖音大项目
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: douyin
+  version: "1.0"
 paths:
   /douyin/comment/action/:
     post:
@@ -249,11 +409,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/api.CommentActionResponse'
+            $ref: '#/definitions/comment.CommentActionResponse'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/api.CommentActionResponse'
+            $ref: '#/definitions/comment.CommentActionResponse'
       summary: 评论操作，删除或增加
       tags:
       - 评论
@@ -274,11 +434,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/api.CommentListResponse'
+            $ref: '#/definitions/comment.CommentListResponse'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/api.CommentListResponse'
+            $ref: '#/definitions/comment.CommentListResponse'
       summary: 获取所有评论
       tags:
       - 评论
@@ -306,11 +466,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/api.CommentActionResponse'
+            $ref: '#/definitions/favorite.FavoriteActionRequest'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/api.CommentActionResponse'
+            $ref: '#/definitions/favorite.FavoriteActionRequest'
       summary: 点赞操作，点赞或取消点赞
       tags:
       - 点赞
@@ -333,11 +493,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/api.FavoriteListResponse'
+            $ref: '#/definitions/favorite.FavoriteListResponse'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/api.FavoriteListResponse'
+            $ref: '#/definitions/favorite.FavoriteListResponse'
       summary: 获取所有点赞过的视频
       tags:
       - 点赞
@@ -358,11 +518,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/api.FeedResponse'
+            $ref: '#/definitions/video.FeedResponse'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/api.FeedResponse'
+            $ref: '#/definitions/video.FeedResponse'
       summary: 视频推流
       tags:
       - feed
@@ -395,11 +555,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/api.MessageActionResponse'
+            $ref: '#/definitions/message.MessageActionResponse'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/api.MessageActionResponse'
+            $ref: '#/definitions/message.MessageActionResponse'
       summary: 发送消息
       tags:
       - 消息
@@ -422,11 +582,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/api.MessageListResponse'
+            $ref: '#/definitions/message.MessageListResponse'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/api.MessageListResponse'
+            $ref: '#/definitions/message.MessageListResponse'
       summary: 获取聊天记录
       tags:
       - 消息
@@ -449,11 +609,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/api.MessageListResponse'
+            $ref: '#/definitions/message.MessageListResponse'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/api.MessageListResponse'
+            $ref: '#/definitions/message.MessageListResponse'
       summary: 获取聊天记录
       tags:
       - 消息
@@ -481,11 +641,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/api.PublishActionResponse'
+            $ref: '#/definitions/video.PublishActionResponse'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/api.PublishActionResponse'
+            $ref: '#/definitions/video.PublishActionResponse'
       summary: 发布视频
       tags:
       - 发布
@@ -508,11 +668,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/api.PublishListResponse'
+            $ref: '#/definitions/video.PublishListResponse'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/api.PublishListResponse'
+            $ref: '#/definitions/video.PublishListResponse'
       summary: 获取发布视频列表
       tags:
       - 发布
@@ -540,11 +700,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/api.RelationActionResponse'
+            $ref: '#/definitions/relation.RelationActionResponse'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/api.RelationActionResponse'
+            $ref: '#/definitions/relation.RelationActionResponse'
       summary: 关注和取消关注操作
       tags:
       - 关系
@@ -648,11 +808,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/api.UserResponse'
+            $ref: '#/definitions/user.UserResponse'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/api.UserResponse'
+            $ref: '#/definitions/user.UserResponse'
       summary: 用户信息
       tags:
       - 用户
@@ -675,11 +835,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/api.LoginResponse'
+            $ref: '#/definitions/user.LoginResponse'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/api.LoginResponse'
+            $ref: '#/definitions/user.LoginResponse'
       summary: 用户登录
       tags:
       - 用户
@@ -702,11 +862,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/api.RegisterResponse'
+            $ref: '#/definitions/user.RegisterResponse'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/api.RegisterResponse'
+            $ref: '#/definitions/user.RegisterResponse'
       summary: 用户注册
       tags:
       - 用户

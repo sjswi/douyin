@@ -6,6 +6,7 @@ import (
 	"context"
 	"douyin_rpc/server/cmd/api/global"
 	"douyin_rpc/server/cmd/api/kitex_gen/favorite"
+	"strconv"
 
 	api "douyin_rpc/server/cmd/api/biz/model/api"
 	"github.com/cloudwego/hertz/pkg/app"
@@ -20,8 +21,8 @@ import (
 // @Param token query string true "token"
 // @Param video_id query int true "视频id"
 // @Param action_type query int true "事件类型，1点赞，2取消点赞"
-// @Success 200 object api.CommentActionResponse 成功后返回值
-// @Failure 409 object api.CommentActionResponse 失败后返回值
+// @Success 200 object favorite.FavoriteActionRequest 成功后返回值
+// @Failure 409 object favorite.FavoriteActionRequest 失败后返回值
 // @Router /douyin/favorite/action/ [post]
 // @router /douyin/favorite/action/ [post]
 func FavoriteAction(ctx context.Context, c *app.RequestContext) {
@@ -36,10 +37,18 @@ func FavoriteAction(ctx context.Context, c *app.RequestContext) {
 	if !exist {
 		return
 	}
+	videoId, err := strconv.ParseInt(req.VideoID, 0, 64)
+	if err != nil {
+		return
+	}
+	actionType, err := strconv.ParseInt(req.VideoID, 0, 32)
+	if err != nil {
+		return
+	}
 	resp, err := global.FavoriteClient.FavoriteAction(ctx, &favorite.FavoriteActionRequest{
-		VideoId:    req.VideoID,
+		VideoId:    videoId,
 		AuthId:     value.(int64),
-		ActionType: req.ActionType,
+		ActionType: int32(actionType),
 	})
 	if err != nil {
 		return
@@ -57,8 +66,8 @@ func FavoriteAction(ctx context.Context, c *app.RequestContext) {
 // @Accept application/x-json-stream
 // @Param user_id query int true "用户id"
 // @Param token query string true "token"
-// @Success 200 object api.FavoriteListResponse 成功后返回值
-// @Failure 409 object api.FavoriteListResponse 失败后返回值
+// @Success 200 object favorite.FavoriteListResponse 成功后返回值
+// @Failure 409 object favorite.FavoriteListResponse 失败后返回值
 // @Router /douyin/favorite/list/ [get]
 // @router /douyin/favorite/list/ [get]
 func FavoriteList(ctx context.Context, c *app.RequestContext) {
@@ -73,9 +82,13 @@ func FavoriteList(ctx context.Context, c *app.RequestContext) {
 	if !exist {
 		return
 	}
+	userId, err := strconv.ParseInt(req.UserID, 0, 64)
+	if err != nil {
+		return
+	}
 	resp, err := global.FavoriteClient.FavoriteList(ctx, &favorite.FavoriteListRequest{
 		AuthId: value.(int64),
-		UserId: req.UserID,
+		UserId: userId,
 	})
 	if err != nil {
 		return

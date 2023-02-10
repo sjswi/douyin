@@ -11,4 +11,5 @@ type ServerConfig struct {
 	UserSrvInfo     config.RPCSrvConfig `mapstructure:"user_srv" json:"user_srv"`
 	VideoSrvInfo    config.RPCSrvConfig `mapstructure:"video_srv" json:"video_srv"`
 	RelationSrvInfo config.RPCSrvConfig `mapstructure:"relation_srv" json:"relation_srv"`
+	CommentSrvInfo  config.RPCSrvConfig `mapstructure:"comment_srv" json:"comment_srv"`
 }

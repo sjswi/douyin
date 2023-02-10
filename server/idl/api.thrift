@@ -229,7 +229,7 @@ struct CommentActionResponse{
 }
 struct CommentListRequest{
     1: required string token (api.query="token");
-    2: required string user_id (api.query="user_id");
+    2: required string video_id (api.query="video_id");
 }
 
 struct CommentListResponse{

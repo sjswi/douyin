@@ -9,6 +9,7 @@ import (
 	"douyin_rpc/server/cmd/api/kitex_gen/comment"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	"strconv"
 )
 
 // CommentAction
@@ -21,8 +22,8 @@ import (
 // @Param action_type query int true "操作类型"
 // @Param comment_text query string false "评论内容"
 // @Param comment_id query int false "评论id"
-// @Success 200 object api.CommentActionResponse 成功后返回值
-// @Failure 409 object api.CommentActionResponse 失败后返回值
+// @Success 200 object comment.CommentActionResponse 成功后返回值
+// @Failure 409 object comment.CommentActionResponse 失败后返回值
 // @Router /douyin/comment/action/ [post]
 // @router /douyin/comment/action/ [post]
 func CommentAction(ctx context.Context, c *app.RequestContext) {
@@ -37,17 +38,39 @@ func CommentAction(ctx context.Context, c *app.RequestContext) {
 	if !exist {
 		return
 	}
-	resp, err := global.CommentClient.CommentAction(ctx, &comment.CommentActionRequest{
-		VideoId:     req.VideoID,
-		AuthId:      value.(int64),
-		ActionType:  req.ActionType,
-		CommentText: req.CommentText,
-		CommentId:   req.CommentID,
-	})
+	videoId, err := strconv.ParseInt(req.VideoID, 0, 64)
+	if err != nil {
+		return
+	}
+	actionType, err := strconv.ParseInt(req.ActionType, 0, 32)
+	if err != nil {
+		return
+	}
+	commentID, err := strconv.ParseInt(req.CommentID, 0, 64)
 	if err != nil {
 		return
 	}
 	//resp := new(api.CommentActionResponse)
+	resp, err := global.CommentClient.CommentAction(ctx, &comment.CommentActionRequest{
+		VideoId:     videoId,
+		AuthId:      value.(int64),
+		ActionType:  int32(actionType),
+		CommentText: req.CommentText,
+		CommentId:   commentID,
+	})
+	if err != nil {
+		resp.StatusCode = 1
+		resp.StatusMsg = err.Error()
+	}
+	//resp.Comment = api.NewComment()
+	//resp.Comment.ID = resp1.Comment.Id
+	//resp.Comment.User = api.NewUser()
+	//resp.Comment.User.FollowCount = resp1.Comment.User.FollowCount
+	//resp.Comment.Content = resp1.Comment.Content
+	//resp.Comment.User.FollowerCount = resp1.Comment.User.FollowerCount
+	//resp.Comment.User.Name = resp1.Comment.User.Name
+	//resp.Comment.User.IsFollow = resp1.Comment.User.IsFollow
+	//resp.Comment.User.ID = resp1.Comment.User.Id
 
 	c.JSON(consts.StatusOK, resp)
 }
@@ -58,8 +81,8 @@ func CommentAction(ctx context.Context, c *app.RequestContext) {
 // @version 1.0
 // @Param video_id query int true "视频id"
 // @Param token query string true "token"
-// @Success 200 object api.CommentListResponse 成功后返回值
-// @Failure 409 object api.CommentListResponse 失败后返回值
+// @Success 200 object comment.CommentListResponse 成功后返回值
+// @Failure 409 object comment.CommentListResponse 失败后返回值
 // @Router /douyin/comment/list/ [get]
 // @router /douyin/comment/list/ [get]
 func CommentList(ctx context.Context, c *app.RequestContext) {
@@ -75,10 +98,13 @@ func CommentList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 	//authID, err := strconv.Atoi(c.Get("accountID"))
-
+	userId, err := strconv.ParseInt(req.UserID, 0, 64)
+	if err != nil {
+		return
+	}
 	resp, err := global.CommentClient.CommentList(ctx, &comment.CommentListRequest{
 		AuthId: value.(int64),
-		UserId: req.UserID,
+		UserId: userId,
 	})
 	if err != nil {
 		return

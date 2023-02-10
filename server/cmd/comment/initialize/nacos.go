@@ -1,8 +1,8 @@
 package initialize
 
 import (
+	"douyin_rpc/server/cmd/comment/global"
 	consts "douyin_rpc/server/cmd/user/constant"
-	"douyin_rpc/server/cmd/user/global"
 	"net"
 	"strconv"
 

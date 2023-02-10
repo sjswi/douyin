@@ -813,11 +813,11 @@ func (p *Comment) Field4DeepEqual(src string) bool {
 }
 
 type CommentActionRequest struct {
-	VideoId     string `thrift:"video_id,1,required" frugal:"1,required,string" json:"video_id"`
+	VideoId     int64  `thrift:"video_id,1,required" frugal:"1,required,i64" json:"video_id"`
 	AuthId      int64  `thrift:"auth_id,2,required" frugal:"2,required,i64" json:"auth_id"`
-	ActionType  string `thrift:"action_type,3,required" frugal:"3,required,string" json:"action_type"`
+	ActionType  int32  `thrift:"action_type,3,required" frugal:"3,required,i32" json:"action_type"`
 	CommentText string `thrift:"comment_text,4" frugal:"4,default,string" json:"comment_text"`
-	CommentId   string `thrift:"comment_id,5" frugal:"5,default,string" json:"comment_id"`
+	CommentId   int64  `thrift:"comment_id,5" frugal:"5,default,i64" json:"comment_id"`
 }
 
 func NewCommentActionRequest() *CommentActionRequest {
@@ -828,7 +828,7 @@ func (p *CommentActionRequest) InitDefault() {
 	*p = CommentActionRequest{}
 }
 
-func (p *CommentActionRequest) GetVideoId() (v string) {
+func (p *CommentActionRequest) GetVideoId() (v int64) {
 	return p.VideoId
 }
 
@@ -836,7 +836,7 @@ func (p *CommentActionRequest) GetAuthId() (v int64) {
 	return p.AuthId
 }
 
-func (p *CommentActionRequest) GetActionType() (v string) {
+func (p *CommentActionRequest) GetActionType() (v int32) {
 	return p.ActionType
 }
 
@@ -844,22 +844,22 @@ func (p *CommentActionRequest) GetCommentText() (v string) {
 	return p.CommentText
 }
 
-func (p *CommentActionRequest) GetCommentId() (v string) {
+func (p *CommentActionRequest) GetCommentId() (v int64) {
 	return p.CommentId
 }
-func (p *CommentActionRequest) SetVideoId(val string) {
+func (p *CommentActionRequest) SetVideoId(val int64) {
 	p.VideoId = val
 }
 func (p *CommentActionRequest) SetAuthId(val int64) {
 	p.AuthId = val
 }
-func (p *CommentActionRequest) SetActionType(val string) {
+func (p *CommentActionRequest) SetActionType(val int32) {
 	p.ActionType = val
 }
 func (p *CommentActionRequest) SetCommentText(val string) {
 	p.CommentText = val
 }
-func (p *CommentActionRequest) SetCommentId(val string) {
+func (p *CommentActionRequest) SetCommentId(val int64) {
 	p.CommentId = val
 }
 
@@ -894,7 +894,7 @@ func (p *CommentActionRequest) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -916,7 +916,7 @@ func (p *CommentActionRequest) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 3:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I32 {
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -937,7 +937,7 @@ func (p *CommentActionRequest) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 5:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField5(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -993,7 +993,7 @@ RequiredFieldNotSetError:
 }
 
 func (p *CommentActionRequest) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.VideoId = v
@@ -1011,7 +1011,7 @@ func (p *CommentActionRequest) ReadField2(iprot thrift.TProtocol) error {
 }
 
 func (p *CommentActionRequest) ReadField3(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI32(); err != nil {
 		return err
 	} else {
 		p.ActionType = v
@@ -1029,7 +1029,7 @@ func (p *CommentActionRequest) ReadField4(iprot thrift.TProtocol) error {
 }
 
 func (p *CommentActionRequest) ReadField5(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.CommentId = v
@@ -1083,10 +1083,10 @@ WriteStructEndError:
 }
 
 func (p *CommentActionRequest) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("video_id", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("video_id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.VideoId); err != nil {
+	if err := oprot.WriteI64(p.VideoId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1117,10 +1117,10 @@ WriteFieldEndError:
 }
 
 func (p *CommentActionRequest) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("action_type", thrift.STRING, 3); err != nil {
+	if err = oprot.WriteFieldBegin("action_type", thrift.I32, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.ActionType); err != nil {
+	if err := oprot.WriteI32(p.ActionType); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1151,10 +1151,10 @@ WriteFieldEndError:
 }
 
 func (p *CommentActionRequest) writeField5(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("comment_id", thrift.STRING, 5); err != nil {
+	if err = oprot.WriteFieldBegin("comment_id", thrift.I64, 5); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.CommentId); err != nil {
+	if err := oprot.WriteI64(p.CommentId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1198,9 +1198,9 @@ func (p *CommentActionRequest) DeepEqual(ano *CommentActionRequest) bool {
 	return true
 }
 
-func (p *CommentActionRequest) Field1DeepEqual(src string) bool {
+func (p *CommentActionRequest) Field1DeepEqual(src int64) bool {
 
-	if strings.Compare(p.VideoId, src) != 0 {
+	if p.VideoId != src {
 		return false
 	}
 	return true
@@ -1212,9 +1212,9 @@ func (p *CommentActionRequest) Field2DeepEqual(src int64) bool {
 	}
 	return true
 }
-func (p *CommentActionRequest) Field3DeepEqual(src string) bool {
+func (p *CommentActionRequest) Field3DeepEqual(src int32) bool {
 
-	if strings.Compare(p.ActionType, src) != 0 {
+	if p.ActionType != src {
 		return false
 	}
 	return true
@@ -1226,9 +1226,9 @@ func (p *CommentActionRequest) Field4DeepEqual(src string) bool {
 	}
 	return true
 }
-func (p *CommentActionRequest) Field5DeepEqual(src string) bool {
+func (p *CommentActionRequest) Field5DeepEqual(src int64) bool {
 
-	if strings.Compare(p.CommentId, src) != 0 {
+	if p.CommentId != src {
 		return false
 	}
 	return true
@@ -1525,8 +1525,8 @@ func (p *CommentActionResponse) Field3DeepEqual(src *Comment) bool {
 }
 
 type CommentListRequest struct {
-	AuthId int64  `thrift:"auth_id,1,required" frugal:"1,required,i64" json:"auth_id"`
-	UserId string `thrift:"user_id,2,required" frugal:"2,required,string" json:"user_id"`
+	AuthId  int64 `thrift:"auth_id,1,required" frugal:"1,required,i64" json:"auth_id"`
+	VideoId int64 `thrift:"video_id,2,required" frugal:"2,required,i64" json:"video_id"`
 }
 
 func NewCommentListRequest() *CommentListRequest {
@@ -1541,19 +1541,19 @@ func (p *CommentListRequest) GetAuthId() (v int64) {
 	return p.AuthId
 }
 
-func (p *CommentListRequest) GetUserId() (v string) {
-	return p.UserId
+func (p *CommentListRequest) GetVideoId() (v int64) {
+	return p.VideoId
 }
 func (p *CommentListRequest) SetAuthId(val int64) {
 	p.AuthId = val
 }
-func (p *CommentListRequest) SetUserId(val string) {
-	p.UserId = val
+func (p *CommentListRequest) SetVideoId(val int64) {
+	p.VideoId = val
 }
 
 var fieldIDToName_CommentListRequest = map[int16]string{
 	1: "auth_id",
-	2: "user_id",
+	2: "video_id",
 }
 
 func (p *CommentListRequest) Read(iprot thrift.TProtocol) (err error) {
@@ -1561,7 +1561,7 @@ func (p *CommentListRequest) Read(iprot thrift.TProtocol) (err error) {
 	var fieldTypeId thrift.TType
 	var fieldId int16
 	var issetAuthId bool = false
-	var issetUserId bool = false
+	var issetVideoId bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -1589,11 +1589,11 @@ func (p *CommentListRequest) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 2:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetUserId = true
+				issetVideoId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -1618,7 +1618,7 @@ func (p *CommentListRequest) Read(iprot thrift.TProtocol) (err error) {
 		goto RequiredFieldNotSetError
 	}
 
-	if !issetUserId {
+	if !issetVideoId {
 		fieldId = 2
 		goto RequiredFieldNotSetError
 	}
@@ -1650,10 +1650,10 @@ func (p *CommentListRequest) ReadField1(iprot thrift.TProtocol) error {
 }
 
 func (p *CommentListRequest) ReadField2(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
-		p.UserId = v
+		p.VideoId = v
 	}
 	return nil
 }
@@ -1709,10 +1709,10 @@ WriteFieldEndError:
 }
 
 func (p *CommentListRequest) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("user_id", thrift.STRING, 2); err != nil {
+	if err = oprot.WriteFieldBegin("video_id", thrift.I64, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.UserId); err != nil {
+	if err := oprot.WriteI64(p.VideoId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1741,7 +1741,7 @@ func (p *CommentListRequest) DeepEqual(ano *CommentListRequest) bool {
 	if !p.Field1DeepEqual(ano.AuthId) {
 		return false
 	}
-	if !p.Field2DeepEqual(ano.UserId) {
+	if !p.Field2DeepEqual(ano.VideoId) {
 		return false
 	}
 	return true
@@ -1754,9 +1754,9 @@ func (p *CommentListRequest) Field1DeepEqual(src int64) bool {
 	}
 	return true
 }
-func (p *CommentListRequest) Field2DeepEqual(src string) bool {
+func (p *CommentListRequest) Field2DeepEqual(src int64) bool {
 
-	if strings.Compare(p.UserId, src) != 0 {
+	if p.VideoId != src {
 		return false
 	}
 	return true
@@ -2070,11 +2070,12 @@ func (p *CommentListResponse) Field3DeepEqual(src []*Comment) bool {
 }
 
 type Comment1 struct {
-	Id        int64 `thrift:"id,1" frugal:"1,default,i64" json:"id"`
-	UserId    int64 `thrift:"user_id,2" frugal:"2,default,i64" json:"user_id"`
-	VideoId   int64 `thrift:"video_id,3" frugal:"3,default,i64" json:"video_id"`
-	CreatedAt int64 `thrift:"created_at,4" frugal:"4,default,i64" json:"created_at"`
-	UpdatedAt int64 `thrift:"updated_at,5" frugal:"5,default,i64" json:"updated_at"`
+	Id        int64  `thrift:"id,1" frugal:"1,default,i64" json:"id"`
+	UserId    int64  `thrift:"user_id,2" frugal:"2,default,i64" json:"user_id"`
+	VideoId   int64  `thrift:"video_id,3" frugal:"3,default,i64" json:"video_id"`
+	CreatedAt int64  `thrift:"created_at,4" frugal:"4,default,i64" json:"created_at"`
+	UpdatedAt int64  `thrift:"updated_at,5" frugal:"5,default,i64" json:"updated_at"`
+	Content   string `thrift:"content,6" frugal:"6,default,string" json:"content"`
 }
 
 func NewComment1() *Comment1 {
@@ -2104,6 +2105,10 @@ func (p *Comment1) GetCreatedAt() (v int64) {
 func (p *Comment1) GetUpdatedAt() (v int64) {
 	return p.UpdatedAt
 }
+
+func (p *Comment1) GetContent() (v string) {
+	return p.Content
+}
 func (p *Comment1) SetId(val int64) {
 	p.Id = val
 }
@@ -2119,6 +2124,9 @@ func (p *Comment1) SetCreatedAt(val int64) {
 func (p *Comment1) SetUpdatedAt(val int64) {
 	p.UpdatedAt = val
 }
+func (p *Comment1) SetContent(val string) {
+	p.Content = val
+}
 
 var fieldIDToName_Comment1 = map[int16]string{
 	1: "id",
@@ -2126,6 +2134,7 @@ var fieldIDToName_Comment1 = map[int16]string{
 	3: "video_id",
 	4: "created_at",
 	5: "updated_at",
+	6: "content",
 }
 
 func (p *Comment1) Read(iprot thrift.TProtocol) (err error) {
@@ -2190,6 +2199,16 @@ func (p *Comment1) Read(iprot thrift.TProtocol) (err error) {
 		case 5:
 			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField5(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		case 6:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField6(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else {
@@ -2272,6 +2291,15 @@ func (p *Comment1) ReadField5(iprot thrift.TProtocol) error {
 	return nil
 }
 
+func (p *Comment1) ReadField6(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.Content = v
+	}
+	return nil
+}
+
 func (p *Comment1) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
 	if err = oprot.WriteStructBegin("Comment1"); err != nil {
@@ -2296,6 +2324,10 @@ func (p *Comment1) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField5(oprot); err != nil {
 			fieldId = 5
+			goto WriteFieldError
+		}
+		if err = p.writeField6(oprot); err != nil {
+			fieldId = 6
 			goto WriteFieldError
 		}
 
@@ -2402,6 +2434,23 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
 }
 
+func (p *Comment1) writeField6(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("content", thrift.STRING, 6); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.Content); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 6 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 6 end error: ", p), err)
+}
+
 func (p *Comment1) String() string {
 	if p == nil {
 		return "<nil>"
@@ -2428,6 +2477,9 @@ func (p *Comment1) DeepEqual(ano *Comment1) bool {
 		return false
 	}
 	if !p.Field5DeepEqual(ano.UpdatedAt) {
+		return false
+	}
+	if !p.Field6DeepEqual(ano.Content) {
 		return false
 	}
 	return true
@@ -2464,6 +2516,13 @@ func (p *Comment1) Field4DeepEqual(src int64) bool {
 func (p *Comment1) Field5DeepEqual(src int64) bool {
 
 	if p.UpdatedAt != src {
+		return false
+	}
+	return true
+}
+func (p *Comment1) Field6DeepEqual(src string) bool {
+
+	if strings.Compare(p.Content, src) != 0 {
 		return false
 	}
 	return true

@@ -6,6 +6,7 @@ import (
 	"context"
 	"douyin_rpc/server/cmd/api/global"
 	"douyin_rpc/server/cmd/api/kitex_gen/video"
+	"time"
 
 	api "douyin_rpc/server/cmd/api/biz/model/api"
 	"github.com/cloudwego/hertz/pkg/app"
@@ -19,8 +20,8 @@ import (
 // @Accept application/x-json-stream
 // @Param latest_time query int false "用户id"
 // @Param token query string false "token"
-// @Success 200 object api.FeedResponse 成功后返回值
-// @Failure 409 object api.FeedResponse 失败后返回值
+// @Success 200 object video.FeedResponse 成功后返回值
+// @Failure 409 object video.FeedResponse 失败后返回值
 // @Router /douyin/feed/ [get]
 // @router /douyin/feed/ [get]
 func Feed(ctx context.Context, c *app.RequestContext) {
@@ -35,9 +36,13 @@ func Feed(ctx context.Context, c *app.RequestContext) {
 	if !exist {
 		return
 	}
+	parse, err := time.Parse("2006-01-02 15:04:05", req.LatestTime)
+	if err != nil {
+		return
+	}
 	resp, err := global.VideoClient.Feed(ctx, &video.FeedRequest{
 		AuthId:     value.(int64),
-		LatestTime: req.LatestTime,
+		LatestTime: parse.Unix(),
 	})
 	if err != nil {
 		return

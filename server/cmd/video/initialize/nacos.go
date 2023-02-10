@@ -2,7 +2,7 @@ package initialize
 
 import (
 	consts "douyin_rpc/server/cmd/user/constant"
-	"douyin_rpc/server/cmd/user/global"
+	"douyin_rpc/server/cmd/video/global"
 	"net"
 	"strconv"
 

@@ -1,7 +1,6 @@
 {
   "name": "douyin_user",
   "host": "192.168.56.100",
-  "port": 10005,
   "otel": {
     "endpoint": "http://192.168.56.102:14268/api/traces"
   },
