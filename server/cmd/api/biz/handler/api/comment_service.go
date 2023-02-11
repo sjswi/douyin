@@ -46,12 +46,17 @@ func CommentAction(ctx context.Context, c *app.RequestContext) {
 	if err != nil {
 		return
 	}
-	commentID, err := strconv.ParseInt(req.CommentID, 0, 64)
-	if err != nil {
-		return
+	var commentID int64
+	commentID = -1
+	if actionType != 1 {
+		commentID, err = strconv.ParseInt(req.CommentID, 0, 64)
+		if err != nil {
+			return
+		}
 	}
+	resp := new(comment.CommentActionResponse)
 	//resp := new(api.CommentActionResponse)
-	resp, err := global.CommentClient.CommentAction(ctx, &comment.CommentActionRequest{
+	resp, err = global.CommentClient.CommentAction(ctx, &comment.CommentActionRequest{
 		VideoId:     videoId,
 		AuthId:      value.(int64),
 		ActionType:  int32(actionType),

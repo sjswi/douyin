@@ -3,7 +3,6 @@
 package video
 
 import (
-	"bytes"
 	"context"
 	"database/sql"
 	"database/sql/driver"
@@ -1644,10 +1643,10 @@ func (p *FeedResponse) Field4DeepEqual(src int64) bool {
 }
 
 type PublishActionRequest struct {
-	Data     []byte `thrift:"data,1,required" frugal:"1,required,binary" json:"data"`
-	AuthId   int64  `thrift:"auth_id,2,required" frugal:"2,required,i64" json:"auth_id"`
-	Title    string `thrift:"title,3,required" frugal:"3,required,string" json:"title"`
-	Filename string `thrift:"filename,4,required" frugal:"4,required,string" json:"filename"`
+	AuthId   int64  `thrift:"auth_id,1,required" frugal:"1,required,i64" json:"auth_id"`
+	Title    string `thrift:"title,2,required" frugal:"2,required,string" json:"title"`
+	PlayUrl  string `thrift:"play_url,3,required" frugal:"3,required,string" json:"play_url"`
+	CoverUrl string `thrift:"cover_url,4,required" frugal:"4,required,string" json:"cover_url"`
 }
 
 func NewPublishActionRequest() *PublishActionRequest {
@@ -1658,10 +1657,6 @@ func (p *PublishActionRequest) InitDefault() {
 	*p = PublishActionRequest{}
 }
 
-func (p *PublishActionRequest) GetData() (v []byte) {
-	return p.Data
-}
-
 func (p *PublishActionRequest) GetAuthId() (v int64) {
 	return p.AuthId
 }
@@ -1670,11 +1665,12 @@ func (p *PublishActionRequest) GetTitle() (v string) {
 	return p.Title
 }
 
-func (p *PublishActionRequest) GetFilename() (v string) {
-	return p.Filename
+func (p *PublishActionRequest) GetPlayUrl() (v string) {
+	return p.PlayUrl
 }
-func (p *PublishActionRequest) SetData(val []byte) {
-	p.Data = val
+
+func (p *PublishActionRequest) GetCoverUrl() (v string) {
+	return p.CoverUrl
 }
 func (p *PublishActionRequest) SetAuthId(val int64) {
 	p.AuthId = val
@@ -1682,25 +1678,28 @@ func (p *PublishActionRequest) SetAuthId(val int64) {
 func (p *PublishActionRequest) SetTitle(val string) {
 	p.Title = val
 }
-func (p *PublishActionRequest) SetFilename(val string) {
-	p.Filename = val
+func (p *PublishActionRequest) SetPlayUrl(val string) {
+	p.PlayUrl = val
+}
+func (p *PublishActionRequest) SetCoverUrl(val string) {
+	p.CoverUrl = val
 }
 
 var fieldIDToName_PublishActionRequest = map[int16]string{
-	1: "data",
-	2: "auth_id",
-	3: "title",
-	4: "filename",
+	1: "auth_id",
+	2: "title",
+	3: "play_url",
+	4: "cover_url",
 }
 
 func (p *PublishActionRequest) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
-	var issetData bool = false
 	var issetAuthId bool = false
 	var issetTitle bool = false
-	var issetFilename bool = false
+	var issetPlayUrl bool = false
+	var issetCoverUrl bool = false
 
 	if _, err = iprot.ReadStructBegin(); err != nil {
 		goto ReadStructBeginError
@@ -1717,22 +1716,22 @@ func (p *PublishActionRequest) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetData = true
+				issetAuthId = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
 				}
 			}
 		case 2:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField2(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetAuthId = true
+				issetTitle = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -1743,7 +1742,7 @@ func (p *PublishActionRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetTitle = true
+				issetPlayUrl = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -1754,7 +1753,7 @@ func (p *PublishActionRequest) Read(iprot thrift.TProtocol) (err error) {
 				if err = p.ReadField4(iprot); err != nil {
 					goto ReadFieldError
 				}
-				issetFilename = true
+				issetCoverUrl = true
 			} else {
 				if err = iprot.Skip(fieldTypeId); err != nil {
 					goto SkipFieldError
@@ -1774,22 +1773,22 @@ func (p *PublishActionRequest) Read(iprot thrift.TProtocol) (err error) {
 		goto ReadStructEndError
 	}
 
-	if !issetData {
+	if !issetAuthId {
 		fieldId = 1
 		goto RequiredFieldNotSetError
 	}
 
-	if !issetAuthId {
+	if !issetTitle {
 		fieldId = 2
 		goto RequiredFieldNotSetError
 	}
 
-	if !issetTitle {
+	if !issetPlayUrl {
 		fieldId = 3
 		goto RequiredFieldNotSetError
 	}
 
-	if !issetFilename {
+	if !issetCoverUrl {
 		fieldId = 4
 		goto RequiredFieldNotSetError
 	}
@@ -1812,15 +1811,6 @@ RequiredFieldNotSetError:
 }
 
 func (p *PublishActionRequest) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadBinary(); err != nil {
-		return err
-	} else {
-		p.Data = []byte(v)
-	}
-	return nil
-}
-
-func (p *PublishActionRequest) ReadField2(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
@@ -1829,7 +1819,7 @@ func (p *PublishActionRequest) ReadField2(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *PublishActionRequest) ReadField3(iprot thrift.TProtocol) error {
+func (p *PublishActionRequest) ReadField2(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
@@ -1838,11 +1828,20 @@ func (p *PublishActionRequest) ReadField3(iprot thrift.TProtocol) error {
 	return nil
 }
 
+func (p *PublishActionRequest) ReadField3(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.PlayUrl = v
+	}
+	return nil
+}
+
 func (p *PublishActionRequest) ReadField4(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
-		p.Filename = v
+		p.CoverUrl = v
 	}
 	return nil
 }
@@ -1889,10 +1888,10 @@ WriteStructEndError:
 }
 
 func (p *PublishActionRequest) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("data", thrift.STRING, 1); err != nil {
+	if err = oprot.WriteFieldBegin("auth_id", thrift.I64, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteBinary([]byte(p.Data)); err != nil {
+	if err := oprot.WriteI64(p.AuthId); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1906,10 +1905,10 @@ WriteFieldEndError:
 }
 
 func (p *PublishActionRequest) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("auth_id", thrift.I64, 2); err != nil {
+	if err = oprot.WriteFieldBegin("title", thrift.STRING, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.AuthId); err != nil {
+	if err := oprot.WriteString(p.Title); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1923,10 +1922,10 @@ WriteFieldEndError:
 }
 
 func (p *PublishActionRequest) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("title", thrift.STRING, 3); err != nil {
+	if err = oprot.WriteFieldBegin("play_url", thrift.STRING, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Title); err != nil {
+	if err := oprot.WriteString(p.PlayUrl); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1940,10 +1939,10 @@ WriteFieldEndError:
 }
 
 func (p *PublishActionRequest) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("filename", thrift.STRING, 4); err != nil {
+	if err = oprot.WriteFieldBegin("cover_url", thrift.STRING, 4); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Filename); err != nil {
+	if err := oprot.WriteString(p.CoverUrl); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1969,45 +1968,45 @@ func (p *PublishActionRequest) DeepEqual(ano *PublishActionRequest) bool {
 	} else if p == nil || ano == nil {
 		return false
 	}
-	if !p.Field1DeepEqual(ano.Data) {
+	if !p.Field1DeepEqual(ano.AuthId) {
 		return false
 	}
-	if !p.Field2DeepEqual(ano.AuthId) {
+	if !p.Field2DeepEqual(ano.Title) {
 		return false
 	}
-	if !p.Field3DeepEqual(ano.Title) {
+	if !p.Field3DeepEqual(ano.PlayUrl) {
 		return false
 	}
-	if !p.Field4DeepEqual(ano.Filename) {
+	if !p.Field4DeepEqual(ano.CoverUrl) {
 		return false
 	}
 	return true
 }
 
-func (p *PublishActionRequest) Field1DeepEqual(src []byte) bool {
-
-	if bytes.Compare(p.Data, src) != 0 {
-		return false
-	}
-	return true
-}
-func (p *PublishActionRequest) Field2DeepEqual(src int64) bool {
+func (p *PublishActionRequest) Field1DeepEqual(src int64) bool {
 
 	if p.AuthId != src {
 		return false
 	}
 	return true
 }
-func (p *PublishActionRequest) Field3DeepEqual(src string) bool {
+func (p *PublishActionRequest) Field2DeepEqual(src string) bool {
 
 	if strings.Compare(p.Title, src) != 0 {
 		return false
 	}
 	return true
 }
+func (p *PublishActionRequest) Field3DeepEqual(src string) bool {
+
+	if strings.Compare(p.PlayUrl, src) != 0 {
+		return false
+	}
+	return true
+}
 func (p *PublishActionRequest) Field4DeepEqual(src string) bool {
 
-	if strings.Compare(p.Filename, src) != 0 {
+	if strings.Compare(p.CoverUrl, src) != 0 {
 		return false
 	}
 	return true

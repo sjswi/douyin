@@ -26,7 +26,7 @@ func initRelation() {
 	}
 
 	cc := constant.ClientConfig{
-		NamespaceId:         global.ServerConfig.UserSrvInfo.Namespace,
+		NamespaceId:         global.ServerConfig.RelationSrvInfo.Namespace,
 		TimeoutMs:           5000,
 		NotLoadCacheAtStart: true,
 		LogDir:              consts.NacosLogDir,

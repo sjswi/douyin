@@ -32,5 +32,11 @@
   "favorite_srv": {
     "name": "douyin_favorite",
     "namespace": "5f273203-7189-42d3-a13b-8122181dacd6"
+  },
+   "oss": {
+    "endpoint": "oss-cn-hangzhou.aliyuncs.com",
+    "access_key_id": "LTAI5tSeWtyu9PPEzWnsZawU",
+    "access_key_secret": "rhG7rW3FesGsm5hdbqVfCXSu9SYT5H",
+    "bucket": "yublogx"
   }
 }

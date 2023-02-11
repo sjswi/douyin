@@ -26,7 +26,7 @@ func initVideo() {
 	}
 
 	cc := constant.ClientConfig{
-		NamespaceId:         global.ServerConfig.UserSrvInfo.Namespace,
+		NamespaceId:         global.ServerConfig.VideoSrvInfo.Namespace,
 		TimeoutMs:           5000,
 		NotLoadCacheAtStart: true,
 		LogDir:              consts.NacosLogDir,
@@ -39,7 +39,7 @@ func initVideo() {
 			ClientConfig:  &cc,
 			ServerConfigs: sc,
 		})
-	r := nacos.NewNacosResolver(nacosCli, nacos.WithGroup(consts.UserGroup))
+	r := nacos.NewNacosResolver(nacosCli, nacos.WithGroup(consts.VideoGroup))
 	if err != nil {
 		klog.Fatalf("new consul client failed: %s", err.Error())
 	}

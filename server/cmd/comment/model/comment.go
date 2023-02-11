@@ -264,7 +264,7 @@ func UpdateComment(tx *gorm.DB, comment Comment) error {
 	return nil
 }
 
-func CreateComment(tx *gorm.DB, comment Comment) error {
+func CreateComment(tx *gorm.DB, comment *Comment) error {
 	if err := tx.Table("comment").Create(&comment).Error; err != nil {
 		return err
 	}

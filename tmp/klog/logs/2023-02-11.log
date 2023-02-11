@@ -174,3 +174,152 @@
 {"level":"info","msg":"real response: UserServiceGetUserResult({Success:GetUserResponse({StatusCode:Success User:User1({Id:1623218426308734976 Name:123 Password:1c39418b79c3ce04832d82a4ae75f5bf CreatedAt:1675840405 UpdatedAt:1675840405 Salt:pq4yKVAz})})})\n","time":"2023-02-11T08:43:30Z"}
 {"level":"info","msg":"KITEX: server listen at addr=[::]:10004","time":"2023-02-11T08:51:36Z"}
 {"level":"info","msg":"KITEX: server listen at addr=[::]:10005","time":"2023-02-11T08:51:44Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10005","time":"2023-02-11T09:34:34Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10004","time":"2023-02-11T09:34:53Z"}
+{"level":"info","msg":"real request: UserServiceUserArgs({Req:UserRequest({UserId:1623218426308734976 AuthId:1624280902525792256})})\n","time":"2023-02-11T09:37:04Z"}
+{"level":"info","msg":"remote service name: douyin_user, remote method: User\n","time":"2023-02-11T09:37:04Z"}
+{"level":"info","msg":"server address: 10.0.2.15:10005, rpc timeout: 0s, readwrite timeout: 50ms\n","time":"2023-02-11T09:37:04Z"}
+{"level":"info","msg":"real request: RelationServiceGetCountArgs({Req:GetCountRequest({UserId:1623218426308734976})})\n","time":"2023-02-11T09:37:08Z"}
+{"level":"info","msg":"remote service name: douyin_relation, remote method: GetCount\n","time":"2023-02-11T09:37:08Z"}
+{"level":"info","msg":"real request: RelationServiceGetRelationArgs({Req:GetRelationRequest({Id:0 UserId:1624280902525792256 TargetId:1623218426308734976 RelationType:-1 QueryType:4})})\n","time":"2023-02-11T09:37:08Z"}
+{"level":"info","msg":"remote service name: douyin_relation, remote method: GetRelation\n","time":"2023-02-11T09:37:08Z"}
+{"level":"info","msg":"server address: 10.0.2.15:10004, rpc timeout: 0s, readwrite timeout: 50ms\n","time":"2023-02-11T09:37:11Z"}
+{"level":"info","msg":"server address: 10.0.2.15:10004, rpc timeout: 0s, readwrite timeout: 50ms\n","time":"2023-02-11T09:37:11Z"}
+{"level":"info","msg":"real response: RelationServiceGetCountResult({Success:GetCountResponse({FollowCount:0 FollowerCount:1 FriendCount:0})})\n","time":"2023-02-11T09:37:11Z"}
+{"level":"info","msg":"real response: RelationServiceGetRelationResult({Success:GetRelationResponse({Relations:[Relation1({Id:1624328387357061120 UserId:1624280902525792256 TargetId:1623218426308734976 Type:1})]})})\n","time":"2023-02-11T09:37:11Z"}
+{"level":"info","msg":"real response: UserServiceUserResult({Success:UserResponse({StatusCode:Success StatusMsg: User:User({Id:1623218426308734976 Name:123 FollowCount:0 FollowerCount:1 IsFollow:true})})})\n","time":"2023-02-11T09:37:44Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10006","time":"2023-02-11T09:48:17Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10005","time":"2023-02-11T09:50:24Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10004","time":"2023-02-11T09:55:31Z"}
+{"level":"info","msg":"real request: UserServiceGetUserArgs({Req:GetUserRequest({UserId:1623218426308734976 Username: QueryType:0})})\n","time":"2023-02-11T09:56:58Z"}
+{"level":"info","msg":"remote service name: douyin_user, remote method: GetUser\n","time":"2023-02-11T09:56:58Z"}
+{"level":"info","msg":"server address: 10.0.2.15:10005, rpc timeout: 0s, readwrite timeout: 50ms\n","time":"2023-02-11T09:56:58Z"}
+{"level":"info","msg":"real response: UserServiceGetUserResult({Success:GetUserResponse({StatusCode:Success User:User1({Id:0 Name: Password: CreatedAt:0 UpdatedAt:0 Salt:})})})\n","time":"2023-02-11T09:56:58Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10005","time":"2023-02-11T10:52:01Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10004","time":"2023-02-11T10:52:11Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10006","time":"2023-02-11T10:52:57Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10004","time":"2023-02-11T11:02:15Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10005","time":"2023-02-11T11:02:37Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10006","time":"2023-02-11T11:02:47Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10006","time":"2023-02-11T11:07:24Z"}
+{"level":"error","msg":"KITEX: processing request error, remoteService=, remoteAddr=10.0.2.15:40606, error=biz error: Error 1406 (22001): Data too long for column 'cover_url' at row 1","span_id":"0000000000000000","time":"2023-02-11T11:09:59Z","trace_flags":"00","trace_id":"00000000000000000000000000000000"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10006","time":"2023-02-11T11:11:49Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10006","time":"2023-02-11T11:16:24Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10006","time":"2023-02-11T11:21:57Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10002","time":"2023-02-11T11:24:00Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10004","time":"2023-02-11T11:28:34Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10005","time":"2023-02-11T11:29:43Z"}
+{"level":"info","msg":"real request: FeedServiceGetVideoArgs({Req:GetVideoRequest({VideoId:1624366829466038272 AuthorId:0 QueryType:1})})\n","time":"2023-02-11T11:36:44Z"}
+{"level":"info","msg":"remote service name: douyin_video, remote method: GetVideo\n","time":"2023-02-11T11:36:44Z"}
+{"level":"error","msg":"KITEX: processing request error, remoteService=, remoteAddr=10.0.2.15:51796, error=biz error: service discovery error: instance list is empty!","span_id":"0000000000000000","time":"2023-02-11T11:38:01Z","trace_flags":"00","trace_id":"00000000000000000000000000000000"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10002","time":"2023-02-11T11:41:27Z"}
+{"level":"info","msg":"real request: FeedServiceGetVideoArgs({Req:GetVideoRequest({VideoId:1624366829466038272 AuthorId:0 QueryType:1})})\n","time":"2023-02-11T11:41:55Z"}
+{"level":"info","msg":"remote service name: douyin_video, remote method: GetVideo\n","time":"2023-02-11T11:41:55Z"}
+{"level":"info","msg":"server address: 10.0.2.15:10006, rpc timeout: 0s, readwrite timeout: 50ms\n","time":"2023-02-11T11:41:55Z"}
+{"level":"error","msg":"KITEX: processing request error, remoteService=, remoteAddr=10.0.2.15:55948, error=panic: [happened in biz handler] runtime error: invalid memory address or nil pointer dereference\nstack=goroutine 77873 [running]:\nruntime/debug.Stack()\n\t/root/golang/go/src/runtime/debug/stack.go:24 +0x7a\ngithub.com/cloudwego/kitex/server.(*server).invokeHandleEndpoint.func1.1()\n\t/root/go/pkg/mod/github.com/cloudwego/kitex@v0.4.4/server/server.go:282 +0x10c\npanic({0x1c72a60, 0x279c4d0})\n\t/root/golang/go/src/runtime/panic.go:844 +0x25a\nmain.(*FeedServiceImpl).GetVideo(0x283e728, {0x1ef42e8, 0xc000af78c0}, 0xc001094510)\n\t/root/douyin/douyin-master/server/cmd/video/handler.go:307 +0x190\ndouyin_rpc/server/cmd/video/kitex_gen/video/feedservice.getVideoHandler({0x1ef42e8, 0xc000af78c0}, {0x1cad5e0, 0x283e728}, {0x1d5afc0, 0xc001096128}, {0x1d5b140, 0xc001096130})\n\t/root/douyin/douyin-master/server/cmd/video/kitex_gen/video/feedservice/feedservice.go:98 +0x137\ngithub.com/cloudwego/kitex/server.(*server).invokeHandleEndpoint.func1({0x1ef42e8, 0xc000af78c0}, {0x1d5afc0, 0xc001096128}, {0x1d5b140, 0xc001096130})\n\t/root/go/pkg/mod/github.com/cloudwego/kitex@v0.4.4/server/server.go:290 +0x625\ngithub.com/kitex-contrib/obs-opentelemetry/tracing.ServerMiddleware.func1.1({0x1ef42e8, 0xc000af78c0}, {0x1d5afc0, 0xc001096128}, {0x1d5b140, 0xc001096130})\n\t/root/go/pkg/mod/github.com/kitex-contrib/obs-opentelemetry@v0.1.0/tracing/middleware.go:88 +0x512\ngithub.com/cloudwego/kitex/pkg/remote/trans.(*svrTransHandler).OnMessage(0xc000e97a80, {0x1ef42e8, 0xc000af77d0}, {0x1efaaf8, 0xc000aeea80}, {0x1efaaf8, 0xc000aeeb00})\n\t/root/go/pkg/mod/github.com/cloudwego/kitex@v0.4.4/pkg/remote/trans/default_server_handler.go:190 +0xf7\ngithub.com/cloudwego/kitex/pkg/remote/trans/detection.(*svrTransHandler).OnMessage(0xc0005acd00, {0x1ef42e8, 0xc000af77d0}, {0x1efaaf8, 0xc000aeea80}, {0x1efaaf8, 0xc000aeeb00})\n\t/root/go/pkg/mod/github.com/cloudwego/kitex@v0.4.4/pkg/remote/trans/detection/server_handler.go:126 +0xe2\ngithub.com/cloudwego/kitex/pkg/remote.(*TransPipeline).OnMessage(0xc000e97ac0, {0x1ef42e8, 0xc000af77d0}, {0x1efaaf8, 0xc000aeea80}, {0x1efaaf8, 0xc000aeeb00})\n\t/root/go/pkg/mod/github.com/cloudwego/kitex@v0.4.4/pkg/remote/trans_pipeline.go:158 +0x198\ngithub.com/cloudwego/kitex/pkg/remote/trans.(*svrTransHandler).OnRead(0xc000e97a80, {0x1ef42e8, 0xc000af7050}, {0x7f0fb80b5598, 0xc000ff4780})\n\t/root/go/pkg/mod/github.com/cloudwego/kitex@v0.4.4/pkg/remote/trans/default_server_handler.go:169 +0x868\ngithub.com/cloudwego/kitex/pkg/remote/trans/detection.(*svrTransHandler).OnRead(0xc0005acd00, {0x1ef42e8, 0xc000af6fc0}, {0x7f0fb80b5598, 0xc000ff4780})\n\t/root/go/pkg/mod/github.com/cloudwego/kitex@v0.4.4/pkg/remote/trans/detection/server_handler.go:110 +0x4aa\ngithub.com/cloudwego/kitex/pkg/remote.(*TransPipeline).OnRead(0xc000e97ac0, {0x1ef42e8, 0xc000af6fc0}, {0x7f0fb80b5598, 0xc000ff4780})\n\t/root/go/pkg/mod/github.com/cloudwego/kitex@v0.4.4/pkg/remote/trans_pipeline.go:131 +0x15e\ngithub.com/cloudwego/kitex/pkg/remote/trans/netpoll.(*transServer).onConnRead(0xc0005b61e0, {0x1ef42e8, 0xc000af6fc0}, {0x1efacc0, 0xc000ff4780})\n\t/root/go/pkg/mod/github.com/cloudwego/kitex@v0.4.4/pkg/remote/trans/netpoll/trans_server.go:154 +0xb1\ngithub.com/cloudwego/netpoll.(*connection).onRequest.func2(0xc000ff4780)\n\t/root/go/pkg/mod/github.com/cloudwego/netpoll@v0.3.1/connection_onevent.go:162 +0x5b\ngithub.com/cloudwego/netpoll.(*connection).onProcess.func1()\n\t/root/go/pkg/mod/github.com/cloudwego/netpoll@v0.3.1/connection_onevent.go:185 +0x5d\ngithub.com/bytedance/gopkg/util/gopool.(*worker).run.func1.1(0xc001096120, 0xc0003bfde0)\n\t/root/go/pkg/mod/github.com/bytedance/gopkg@v0.0.0-20220531084716-665b4f21126f/util/gopool/worker.go:69 +0x99\ngithub.com/bytedance/gopkg/util/gopool.(*worker).run.func1()\n\t/root/go/pkg/mod/github.com/bytedance/gopkg@v0.0.0-20220531084716-665b4f21126f/util/gopool/worker.go:70 +0x107\ncreated by github.com/bytedance/gopkg/util/gopool.(*worker).run\n\t/root/go/pkg/mod/github.com/bytedance/gopkg@v0.0.0-20220531084716-665b4f21126f/util/gopool/worker.go:41 +0x66\n","span_id":"0000000000000000","time":"2023-02-11T11:42:47Z","trace_flags":"00","trace_id":"00000000000000000000000000000000"}
+{"level":"error","msg":"KITEX: processing request error, remoteService=, remoteAddr=10.0.2.15:53930, error=biz error: remote or network error[remote]: panic: [happened in biz handler] runtime error: invalid memory address or nil pointer dereference","span_id":"0000000000000000","time":"2023-02-11T11:43:07Z","trace_flags":"00","trace_id":"00000000000000000000000000000000"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10006","time":"2023-02-11T11:43:38Z"}
+{"level":"info","msg":"real request: FeedServiceGetVideoArgs({Req:GetVideoRequest({VideoId:1624366829466038272 AuthorId:0 QueryType:1})})\n","time":"2023-02-11T11:44:12Z"}
+{"level":"info","msg":"remote service name: douyin_video, remote method: GetVideo\n","time":"2023-02-11T11:44:12Z"}
+{"level":"info","msg":"server address: 10.0.2.15:10006, rpc timeout: 0s, readwrite timeout: 50ms\n","time":"2023-02-11T11:44:12Z"}
+{"level":"info","msg":"real response: FeedServiceGetVideoResult({Success:GetVideoResponse({Video:[Video1({Id:1624366829466038272 AuthorId:1624280902525792256 Title:blackpink PlayUrl:http://yublogx.oss-cn-hangzhou.aliyuncs.com/22da7eb1-4437-4793-8b60-d181313cf007BLACKPINK - ‘Shut Down’ MV.mp4 CoverUrl:http://yublogx.oss-cn-hangzhou.aliyuncs.com/22da7eb1-4437-4793-8b60-d181313cf007BLACKPINK - ‘Shut Down’ MV.mp4?x-oss-process=video/snapshot,t_7000,f_jpg,w_800,h_600,m_fast CreatedAt:1676114206 UpdatedAt:1676114206})]})})\n","time":"2023-02-11T11:44:32Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10002","time":"2023-02-11T11:49:22Z"}
+{"level":"info","msg":"real request: FeedServiceGetVideoArgs({Req:GetVideoRequest({VideoId:1624366829466038272 AuthorId:0 QueryType:1})})\n","time":"2023-02-11T11:49:31Z"}
+{"level":"info","msg":"remote service name: douyin_video, remote method: GetVideo\n","time":"2023-02-11T11:49:31Z"}
+{"level":"info","msg":"server address: 10.0.2.15:10006, rpc timeout: 0s, readwrite timeout: 50ms\n","time":"2023-02-11T11:49:31Z"}
+{"level":"info","msg":"real response: FeedServiceGetVideoResult({Success:GetVideoResponse({Video:[Video1({Id:1624366829466038272 AuthorId:1624280902525792256 Title:blackpink PlayUrl:http://yublogx.oss-cn-hangzhou.aliyuncs.com/22da7eb1-4437-4793-8b60-d181313cf007BLACKPINK - ‘Shut Down’ MV.mp4 CoverUrl:http://yublogx.oss-cn-hangzhou.aliyuncs.com/22da7eb1-4437-4793-8b60-d181313cf007BLACKPINK - ‘Shut Down’ MV.mp4?x-oss-process=video/snapshot,t_7000,f_jpg,w_800,h_600,m_fast CreatedAt:1676114206 UpdatedAt:1676114206})]})})\n","time":"2023-02-11T11:49:41Z"}
+{"level":"info","msg":"real request: FeedServiceGetVideoArgs({Req:GetVideoRequest({VideoId:1624366829466038272 AuthorId:0 QueryType:1})})\n","time":"2023-02-11T11:54:24Z"}
+{"level":"info","msg":"remote service name: douyin_video, remote method: GetVideo\n","time":"2023-02-11T11:54:24Z"}
+{"level":"info","msg":"server address: 10.0.2.15:10006, rpc timeout: 0s, readwrite timeout: 50ms\n","time":"2023-02-11T11:54:24Z"}
+{"level":"info","msg":"real response: FeedServiceGetVideoResult({Success:GetVideoResponse({Video:[Video1({Id:1624366829466038272 AuthorId:1624280902525792256 Title:blackpink PlayUrl:http://yublogx.oss-cn-hangzhou.aliyuncs.com/22da7eb1-4437-4793-8b60-d181313cf007BLACKPINK - ‘Shut Down’ MV.mp4 CoverUrl:http://yublogx.oss-cn-hangzhou.aliyuncs.com/22da7eb1-4437-4793-8b60-d181313cf007BLACKPINK - ‘Shut Down’ MV.mp4?x-oss-process=video/snapshot,t_7000,f_jpg,w_800,h_600,m_fast CreatedAt:1676114206 UpdatedAt:1676114206})]})})\n","time":"2023-02-11T11:54:28Z"}
+{"level":"error","msg":"KITEX: processing request error, remoteService=, remoteAddr=10.0.2.15:37216, error=biz error: 赞存在，无需点赞","span_id":"0000000000000000","time":"2023-02-11T11:55:24Z","trace_flags":"00","trace_id":"00000000000000000000000000000000"}
+{"level":"info","msg":"real request: FeedServiceGetVideoArgs({Req:GetVideoRequest({VideoId:1624366829466038272 AuthorId:0 QueryType:1})})\n","time":"2023-02-11T11:56:34Z"}
+{"level":"info","msg":"remote service name: douyin_video, remote method: GetVideo\n","time":"2023-02-11T11:56:34Z"}
+{"level":"info","msg":"server address: 10.0.2.15:10006, rpc timeout: 0s, readwrite timeout: 50ms\n","time":"2023-02-11T11:56:34Z"}
+{"level":"info","msg":"real response: FeedServiceGetVideoResult({Success:GetVideoResponse({Video:[Video1({Id:1624366829466038272 AuthorId:1624280902525792256 Title:blackpink PlayUrl:http://yublogx.oss-cn-hangzhou.aliyuncs.com/22da7eb1-4437-4793-8b60-d181313cf007BLACKPINK - ‘Shut Down’ MV.mp4 CoverUrl:http://yublogx.oss-cn-hangzhou.aliyuncs.com/22da7eb1-4437-4793-8b60-d181313cf007BLACKPINK - ‘Shut Down’ MV.mp4?x-oss-process=video/snapshot,t_7000,f_jpg,w_800,h_600,m_fast CreatedAt:1676114206 UpdatedAt:1676114206})]})})\n","time":"2023-02-11T11:56:35Z"}
+{"level":"error","msg":"KITEX: processing request error, remoteService=, remoteAddr=10.0.2.15:58764, error=biz error: 赞存在，无需点赞","span_id":"0000000000000000","time":"2023-02-11T11:56:37Z","trace_flags":"00","trace_id":"00000000000000000000000000000000"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10002","time":"2023-02-11T12:05:23Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10002","time":"2023-02-11T12:12:34Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10001","time":"2023-02-11T12:23:37Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10001","time":"2023-02-11T12:32:29Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10001","time":"2023-02-11T12:33:27Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10006","time":"2023-02-11T12:39:51Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10001","time":"2023-02-11T12:40:28Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10005","time":"2023-02-11T12:40:39Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10001","time":"2023-02-11T12:44:12Z"}
+{"level":"info","msg":"real request: FeedServiceGetVideoArgs({Req:GetVideoRequest({VideoId:1624366829466038272 AuthorId:0 QueryType:1})})\n","time":"2023-02-11T12:44:33Z"}
+{"level":"info","msg":"remote service name: douyin_video, remote method: GetVideo\n","time":"2023-02-11T12:44:33Z"}
+{"level":"error","msg":"KITEX: processing request error, remoteService=, remoteAddr=10.0.2.15:44994, error=biz error: service discovery error: instance list is empty!","span_id":"0000000000000000","time":"2023-02-11T12:44:50Z","trace_flags":"00","trace_id":"00000000000000000000000000000000"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10006","time":"2023-02-11T12:45:18Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10005","time":"2023-02-11T12:46:03Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10001","time":"2023-02-11T12:46:14Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10004","time":"2023-02-11T12:46:24Z"}
+{"level":"info","msg":"real request: FeedServiceGetVideoArgs({Req:GetVideoRequest({VideoId:1624366829466038272 AuthorId:0 QueryType:1})})\n","time":"2023-02-11T12:46:51Z"}
+{"level":"info","msg":"remote service name: douyin_video, remote method: GetVideo\n","time":"2023-02-11T12:46:51Z"}
+{"level":"error","msg":"KITEX: processing request error, remoteService=, remoteAddr=10.0.2.15:59060, error=biz error: service discovery error: instance list is empty!","span_id":"0000000000000000","time":"2023-02-11T12:47:32Z","trace_flags":"00","trace_id":"00000000000000000000000000000000"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10001","time":"2023-02-11T12:48:09Z"}
+{"level":"info","msg":"real request: FeedServiceGetVideoArgs({Req:GetVideoRequest({VideoId:1624366829466038272 AuthorId:0 QueryType:1})})\n","time":"2023-02-11T12:48:22Z"}
+{"level":"info","msg":"remote service name: douyin_video, remote method: GetVideo\n","time":"2023-02-11T12:48:22Z"}
+{"level":"info","msg":"server address: 10.0.2.15:10006, rpc timeout: 0s, readwrite timeout: 50ms\n","time":"2023-02-11T12:48:22Z"}
+{"level":"info","msg":"real response: FeedServiceGetVideoResult({Success:GetVideoResponse({Video:[Video1({Id:1624366829466038272 AuthorId:1624280902525792256 Title:blackpink PlayUrl:http://yublogx.oss-cn-hangzhou.aliyuncs.com/22da7eb1-4437-4793-8b60-d181313cf007BLACKPINK - ‘Shut Down’ MV.mp4 CoverUrl:http://yublogx.oss-cn-hangzhou.aliyuncs.com/22da7eb1-4437-4793-8b60-d181313cf007BLACKPINK - ‘Shut Down’ MV.mp4?x-oss-process=video/snapshot,t_7000,f_jpg,w_800,h_600,m_fast CreatedAt:1676114206 UpdatedAt:1676114206})]})})\n","time":"2023-02-11T12:48:35Z"}
+{"level":"info","msg":"real request: UserServiceUserArgs({Req:UserRequest({UserId:1624280902525792256 AuthId:1624280902525792256})})\n","time":"2023-02-11T12:48:47Z"}
+{"level":"info","msg":"remote service name: douyin_user, remote method: User\n","time":"2023-02-11T12:48:47Z"}
+{"level":"info","msg":"server address: 10.0.2.15:10005, rpc timeout: 0s, readwrite timeout: 50ms\n","time":"2023-02-11T12:48:47Z"}
+{"level":"info","msg":"real request: RelationServiceGetRelationArgs({Req:GetRelationRequest({Id:0 UserId:1624280902525792256 TargetId:1624280902525792256 RelationType:-1 QueryType:4})})\n","time":"2023-02-11T12:48:59Z"}
+{"level":"info","msg":"remote service name: douyin_relation, remote method: GetRelation\n","time":"2023-02-11T12:48:59Z"}
+{"level":"info","msg":"real request: RelationServiceGetCountArgs({Req:GetCountRequest({UserId:1624280902525792256})})\n","time":"2023-02-11T12:48:59Z"}
+{"level":"info","msg":"remote service name: douyin_relation, remote method: GetCount\n","time":"2023-02-11T12:48:59Z"}
+{"level":"info","msg":"server address: 10.0.2.15:10004, rpc timeout: 0s, readwrite timeout: 50ms\n","time":"2023-02-11T12:48:59Z"}
+{"level":"info","msg":"server address: 10.0.2.15:10004, rpc timeout: 0s, readwrite timeout: 50ms\n","time":"2023-02-11T12:48:59Z"}
+{"level":"info","msg":"real response: RelationServiceGetRelationResult({Success:GetRelationResponse({Relations:[Relation1({Id:0 UserId:0 TargetId:0 Type:0})]})})\n","time":"2023-02-11T12:49:11Z"}
+{"level":"info","msg":"real response: RelationServiceGetCountResult({Success:GetCountResponse({FollowCount:1 FollowerCount:0 FriendCount:0})})\n","time":"2023-02-11T12:49:15Z"}
+{"level":"info","msg":"real response: UserServiceUserResult({Success:UserResponse({StatusCode:Success StatusMsg: User:User({Id:1624280902525792256 Name:1234 FollowCount:1 FollowerCount:0 IsFollow:false})})})\n","time":"2023-02-11T12:49:15Z"}
+{"level":"info","msg":"real request: FeedServiceGetVideoArgs({Req:GetVideoRequest({VideoId:1624366829466038272 AuthorId:0 QueryType:1})})\n","time":"2023-02-11T12:50:53Z"}
+{"level":"info","msg":"remote service name: douyin_video, remote method: GetVideo\n","time":"2023-02-11T12:50:53Z"}
+{"level":"info","msg":"server address: 10.0.2.15:10006, rpc timeout: 0s, readwrite timeout: 50ms\n","time":"2023-02-11T12:50:53Z"}
+{"level":"info","msg":"real response: FeedServiceGetVideoResult({Success:GetVideoResponse({Video:[Video1({Id:1624366829466038272 AuthorId:1624280902525792256 Title:blackpink PlayUrl:http://yublogx.oss-cn-hangzhou.aliyuncs.com/22da7eb1-4437-4793-8b60-d181313cf007BLACKPINK - ‘Shut Down’ MV.mp4 CoverUrl:http://yublogx.oss-cn-hangzhou.aliyuncs.com/22da7eb1-4437-4793-8b60-d181313cf007BLACKPINK - ‘Shut Down’ MV.mp4?x-oss-process=video/snapshot,t_7000,f_jpg,w_800,h_600,m_fast CreatedAt:1676114206 UpdatedAt:1676114206})]})})\n","time":"2023-02-11T12:51:06Z"}
+{"level":"info","msg":"real request: UserServiceUserArgs({Req:UserRequest({UserId:1624280902525792256 AuthId:1624280902525792256})})\n","time":"2023-02-11T12:51:06Z"}
+{"level":"info","msg":"remote service name: douyin_user, remote method: User\n","time":"2023-02-11T12:51:06Z"}
+{"level":"info","msg":"server address: 10.0.2.15:10005, rpc timeout: 0s, readwrite timeout: 50ms\n","time":"2023-02-11T12:51:06Z"}
+{"level":"info","msg":"real request: RelationServiceGetRelationArgs({Req:GetRelationRequest({Id:0 UserId:1624280902525792256 TargetId:1624280902525792256 RelationType:-1 QueryType:4})})\n","time":"2023-02-11T12:51:08Z"}
+{"level":"info","msg":"remote service name: douyin_relation, remote method: GetRelation\n","time":"2023-02-11T12:51:08Z"}
+{"level":"info","msg":"server address: 10.0.2.15:10004, rpc timeout: 0s, readwrite timeout: 50ms\n","time":"2023-02-11T12:51:08Z"}
+{"level":"info","msg":"real request: RelationServiceGetCountArgs({Req:GetCountRequest({UserId:1624280902525792256})})\n","time":"2023-02-11T12:51:08Z"}
+{"level":"info","msg":"remote service name: douyin_relation, remote method: GetCount\n","time":"2023-02-11T12:51:08Z"}
+{"level":"info","msg":"server address: 10.0.2.15:10004, rpc timeout: 0s, readwrite timeout: 50ms\n","time":"2023-02-11T12:51:08Z"}
+{"level":"info","msg":"real response: RelationServiceGetRelationResult({Success:GetRelationResponse({Relations:[Relation1({Id:0 UserId:0 TargetId:0 Type:0})]})})\n","time":"2023-02-11T12:51:11Z"}
+{"level":"info","msg":"real response: RelationServiceGetCountResult({Success:GetCountResponse({FollowCount:1 FollowerCount:0 FriendCount:0})})\n","time":"2023-02-11T12:51:11Z"}
+{"level":"info","msg":"real response: UserServiceUserResult({Success:UserResponse({StatusCode:Success StatusMsg: User:User({Id:1624280902525792256 Name:1234 FollowCount:1 FollowerCount:0 IsFollow:false})})})\n","time":"2023-02-11T12:51:11Z"}
+{"level":"info","msg":"real request: FeedServiceGetVideoArgs({Req:GetVideoRequest({VideoId:1624366829466038272 AuthorId:0 QueryType:1})})\n","time":"2023-02-11T12:56:57Z"}
+{"level":"info","msg":"remote service name: douyin_video, remote method: GetVideo\n","time":"2023-02-11T12:56:57Z"}
+{"level":"info","msg":"server address: 10.0.2.15:10006, rpc timeout: 0s, readwrite timeout: 50ms\n","time":"2023-02-11T12:56:57Z"}
+{"level":"info","msg":"real response: FeedServiceGetVideoResult({Success:GetVideoResponse({Video:[Video1({Id:1624366829466038272 AuthorId:1624280902525792256 Title:blackpink PlayUrl:http://yublogx.oss-cn-hangzhou.aliyuncs.com/22da7eb1-4437-4793-8b60-d181313cf007BLACKPINK - ‘Shut Down’ MV.mp4 CoverUrl:http://yublogx.oss-cn-hangzhou.aliyuncs.com/22da7eb1-4437-4793-8b60-d181313cf007BLACKPINK - ‘Shut Down’ MV.mp4?x-oss-process=video/snapshot,t_7000,f_jpg,w_800,h_600,m_fast CreatedAt:1676114206 UpdatedAt:1676114206})]})})\n","time":"2023-02-11T12:57:00Z"}
+{"level":"info","msg":"real request: UserServiceUserArgs({Req:UserRequest({UserId:1624280902525792256 AuthId:1624280902525792256})})\n","time":"2023-02-11T12:57:00Z"}
+{"level":"info","msg":"remote service name: douyin_user, remote method: User\n","time":"2023-02-11T12:57:00Z"}
+{"level":"info","msg":"server address: 10.0.2.15:10005, rpc timeout: 0s, readwrite timeout: 50ms\n","time":"2023-02-11T12:57:00Z"}
+{"level":"info","msg":"real request: RelationServiceGetRelationArgs({Req:GetRelationRequest({Id:0 UserId:1624280902525792256 TargetId:1624280902525792256 RelationType:-1 QueryType:4})})\n","time":"2023-02-11T12:57:01Z"}
+{"level":"info","msg":"remote service name: douyin_relation, remote method: GetRelation\n","time":"2023-02-11T12:57:01Z"}
+{"level":"info","msg":"server address: 10.0.2.15:10004, rpc timeout: 0s, readwrite timeout: 50ms\n","time":"2023-02-11T12:57:01Z"}
+{"level":"info","msg":"real request: RelationServiceGetCountArgs({Req:GetCountRequest({UserId:1624280902525792256})})\n","time":"2023-02-11T12:57:01Z"}
+{"level":"info","msg":"remote service name: douyin_relation, remote method: GetCount\n","time":"2023-02-11T12:57:01Z"}
+{"level":"info","msg":"server address: 10.0.2.15:10004, rpc timeout: 0s, readwrite timeout: 50ms\n","time":"2023-02-11T12:57:01Z"}
+{"level":"info","msg":"real response: RelationServiceGetRelationResult({Success:GetRelationResponse({Relations:[Relation1({Id:0 UserId:0 TargetId:0 Type:0})]})})\n","time":"2023-02-11T12:57:04Z"}
+{"level":"info","msg":"real response: RelationServiceGetCountResult({Success:GetCountResponse({FollowCount:1 FollowerCount:0 FriendCount:0})})\n","time":"2023-02-11T12:57:04Z"}
+{"level":"info","msg":"real response: UserServiceUserResult({Success:UserResponse({StatusCode:Success StatusMsg: User:User({Id:1624280902525792256 Name:1234 FollowCount:1 FollowerCount:0 IsFollow:false})})})\n","time":"2023-02-11T12:57:04Z"}
+{"level":"info","msg":"KITEX: server listen at addr=[::]:10001","time":"2023-02-11T13:02:56Z"}
+{"level":"info","msg":"real request: FeedServiceGetVideoArgs({Req:GetVideoRequest({VideoId:1624366829466038272 AuthorId:0 QueryType:1})})\n","time":"2023-02-11T13:03:40Z"}
+{"level":"info","msg":"remote service name: douyin_video, remote method: GetVideo\n","time":"2023-02-11T13:03:40Z"}
+{"level":"info","msg":"server address: 10.0.2.15:10006, rpc timeout: 0s, readwrite timeout: 50ms\n","time":"2023-02-11T13:03:40Z"}
+{"level":"info","msg":"real response: FeedServiceGetVideoResult({Success:GetVideoResponse({Video:[Video1({Id:1624366829466038272 AuthorId:1624280902525792256 Title:blackpink PlayUrl:http://yublogx.oss-cn-hangzhou.aliyuncs.com/22da7eb1-4437-4793-8b60-d181313cf007BLACKPINK - ‘Shut Down’ MV.mp4 CoverUrl:http://yublogx.oss-cn-hangzhou.aliyuncs.com/22da7eb1-4437-4793-8b60-d181313cf007BLACKPINK - ‘Shut Down’ MV.mp4?x-oss-process=video/snapshot,t_7000,f_jpg,w_800,h_600,m_fast CreatedAt:1676114206 UpdatedAt:1676114206})]})})\n","time":"2023-02-11T13:03:41Z"}
+{"level":"info","msg":"real request: UserServiceUserArgs({Req:UserRequest({UserId:1624280902525792256 AuthId:1624280902525792256})})\n","time":"2023-02-11T13:03:41Z"}
+{"level":"info","msg":"remote service name: douyin_user, remote method: User\n","time":"2023-02-11T13:03:41Z"}
+{"level":"info","msg":"server address: 10.0.2.15:10005, rpc timeout: 0s, readwrite timeout: 50ms\n","time":"2023-02-11T13:03:41Z"}
+{"level":"info","msg":"real request: RelationServiceGetRelationArgs({Req:GetRelationRequest({Id:0 UserId:1624280902525792256 TargetId:1624280902525792256 RelationType:-1 QueryType:4})})\n","time":"2023-02-11T13:03:42Z"}
+{"level":"info","msg":"remote service name: douyin_relation, remote method: GetRelation\n","time":"2023-02-11T13:03:42Z"}
+{"level":"info","msg":"server address: 10.0.2.15:10004, rpc timeout: 0s, readwrite timeout: 50ms\n","time":"2023-02-11T13:03:42Z"}
+{"level":"info","msg":"real request: RelationServiceGetCountArgs({Req:GetCountRequest({UserId:1624280902525792256})})\n","time":"2023-02-11T13:03:42Z"}
+{"level":"info","msg":"remote service name: douyin_relation, remote method: GetCount\n","time":"2023-02-11T13:03:42Z"}
+{"level":"info","msg":"server address: 10.0.2.15:10004, rpc timeout: 0s, readwrite timeout: 50ms\n","time":"2023-02-11T13:03:42Z"}
+{"level":"info","msg":"real response: RelationServiceGetRelationResult({Success:GetRelationResponse({Relations:[Relation1({Id:0 UserId:0 TargetId:0 Type:0})]})})\n","time":"2023-02-11T13:03:45Z"}
+{"level":"info","msg":"real response: RelationServiceGetCountResult({Success:GetCountResponse({FollowCount:1 FollowerCount:0 FriendCount:0})})\n","time":"2023-02-11T13:03:45Z"}
+{"level":"info","msg":"real response: UserServiceUserResult({Success:UserResponse({StatusCode:Success StatusMsg: User:User({Id:1624280902525792256 Name:1234 FollowCount:1 FollowerCount:0 IsFollow:false})})})\n","time":"2023-02-11T13:03:45Z"}

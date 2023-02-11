@@ -27,10 +27,12 @@ import (
 // @BasePath /
 func main() {
 	// kitex的log
+	r, info := initialize.InitNacos()
 	initialize.InitLogger()
 	// hertz的log
 	initialize.InitHertzLogger()
-	r, info := initialize.InitNacos()
+	initialize.InitOSS()
+
 	//tracer, cfg := hertztracing.NewServerTracer()
 	rpc.Init()
 	h := server.New(
@@ -39,6 +41,7 @@ func main() {
 		server.WithHostPorts(fmt.Sprintf(":%d", global.ServerConfig.Port)),
 		server.WithRegistry(r, info),
 		server.WithHandleMethodNotAllowed(true),
+		server.WithMaxRequestBodySize(20>>20),
 	)
 	// use pprof & tracer mw
 	pprof.Register(h)

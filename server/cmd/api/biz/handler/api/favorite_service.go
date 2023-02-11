@@ -33,6 +33,7 @@ func FavoriteAction(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
+	resp := new(api.FavoriteActionResponse)
 	value, exist := c.Get("accountID")
 	if !exist {
 		return
@@ -41,16 +42,19 @@ func FavoriteAction(ctx context.Context, c *app.RequestContext) {
 	if err != nil {
 		return
 	}
-	actionType, err := strconv.ParseInt(req.VideoID, 0, 32)
+	actionType, err := strconv.ParseInt(req.ActionType, 0, 32)
 	if err != nil {
 		return
 	}
-	resp, err := global.FavoriteClient.FavoriteAction(ctx, &favorite.FavoriteActionRequest{
+	_, err = global.FavoriteClient.FavoriteAction(ctx, &favorite.FavoriteActionRequest{
 		VideoId:    videoId,
 		AuthId:     value.(int64),
 		ActionType: int32(actionType),
 	})
 	if err != nil {
+		resp.StatusCode = 2
+		resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusConflict, resp)
 		return
 	}
 
@@ -91,6 +95,9 @@ func FavoriteList(ctx context.Context, c *app.RequestContext) {
 		UserId: userId,
 	})
 	if err != nil {
+		resp.StatusCode = 2
+		resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusConflict, resp)
 		return
 	}
 	//resp := new(api.FavoriteListResponse)

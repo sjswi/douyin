@@ -3,6 +3,7 @@ module douyin_rpc/server/cmd/api
 go 1.18
 
 require (
+	github.com/aliyun/aliyun-oss-go-sdk v2.2.6+incompatible
 	github.com/apache/thrift v0.17.0
 	github.com/bwmarrin/snowflake v0.3.0
 	github.com/bytedance/sonic v1.7.0
@@ -12,7 +13,6 @@ require (
 	github.com/hertz-contrib/gzip v0.0.1
 	github.com/hertz-contrib/limiter v0.0.0-20221008063035-ad27db7cc386
 	github.com/hertz-contrib/logger/logrus v1.0.0
-	github.com/hertz-contrib/logger/zerolog v0.0.0-20230206071608-2de215a9fd50
 	github.com/hertz-contrib/pprof v0.1.0
 	github.com/hertz-contrib/registry/nacos v0.0.0-20221226122036-3c451682dc72
 	github.com/hertz-contrib/requestid v1.1.0
@@ -63,8 +63,6 @@ require (
 	github.com/klauspost/cpuid/v2 v2.1.0 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mailru/easyjson v0.7.6 // indirect
-	github.com/mattn/go-colorable v0.1.13 // indirect
-	github.com/mattn/go-isatty v0.0.16 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
@@ -72,7 +70,7 @@ require (
 	github.com/oleiade/lane v1.0.1 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.6 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/rs/zerolog v1.28.0 // indirect
+	github.com/rogpeppe/go-internal v1.8.0 // indirect
 	github.com/savsgio/gotils v0.0.0-20220530130905-52f3993e8d6d // indirect
 	github.com/sirupsen/logrus v1.9.0 // indirect
 	github.com/spf13/afero v1.9.3 // indirect
@@ -95,9 +93,11 @@ require (
 	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.3.0 // indirect
 	golang.org/x/text v0.5.0 // indirect
+	golang.org/x/time v0.1.0 // indirect
 	golang.org/x/tools v0.1.12 // indirect
 	google.golang.org/genproto v0.0.0-20221227171554-f9683d7f8bef // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
+	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect

@@ -27,7 +27,7 @@ func initVideo() {
 	}
 
 	cc := constant.ClientConfig{
-		NamespaceId:         global.NacosConfig.Namespace,
+		NamespaceId:         global.ServerConfig.VideoSrvInfo.Namespace,
 		TimeoutMs:           5000,
 		NotLoadCacheAtStart: true,
 		LogDir:              consts.NacosLogDir,

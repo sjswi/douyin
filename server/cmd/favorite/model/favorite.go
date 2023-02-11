@@ -1,14 +1,10 @@
 package model
 
 import (
-	"douyin_rpc/common/cache"
-	"encoding/json"
 	"github.com/bwmarrin/snowflake"
 	"github.com/cloudwego/kitex/pkg/klog"
-	"github.com/u2takey/go-utils/strings"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
-	"strconv"
 )
 
 type Favorite struct {
@@ -39,50 +35,51 @@ func queryFavoriteByUserID(tx *gorm.DB, userID int64) ([]Favorite, error) {
 }
 
 func QueryFavoriteByUserIDWithCache(tx *gorm.DB, userID int64) ([]Favorite, error) {
-	key := FavoriteCachePrefix + "UserID_" + strconv.Itoa(int(userID))
-	// 查看key是否存在
-	//不存在
-
-	var result string
-	var Favorites []Favorite
-	var err error
-	if !cache.Exist(key) {
-		Favorites, err = queryFavoriteByUserID(tx, userID)
-		if err != nil {
-			return nil, err
-		}
-		// 从数据库查出，放进redis
-		err := cache.Set(key, Favorites)
-		if err != nil {
-			return nil, err
-		}
-		return Favorites, nil
-	}
-	//TODO
-	// lua脚本优化，保证原子性
-	//查询redis
-	if result, err = cache.Get(key); err != nil {
-		// 极端情况：在判断存在后查询前过期了
-		if err.Error() == "redis: nil" {
-			Favorites, err = queryFavoriteByUserID(tx, userID)
-			if err != nil {
-				return nil, err
-			}
-			// 从数据库查出，放进redis
-			err := cache.Set(key, Favorites)
-			if err != nil {
-				return nil, err
-			}
-			return Favorites, nil
-		}
-		return nil, err
-	}
-	// 反序列化
-	err = json.Unmarshal(strings.StringToBytes(result), &Favorites)
-	if err != nil {
-		return nil, err
-	}
-	return Favorites, nil
+	return queryFavoriteByUserID(tx, userID)
+	//key := FavoriteCachePrefix + "UserID_" + strconv.Itoa(int(userID))
+	//// 查看key是否存在
+	////不存在
+	//
+	//var result string
+	//var Favorites []Favorite
+	//var err error
+	//if !cache.Exist(key) {
+	//	Favorites, err = queryFavoriteByUserID(tx, userID)
+	//	if err != nil {
+	//		return nil, err
+	//	}
+	//	// 从数据库查出，放进redis
+	//	err := cache.Set(key, Favorites)
+	//	if err != nil {
+	//		return nil, err
+	//	}
+	//	return Favorites, nil
+	//}
+	////TODO
+	//// lua脚本优化，保证原子性
+	////查询redis
+	//if result, err = cache.Get(key); err != nil {
+	//	// 极端情况：在判断存在后查询前过期了
+	//	if err.Error() == "redis: nil" {
+	//		Favorites, err = queryFavoriteByUserID(tx, userID)
+	//		if err != nil {
+	//			return nil, err
+	//		}
+	//		// 从数据库查出，放进redis
+	//		err := cache.Set(key, Favorites)
+	//		if err != nil {
+	//			return nil, err
+	//		}
+	//		return Favorites, nil
+	//	}
+	//	return nil, err
+	//}
+	//// 反序列化
+	//err = json.Unmarshal(strings.StringToBytes(result), &Favorites)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//return Favorites, nil
 }
 
 func queryFavoriteByVideoID(tx *gorm.DB, videoID int64) ([]Favorite, error) {
@@ -100,50 +97,51 @@ func CountFavoriteByVideoID(tx *gorm.DB, videoID int64) (int64, error) {
 	return count, nil
 }
 func QueryFavoriteByVideoIDWithCache(tx *gorm.DB, videoID int64) ([]Favorite, error) {
-	key := FavoriteCachePrefix + "videoID_" + strconv.Itoa(int(videoID))
-	// 查看key是否存在
-	//不存在
-	var result string
-	var Favorites []Favorite
-	var err error
-	if !cache.Exist(key) {
-		Favorites, err = queryFavoriteByVideoID(tx, videoID)
-		if err != nil {
-			return nil, err
-		}
-		// 从数据库查出，放进redis
-		err := cache.Set(key, Favorites)
-		if err != nil {
-			return nil, err
-		}
-		return Favorites, nil
-	}
-	//TODO
-	// lua脚本优化，保证原子性
-
-	//查询redis
-	if result, err = cache.Get(key); err != nil {
-		// 极端情况：在判断存在后查询前过期了
-		if err.Error() == "redis: nil" {
-			Favorites, err = queryFavoriteByVideoID(tx, videoID)
-			if err != nil {
-				return nil, err
-			}
-			// 从数据库查出，放进redis
-			err := cache.Set(key, Favorites)
-			if err != nil {
-				return nil, err
-			}
-			return Favorites, nil
-		}
-		return nil, err
-	}
-	// 反序列化
-	err = json.Unmarshal(strings.StringToBytes(result), &Favorites)
-	if err != nil {
-		return nil, err
-	}
-	return Favorites, nil
+	return queryFavoriteByVideoID(tx, videoID)
+	//key := FavoriteCachePrefix + "videoID_" + strconv.Itoa(int(videoID))
+	//// 查看key是否存在
+	////不存在
+	//var result string
+	//var Favorites []Favorite
+	//var err error
+	//if !cache.Exist(key) {
+	//	Favorites, err = queryFavoriteByVideoID(tx, videoID)
+	//	if err != nil {
+	//		return nil, err
+	//	}
+	//	// 从数据库查出，放进redis
+	//	err := cache.Set(key, Favorites)
+	//	if err != nil {
+	//		return nil, err
+	//	}
+	//	return Favorites, nil
+	//}
+	////TODO
+	//// lua脚本优化，保证原子性
+	//
+	////查询redis
+	//if result, err = cache.Get(key); err != nil {
+	//	// 极端情况：在判断存在后查询前过期了
+	//	if err.Error() == "redis: nil" {
+	//		Favorites, err = queryFavoriteByVideoID(tx, videoID)
+	//		if err != nil {
+	//			return nil, err
+	//		}
+	//		// 从数据库查出，放进redis
+	//		err := cache.Set(key, Favorites)
+	//		if err != nil {
+	//			return nil, err
+	//		}
+	//		return Favorites, nil
+	//	}
+	//	return nil, err
+	//}
+	//// 反序列化
+	//err = json.Unmarshal(strings.StringToBytes(result), &Favorites)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//return Favorites, nil
 }
 
 func queryFavoriteByUserIDAndVideoID(tx *gorm.DB, userID, videoID int64) (*Favorite, error) {
@@ -155,50 +153,51 @@ func queryFavoriteByUserIDAndVideoID(tx *gorm.DB, userID, videoID int64) (*Favor
 }
 
 func QueryFavoriteByUserIDAndVideoIDWithCache(tx *gorm.DB, userID, videoID int64) (*Favorite, error) {
-	key := FavoriteCachePrefix + "UserID_" + strconv.Itoa(int(userID)) + "_VideoID_" + strconv.Itoa(int(videoID))
-	var result string
-	var Favorite *Favorite
-	var err error
-	// 查看key是否存在
-	//不存在
-	if !cache.Exist(key) {
-		Favorite, err = queryFavoriteByUserIDAndVideoID(tx, userID, videoID)
-		if err != nil {
-			return nil, err
-		}
-		// 从数据库查出，放进redis
-		err := cache.Set(key, Favorite)
-		if err != nil {
-			return nil, err
-		}
-		return Favorite, nil
-	}
-	//TODO
-	// lua脚本优化，保证原子性
-
-	//查询redis
-	if result, err = cache.Get(key); err != nil {
-		// 极端情况：在判断存在后查询前过期了
-		if err.Error() == "redis: nil" {
-			Favorite, err = queryFavoriteByUserIDAndVideoID(tx, userID, videoID)
-			if err != nil {
-				return nil, err
-			}
-			// 从数据库查出，放进redis
-			err := cache.Set(key, Favorite)
-			if err != nil {
-				return nil, err
-			}
-			return Favorite, nil
-		}
-		return nil, err
-	}
-	// 反序列化
-	err = json.Unmarshal(strings.StringToBytes(result), &Favorite)
-	if err != nil {
-		return nil, err
-	}
-	return Favorite, nil
+	return queryFavoriteByUserIDAndVideoID(tx, userID, videoID)
+	//key := FavoriteCachePrefix + "UserID_" + strconv.Itoa(int(userID)) + "_VideoID_" + strconv.Itoa(int(videoID))
+	//var result string
+	//var Favorite *Favorite
+	//var err error
+	//// 查看key是否存在
+	////不存在
+	//if !cache.Exist(key) {
+	//	Favorite, err = queryFavoriteByUserIDAndVideoID(tx, userID, videoID)
+	//	if err != nil {
+	//		return nil, err
+	//	}
+	//	// 从数据库查出，放进redis
+	//	err := cache.Set(key, Favorite)
+	//	if err != nil {
+	//		return nil, err
+	//	}
+	//	return Favorite, nil
+	//}
+	////TODO
+	//// lua脚本优化，保证原子性
+	//
+	////查询redis
+	//if result, err = cache.Get(key); err != nil {
+	//	// 极端情况：在判断存在后查询前过期了
+	//	if err.Error() == "redis: nil" {
+	//		Favorite, err = queryFavoriteByUserIDAndVideoID(tx, userID, videoID)
+	//		if err != nil {
+	//			return nil, err
+	//		}
+	//		// 从数据库查出，放进redis
+	//		err := cache.Set(key, Favorite)
+	//		if err != nil {
+	//			return nil, err
+	//		}
+	//		return Favorite, nil
+	//	}
+	//	return nil, err
+	//}
+	//// 反序列化
+	//err = json.Unmarshal(strings.StringToBytes(result), &Favorite)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//return Favorite, nil
 }
 
 func UpdateFavorite(tx *gorm.DB, favorite Favorite) error {
@@ -218,7 +217,7 @@ func CreateFavorite(tx *gorm.DB, favorite Favorite) error {
 }
 
 func UpdateOrCreateFavorite(tx *gorm.DB, favorite Favorite) error {
-	if err := tx.Clauses(clause.OnConflict{
+	if err := tx.Table("favorite").Clauses(clause.OnConflict{
 		Columns:      []clause.Column{{Name: "user_id"}, {Name: "video_id"}},
 		Where:        clause.Where{},
 		TargetWhere:  clause.Where{},

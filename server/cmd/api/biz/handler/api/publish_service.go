@@ -6,6 +6,7 @@ import (
 	"context"
 	"douyin_rpc/server/cmd/api/global"
 	"douyin_rpc/server/cmd/api/kitex_gen/video"
+	"github.com/google/uuid"
 	"strconv"
 
 	api "douyin_rpc/server/cmd/api/biz/model/api"
@@ -27,25 +28,37 @@ import (
 // @router /douyin/publish/action/ [POST]
 func PublishAction(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req api.PublishActionRequest
-	err = c.BindAndValidate(&req)
+	form, err := c.MultipartForm()
 	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+		return
+	}
+	video1 := form.File["data"][0]
+	open, err := video1.Open()
+	if err != nil {
 		return
 	}
 	value, exist := c.Get("accountID")
 	if !exist {
 		return
 	}
-	resp, err := global.VideoClient.PublishAction(ctx, &video.PublishActionRequest{
-		Data:   req.Data,
-		AuthId: value.(int64),
-		Title:  req.Title,
+	uid := uuid.New().String()
+	videoURL := global.OSS.Put(uid+video1.Filename, open)
+	coverURL := videoURL + "?x-oss-process=video/snapshot,t_7000,f_jpg,w_800,h_600,m_fast"
+	resp := new(api.PublishActionResponse)
+	_, err = global.VideoClient.PublishAction(ctx, &video.PublishActionRequest{
+		AuthId:   value.(int64),
+		Title:    form.Value["title"][0],
+		PlayUrl:  videoURL,
+		CoverUrl: coverURL,
 	})
 	if err != nil {
+
+		resp.StatusCode = 4
+
+		resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusConflict, resp)
 		return
 	}
-	//resp := new(api.PublishActionResponse)
 
 	c.JSON(consts.StatusOK, resp)
 }

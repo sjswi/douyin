@@ -44,6 +44,7 @@ func (s *FavoriteServiceImpl) FavoriteAction(ctx context.Context, req *favorite.
 		// 3.3.1 查看点赞是否存在，如果存在返回
 		favorite1, err1 := model.QueryFavoriteByUserIDAndVideoIDWithCache(tx, req.AuthId, req.VideoId)
 		if err1 != nil {
+			err = err1
 			tx.Rollback()
 			return
 		}
@@ -110,6 +111,7 @@ func (s *FavoriteServiceImpl) FavoriteAction(ctx context.Context, req *favorite.
 // FavoriteList implements the FavoriteServiceImpl interface.
 func (s *FavoriteServiceImpl) FavoriteList(ctx context.Context, req *favorite.FavoriteListRequest) (resp *favorite.FavoriteListResponse, err error) {
 	tx := global.DB.Debug()
+	resp = new(favorite.FavoriteListResponse)
 	favorites, err1 := model.QueryFavoriteByUserIDWithCache(tx, req.UserId)
 	if err1 != nil {
 		return nil, err

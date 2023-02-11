@@ -8,6 +8,7 @@ import (
 	"douyin_rpc/server/cmd/api/kitex_gen/relation/relationservice"
 	"douyin_rpc/server/cmd/api/kitex_gen/user/userservice"
 	"douyin_rpc/server/cmd/api/kitex_gen/video/feedservice"
+	"douyin_rpc/server/cmd/api/storage"
 )
 
 var (
@@ -19,4 +20,5 @@ var (
 	CommentClient  commentservice.Client
 	FavoriteClient favoriteservice.Client
 	RelationClient relationservice.Client
+	OSS            *storage.OSSClient
 )

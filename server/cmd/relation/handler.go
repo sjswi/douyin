@@ -36,6 +36,7 @@ func (s *RelationServiceImpl) Action(ctx context.Context, req *relation.Relation
 		relation2, err = model.QueryRelationByUserIDAndTargetIDWithCache(global.DB.Debug(), req.ToUserId, req.AuthId)
 
 	}()
+	// 这两个goroutine主要是为了确定用户是否存在
 	go func() {
 		defer wg.Done()
 		targetUser, err = global.UserClient.GetUser(ctx, &user2.GetUserRequest{
@@ -185,28 +186,47 @@ func getList(ctx context.Context, userId int64, userType int, authId int64) ([]*
 			} else {
 				userList[i].Id = relations[i].TargetID
 			}
-			user1, err1 := global.UserClient.User(ctx, &user2.UserRequest{
-				UserId: userList[i].Id,
-				AuthId: authId,
-			})
-			if err1 != nil {
-				err = err1
+
+			var wg1 sync.WaitGroup
+			wg1.Add(3)
+			go func() {
+				user1, err1 := global.UserClient.GetUser(ctx, &user2.GetUserRequest{
+					UserId: userList[i].Id,
+				})
+				if err1 != nil {
+					err = err1
+					return
+				}
+				userList[i].Name = user1.User.Name
+			}()
+			go func() {
+				defer wg1.Done()
+				_, count1, count2, err1 := model.CountRelation(tx, userList[i].Id)
+				if err1 != nil {
+					err = err1
+					return
+				}
+				userList[i].FollowerCount = count2
+				userList[i].FollowCount = count1
+			}()
+			go func() {
+				// 判断登录用户是否关注该用户
+				defer wg1.Done()
+				relation1, err1 := model.QueryRelationByUserIDAndTargetIDWithCache(tx, authId, userList[i].Id)
+				if err1 != nil {
+					err = err1
+					return
+				}
+				// 再次判断是否存在
+				if relation1.ID != 0 {
+					userList[i].IsFollow = true
+				}
+			}()
+			wg1.Wait()
+			if err != nil {
 				return
 			}
 
-			userList[i].Name = user1.User.Name
-			userList[i].FollowerCount = user1.User.FollowerCount
-			userList[i].FollowCount = user1.User.FollowCount
-			userList[i].IsFollow = false
-			relation1, err1 := model.QueryRelationByUserIDAndTargetIDWithCache(tx, authId, userList[i].Id)
-			if err1 != nil {
-				err = err1
-				return
-			}
-			// 再次判断是否存在
-			if relation1.ID != 0 {
-				userList[i].IsFollow = true
-			}
 		}()
 
 	}

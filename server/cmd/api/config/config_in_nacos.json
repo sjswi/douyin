@@ -9,6 +9,12 @@
   "jwt": {
     "key": "love"
   },
+  "oss": {
+    "endpoint": "oss-cn-hangzhou.aliyuncs.com",
+    "access_key_id": "LTAI5tSeWtyu9PPEzWnsZawU",
+    "access_key_secret": "rhG7rW3FesGsm5hdbqVfCXSu9SYT5H",
+    "bucket": "yublogx"
+  },
   "user_srv": {
     "name": "douyin_user",
     "namespace": "55f9bbf4-2052-4116-a3dd-a58fcfa80b32"

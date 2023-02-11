@@ -156,7 +156,6 @@ func _publishMw() []app.HandlerFunc {
 	// your code...
 	return []app.HandlerFunc{
 		middleware.Recovery(),
-		middleware.JWTAuthForm(),
 	}
 }
 
@@ -169,7 +168,7 @@ func _publish_ctionMw() []app.HandlerFunc {
 	// your code...
 	return []app.HandlerFunc{
 		middleware.Recovery(),
-		middleware.JWTAuth(),
+		middleware.JWTAuthForm(),
 	}
 }
 

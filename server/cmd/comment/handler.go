@@ -26,14 +26,14 @@ func (s *CommentServiceImpl) CommentAction(ctx context.Context, req *comment.Com
 			tx.Rollback()
 		}
 	}()
-
+	resp = new(comment.CommentActionResponse)
 	//videoErr := make(chan error)
 	//videoAuthorId := -1
 
 	video1, err1 := global.VideoClient.GetVideo(ctx, &video.GetVideoRequest{
 		VideoId:   req.VideoId,
 		AuthorId:  0,
-		QueryType: 0,
+		QueryType: 1,
 	})
 	if err1 != nil {
 		err = err1
@@ -58,7 +58,7 @@ func (s *CommentServiceImpl) CommentAction(ctx context.Context, req *comment.Com
 			VideoID:    req.VideoId,
 			UserID:     req.AuthId,
 		}
-		err = model.CreateComment(tx, comment1)
+		err = model.CreateComment(tx, &comment1)
 		if err != nil {
 			return
 		}

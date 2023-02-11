@@ -9,7 +9,12 @@ type NacosConfig struct {
 	DataId    string `mapstructure:"dataid"`
 	Group     string `mapstructure:"group"`
 }
-
+type OSSConfig struct {
+	Endpoint        string `mapstructure:"endpoint" json:"endpoint"`
+	AccessKeyId     string `mapstructure:"access_key_id" json:"access_key_id"`
+	AccessKeySecret string `mapstructure:"access_key_secret" json:"access_key_secret"`
+	Bucket          string `mapstructure:"bucket" json:"bucket"`
+}
 type JWTConfig struct {
 	SigningKey string `mapstructure:"key" json:"key"`
 }
@@ -30,6 +35,7 @@ type ServerConfig struct {
 	RelationSrvInfo RPCSrvConfig `mapstructure:"relation_srv" json:"relation_srv"`
 	FavoriteSrvInfo RPCSrvConfig `mapstructure:"favorite_srv" json:"favorite_srv"`
 	CommentSrvInfo  RPCSrvConfig `mapstructure:"comment_srv" json:"comment_srv"`
+	OSSInfo         OSSConfig    `mapstructure:"oss" json:"oss"`
 }
 
 type RPCSrvConfig struct {

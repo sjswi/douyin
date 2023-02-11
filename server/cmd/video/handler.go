@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"context"
 	"douyin_rpc/client/kitex_gen/comment"
 	"douyin_rpc/client/kitex_gen/favorite"
@@ -10,7 +9,6 @@ import (
 	"douyin_rpc/server/cmd/video/global"
 	video "douyin_rpc/server/cmd/video/kitex_gen/video"
 	"douyin_rpc/server/cmd/video/model"
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 	"sync"
 	"time"
@@ -176,17 +174,13 @@ func (s *FeedServiceImpl) Feed(ctx context.Context, req *video.FeedRequest) (res
 
 // PublishAction implements the FeedServiceImpl interface.
 func (s *FeedServiceImpl) PublishAction(ctx context.Context, req *video.PublishActionRequest) (resp *video.PublishActionResponse, err error) {
-	uid := uuid.New().String()
-	reader := bytes.NewReader(req.Data)
-	videoURL := global.OSS.Put(uid+req.Filename, reader)
-	//coverURL := storage.OSS.Put(uid+".jpeg", snapshot)
-	coverURL := videoURL + "?x-oss-process=video/snapshot,t_7000,f_jpg,w_800,h_600,m_fast"
+
 	videoModel := model.Video{
 		Model:    gorm.Model{},
 		AuthorID: req.AuthId,
 		Title:    req.Title,
-		PlayURL:  videoURL,
-		CoverURL: coverURL,
+		PlayURL:  req.PlayUrl,
+		CoverURL: req.CoverUrl,
 	}
 	tx := global.DB.Debug().Begin()
 	defer func() {
@@ -204,6 +198,7 @@ func (s *FeedServiceImpl) PublishAction(ctx context.Context, req *video.PublishA
 		tx.Rollback()
 		return
 	}
+
 	return
 }
 
@@ -303,6 +298,12 @@ func (s *FeedServiceImpl) PublishList(ctx context.Context, req *video.PublishLis
 func (s *FeedServiceImpl) GetVideo(ctx context.Context, req *video.GetVideoRequest) (resp *video.GetVideoResponse, err error) {
 	// 根据video_id 查询video
 	tx := global.DB.Debug()
+	/**
+	* query_type=1 根据视频id查询
+	* query_type=2 根据作者id查询
+	*
+	**/
+	resp = new(video.GetVideoResponse)
 	if req.QueryType == 1 {
 		cache, err1 := model.QueryVideoByIDWithCache(tx, req.VideoId)
 		if err1 != nil {

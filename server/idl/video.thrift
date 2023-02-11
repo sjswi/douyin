@@ -37,10 +37,11 @@ struct FeedResponse{
     4: i64 next_time;
 }
 struct PublishActionRequest{
-    1: required binary data; //注意thrift没有定义multipart.FILE
-    2: required i64 auth_id;
-    3: required string title;
-    4: required string filename;
+    1: required i64 auth_id;
+    2: required string title;
+    3: required string play_url
+    4: required string cover_url
+
 }
 
 struct PublishActionResponse{
