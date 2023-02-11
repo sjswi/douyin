@@ -16,10 +16,11 @@ struct User1 {
     6: string salt
 }
 enum Code {
-    Success = 1;
-    ParamInvalid = 2;
-    DBError = 3;
-    ServerError = 4;
+    Success = 0;
+    ParamInvalid = 1;
+    DBError = 2;
+    ServerError = 3;
+    ErrorRequest = 4;
 }
 struct LoginRequest{
     1: required string username;

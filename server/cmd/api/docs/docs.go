@@ -1315,7 +1315,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "192.168.56.100:10000",
-	BasePath:         "/douyin",
+	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "douyin",
 	Description:      "青训营抖音大项目",

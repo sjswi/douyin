@@ -18,5 +18,9 @@
     "db": 0,
     "password": "",
     "max_conn_age": "30"
+  },
+  "relation_srv": {
+    "name": "douyin_relation",
+    "namespace": "fc5aa648-86a4-4188-a6af-77fc9be952da"
   }
 }

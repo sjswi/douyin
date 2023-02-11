@@ -265,14 +265,14 @@ func UpdateComment(tx *gorm.DB, comment Comment) error {
 }
 
 func CreateComment(tx *gorm.DB, comment Comment) error {
-	if err := tx.Model(comment).Create(&comment).Error; err != nil {
+	if err := tx.Table("comment").Create(&comment).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
 func DeleteComment(tx *gorm.DB, comment Comment) error {
-	if err := tx.Model(comment).Delete(&comment).Error; err != nil {
+	if err := tx.Table("comment").Delete(&comment).Error; err != nil {
 		return err
 	}
 	return nil

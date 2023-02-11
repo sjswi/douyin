@@ -211,7 +211,7 @@ func UpdateFavorite(tx *gorm.DB, favorite Favorite) error {
 }
 
 func CreateFavorite(tx *gorm.DB, favorite Favorite) error {
-	if err := tx.Model(favorite).Create(&favorite).Error; err != nil {
+	if err := tx.Table("favorite").Create(&favorite).Error; err != nil {
 		return err
 	}
 	return nil

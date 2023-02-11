@@ -13,7 +13,7 @@ import (
 	"strconv"
 	"time"
 
-	api "douyin_rpc/server/cmd/api/biz/model/api"
+	"douyin_rpc/server/cmd/api/biz/model/api"
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 )
@@ -37,11 +37,16 @@ func Login(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
+	response := new(api.LoginResponse)
 	resp, err := global.UserClient.Login(ctx, &user.LoginRequest{
 		Username: req.Username,
 		Password: req.Password,
 	})
 	if err != nil {
+		response.StatusCode = 4
+
+		response.StatusMsg = err.Error()
+		c.JSON(consts.StatusConflict, response)
 		return
 	}
 	j := middleware.NewJWT()
@@ -53,11 +58,12 @@ func Login(ctx context.Context, c *app.RequestContext) {
 			Issuer:    constant.JWTIssuer,
 		},
 	}
-	response := new(api.LoginResponse)
+
 	token, err := j.CreateToken(claims)
 	if err != nil {
-		response.StatusCode = 1
+		response.StatusCode = 2
 		response.StatusMsg = err.Error()
+		c.JSON(consts.StatusInternalServerError, response)
 		return
 	}
 	response.StatusCode = 0
@@ -86,13 +92,16 @@ func Register(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 	response := new(api.RegisterResponse)
+
 	resp, err := global.UserClient.Register(ctx, &user.RegisterRequest{
 		Username: req.Username,
 		Password: req.Password,
 	})
 	if err != nil || resp.UserId == 0 {
-		response.StatusCode = 1
+		response.StatusCode = 4
+
 		response.StatusMsg = err.Error()
+		c.JSON(consts.StatusConflict, response)
 		return
 	}
 	//resp := new(api.LoginResponse)
@@ -108,7 +117,9 @@ func Register(ctx context.Context, c *app.RequestContext) {
 
 	token, err := j.CreateToken(claims)
 	if err != nil {
-
+		response.StatusCode = 2
+		response.StatusMsg = err.Error()
+		c.JSON(consts.StatusInternalServerError, response)
 		return
 	}
 	response.StatusCode = 0
@@ -136,12 +147,18 @@ func GetUser(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
+	response := new(api.UserResponse)
 	value, exist := c.Get("accountID")
 	if !exist {
 		return
 	}
 	userID, err := strconv.ParseInt(req.UserID, 0, 64)
 	if err != nil {
+
+		response.StatusCode = 4
+
+		response.StatusMsg = err.Error()
+		c.JSON(consts.StatusConflict, response)
 		return
 	}
 	resp, err := global.UserClient.User(ctx, &user.UserRequest{
@@ -149,9 +166,19 @@ func GetUser(ctx context.Context, c *app.RequestContext) {
 		AuthId: value.(int64),
 	})
 	if err != nil {
+		response.StatusCode = 4
+
+		response.StatusMsg = err.Error()
+		c.JSON(consts.StatusConflict, response)
 		return
 	}
-	//resp := new(api.UserResponse)
+	response.User = &api.User{
+		ID:            resp.User.Id,
+		Name:          resp.User.Name,
+		FollowCount:   resp.User.FollowCount,
+		FollowerCount: resp.User.FollowerCount,
+		IsFollow:      resp.User.IsFollow,
+	}
 
 	c.JSON(consts.StatusOK, resp)
 }

@@ -156,7 +156,7 @@ func _publishMw() []app.HandlerFunc {
 	// your code...
 	return []app.HandlerFunc{
 		middleware.Recovery(),
-		middleware.JWTAuth(),
+		middleware.JWTAuthForm(),
 	}
 }
 

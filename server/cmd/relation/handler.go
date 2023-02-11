@@ -6,6 +6,7 @@ import (
 	"douyin_rpc/server/cmd/relation/global"
 	relation "douyin_rpc/server/cmd/relation/kitex_gen/relation"
 	"douyin_rpc/server/cmd/relation/model"
+	"errors"
 	"sync"
 )
 
@@ -14,52 +15,53 @@ type RelationServiceImpl struct{}
 
 // Action implements the RelationServiceImpl interface.
 func (s *RelationServiceImpl) Action(ctx context.Context, req *relation.RelationActionRequest) (resp *relation.RelationActionResponse, err error) {
+	resp = new(relation.RelationActionResponse)
 	tx := global.DB.Debug().Begin()
 	defer func() {
 		if r := recover(); r != nil {
 			tx.Rollback()
 		}
 	}()
-	// 3、查询数据库获取两个用户信息，使用for update加锁（用户一般都存在）
-
-	user, err1 := global.UserClient.GetUser(ctx, &user2.GetUserRequest{
-		UserId:    req.AuthId,
-		Username:  "",
-		QueryType: 0,
-	})
-	if err1 != nil {
-		err = err1
-		return
-	}
-	targetUser, err := global.UserClient.GetUser(ctx, &user2.GetUserRequest{
-		UserId:    req.ToUserId,
-		Username:  "",
-		QueryType: 0,
-	})
-	if err1 != nil {
-		err = err1
-		return
-	}
 	var relation1, relation2 *model.Relation
-
+	var user, targetUser *user2.GetUserResponse
 	var wg sync.WaitGroup
-	wg.Add(2)
+	wg.Add(4)
 	go func() {
 		defer wg.Done()
-		relation1, err = model.QueryRelationByUserIDAndTargetIDWithCache(tx, user.User.Id, targetUser.User.Id)
+		relation1, err = model.QueryRelationByUserIDAndTargetIDWithCache(global.DB.Debug(), req.AuthId, req.ToUserId)
 
 	}()
 	go func() {
 		defer wg.Done()
-		relation2, err = model.QueryRelationByUserIDAndTargetIDWithCache(tx, targetUser.User.Id, user.User.Id)
+		relation2, err = model.QueryRelationByUserIDAndTargetIDWithCache(global.DB.Debug(), req.ToUserId, req.AuthId)
 
 	}()
+	go func() {
+		defer wg.Done()
+		targetUser, err = global.UserClient.GetUser(ctx, &user2.GetUserRequest{
+			UserId:    req.ToUserId,
+			Username:  "",
+			QueryType: 1,
+		})
 
+	}()
+	go func() {
+		defer wg.Done()
+		user, err = global.UserClient.GetUser(ctx, &user2.GetUserRequest{
+			UserId:    req.AuthId,
+			Username:  "",
+			QueryType: 1,
+		})
+
+	}()
 	wg.Wait()
 	if err != nil {
 		return
 	}
-
+	if user.User.Id == 0 || targetUser.User.Id == 0 {
+		err = errors.New("用户不存在")
+		return
+	}
 	// 由于不能确定这两个关系同时存在，因此不要使用for update加锁（使用for update时确保索引存在。不存在会锁住表）
 	// for update在数据存在时加的是行级锁，不存在加的是间隙锁。之后进行insert时容易形成死锁
 	if req.ActionType == 1 {
@@ -147,6 +149,7 @@ func (s *RelationServiceImpl) Action(ctx context.Context, req *relation.Relation
 	return
 }
 func getList(ctx context.Context, userId int64, userType int, authId int64) ([]*relation.User, error) {
+
 	var relations []model.Relation
 	var err error
 	tx := global.DB.Debug()
@@ -176,7 +179,7 @@ func getList(ctx context.Context, userId int64, userType int, authId int64) ([]*
 			defer wg.Done()
 
 			// 此处为TargetID
-
+			userList[i] = new(relation.User)
 			if userType == 2 {
 				userList[i].Id = relations[i].UserID
 			} else {
@@ -217,6 +220,7 @@ func getList(ctx context.Context, userId int64, userType int, authId int64) ([]*
 
 // FollowList implements the RelationServiceImpl interface.
 func (s *RelationServiceImpl) FollowList(ctx context.Context, req *relation.RelationFollowListRequest) (resp *relation.RelationFollowListResponse, err error) {
+	resp = new(relation.RelationFollowListResponse)
 	list, err := getList(ctx, req.UserId, 1, req.AuthId)
 	if err != nil {
 		return nil, err
@@ -227,6 +231,7 @@ func (s *RelationServiceImpl) FollowList(ctx context.Context, req *relation.Rela
 
 // FollowerList implements the RelationServiceImpl interface.
 func (s *RelationServiceImpl) FollowerList(ctx context.Context, req *relation.RelationFollowerListRequest) (resp *relation.RelationFollowerListResponse, err error) {
+	resp = new(relation.RelationFollowerListResponse)
 	list, err := getList(ctx, req.UserId, 2, req.AuthId)
 	if err != nil {
 		return nil, err
@@ -237,6 +242,7 @@ func (s *RelationServiceImpl) FollowerList(ctx context.Context, req *relation.Re
 
 // FriendList implements the RelationServiceImpl interface.
 func (s *RelationServiceImpl) FriendList(ctx context.Context, req *relation.RelationFriendListRequest) (resp *relation.RelationFriendListResponse, err error) {
+	resp = new(relation.RelationFriendListResponse)
 	list, err := getList(ctx, req.UserId, 3, req.AuthId)
 	if err != nil {
 		return nil, err
@@ -255,6 +261,7 @@ func (s *RelationServiceImpl) GetRelation(ctx context.Context, req *relation.Get
 	   relation_type暂时不需要，考虑拿掉
 	*/
 	tx := global.DB.Debug()
+	resp = new(relation.GetRelationResponse)
 	var cache []model.Relation
 	if req.QueryType == 1 {
 		//model.Q(tx, req.)
@@ -308,6 +315,7 @@ func (s *RelationServiceImpl) GetCount(ctx context.Context, req *relation.GetCou
 	if err != nil {
 		return nil, err
 	}
+	resp = new(relation.GetCountResponse)
 	resp.FriendCount = friendCount
 	resp.FollowCount = followCount
 	resp.FollowerCount = followerCount

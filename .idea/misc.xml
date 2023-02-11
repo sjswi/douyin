@@ -4,43 +4,41 @@
     <option name="openedFilesInfos">
       <list>
         <OpenedFileInfo>
-          <option name="caretOffset" value="0" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/user/main.go" />
+          <option name="caretOffset" value="2386" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/api/biz/handler/api/relation_service.go" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="320" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/video/main.go" />
+          <option name="caretOffset" value="1102" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/relation/model/relation.go" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="8508" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/video/handler.go" />
+          <option name="fileUrl" value="das://29704e40-10e2-4f06-9fe3-5215f648da56/schema/douyin_relation/table/relation" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="6048" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/favorite/handler.go" />
+          <option name="caretOffset" value="5064" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/favorite/model/favorite.go" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="640" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/favorite/global/global.go" />
+          <option name="caretOffset" value="6766" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/comment/model/comment.go" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="1186" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/server/idl/relation.thrift" />
+          <option name="fileUrl" value="das://29704e40-10e2-4f06-9fe3-5215f648da56/schema/douyin_user/table/user" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="0" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/server/idl/message.thrift" />
+          <option name="caretOffset" value="3686" />
+          <option name="fileUrl" value="file://$USER_HOME$/golang/go/src/sync/waitgroup.go" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="462" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/relation/main.go" />
+          <option name="caretOffset" value="32897" />
+          <option name="fileUrl" value="file://$USER_HOME$/golang/go/src/runtime/panic.go" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="242" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/relation/global/global.go" />
+          <option name="caretOffset" value="30704" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/relation/kitex_gen/relation/relation.go" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="8113" />
+          <option name="caretOffset" value="4618" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/relation/handler.go" />
         </OpenedFileInfo>
       </list>

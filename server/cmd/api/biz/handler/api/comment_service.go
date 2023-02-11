@@ -98,13 +98,13 @@ func CommentList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 	//authID, err := strconv.Atoi(c.Get("accountID"))
-	userId, err := strconv.ParseInt(req.UserID, 0, 64)
+	videoId, err := strconv.ParseInt(req.VideoID, 0, 64)
 	if err != nil {
 		return
 	}
 	resp, err := global.CommentClient.CommentList(ctx, &comment.CommentListRequest{
-		AuthId: value.(int64),
-		UserId: userId,
+		AuthId:  value.(int64),
+		VideoId: videoId,
 	})
 	if err != nil {
 		return

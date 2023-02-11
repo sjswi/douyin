@@ -203,7 +203,7 @@ func UpdateMessage(tx *gorm.DB, message Message) error {
 }
 
 func CreateMessage(tx *gorm.DB, message Message) error {
-	if err := tx.Model(message).Create(&message).Error; err != nil {
+	if err := tx.Table("message").Create(&message).Error; err != nil {
 		return err
 	}
 	return nil

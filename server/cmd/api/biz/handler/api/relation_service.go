@@ -33,6 +33,7 @@ func Action(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
+	response := new(api.RelationActionResponse)
 	value, exist := c.Get("accountID")
 	if !exist {
 		return
@@ -47,10 +48,13 @@ func Action(ctx context.Context, c *app.RequestContext) {
 		ActionType: req.ActionType,
 	})
 	if err != nil {
+
+		response.StatusCode = 4
+
+		response.StatusMsg = err.Error()
+		c.JSON(consts.StatusConflict, response)
 		return
 	}
-	//resp := new(api.PublishActionResponse)
-	//resp := new(api.RelationActionResponse)
 
 	c.JSON(consts.StatusOK, resp)
 }
@@ -87,6 +91,11 @@ func FollowList(ctx context.Context, c *app.RequestContext) {
 		UserId: userID,
 	})
 	if err != nil {
+
+		resp.StatusCode = 4
+
+		resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusConflict, resp)
 		return
 	}
 	//resp := new(api.PublishActionResponse)
@@ -126,6 +135,11 @@ func FollowerList(ctx context.Context, c *app.RequestContext) {
 		UserId: userID,
 	})
 	if err != nil {
+
+		resp.StatusCode = 4
+
+		resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusConflict, resp)
 		return
 	}
 	//resp := new(api.PublishActionResponse)
@@ -165,6 +179,11 @@ func FriendList(ctx context.Context, c *app.RequestContext) {
 		UserId: userID,
 	})
 	if err != nil {
+
+		resp.StatusCode = 4
+
+		resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusConflict, resp)
 		return
 	}
 	//resp := new(api.PublishActionResponse)

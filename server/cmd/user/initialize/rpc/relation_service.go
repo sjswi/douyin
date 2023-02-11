@@ -39,7 +39,7 @@ func initRelation() {
 			ClientConfig:  &cc,
 			ServerConfigs: sc,
 		})
-	r := nacos.NewNacosResolver(nacosCli, nacos.WithGroup(consts.UserGroup))
+	r := nacos.NewNacosResolver(nacosCli, nacos.WithGroup(consts.RelationGroup))
 	if err != nil {
 		klog.Fatalf("new consul client failed: %s", err.Error())
 	}

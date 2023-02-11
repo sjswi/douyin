@@ -6,7 +6,6 @@ import (
 	"douyin_rpc/server/cmd/api/global"
 	"douyin_rpc/server/cmd/api/models"
 	"errors"
-	"strings"
 	"time"
 
 	"github.com/cloudwego/hertz/pkg/app"
@@ -22,13 +21,12 @@ var (
 
 func JWTAuth() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
-		token := c.Request.Header.Get("authorization")
+		token := c.Query("token")
 		if token == "" {
 			errno.SendResponse(c, errno.AuthorizeFail, nil)
 			c.Abort()
 			return
 		}
-		token = strings.Split(token, " ")[1]
 		j := NewJWT()
 		// Parse the information contained in the token
 		claims, err := j.ParseToken(token)
@@ -42,7 +40,33 @@ func JWTAuth() app.HandlerFunc {
 			c.Abort()
 			return
 		}
-		c.Set("claims", claims)
+		//c.Set("claims", claims)
+		c.Set("accountID", claims.ID)
+		c.Next(ctx)
+	}
+}
+func JWTAuthForm() app.HandlerFunc {
+	return func(ctx context.Context, c *app.RequestContext) {
+		token := c.PostForm("token")
+		if token == "" {
+			errno.SendResponse(c, errno.AuthorizeFail, nil)
+			c.Abort()
+			return
+		}
+		j := NewJWT()
+		// Parse the information contained in the token
+		claims, err := j.ParseToken(token)
+		if err != nil {
+			if err == TokenExpired {
+				errno.SendResponse(c, errno.AuthorizeFail, nil)
+				c.Abort()
+				return
+			}
+			errno.SendResponse(c, errno.AuthorizeFail, nil)
+			c.Abort()
+			return
+		}
+		//c.Set("claims", claims)
 		c.Set("accountID", claims.ID)
 		c.Next(ctx)
 	}

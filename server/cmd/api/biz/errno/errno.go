@@ -14,8 +14,8 @@ type ErrNo struct {
 }
 
 type Response struct {
-	Code    int64       `json:"code"`
-	Message string      `json:"message"`
+	Code    int64       `json:"status_code"`
+	Message string      `json:"status_msg"`
 	Data    interface{} `json:"data"`
 }
 

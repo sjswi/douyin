@@ -3,6 +3,7 @@ package main
 import (
 	"douyin_rpc/server/cmd/user/constant"
 	"douyin_rpc/server/cmd/user/initialize"
+	"douyin_rpc/server/cmd/user/initialize/rpc"
 	user "douyin_rpc/server/cmd/user/kitex_gen/user/userservice"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
@@ -15,6 +16,7 @@ func main() {
 	initialize.InitDB()
 	initialize.InitRedis()
 	initialize.InitLogger()
+	rpc.Init()
 	//p := provider.NewOpenTelemetryProvider(
 	//	provider.WithServiceName(constant.DefaultName+"_"+constant.SERVICEName),
 	//	provider.WithExportEndpoint("192.168.56.102:4317"),

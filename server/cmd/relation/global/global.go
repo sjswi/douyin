@@ -4,7 +4,7 @@ import (
 	"douyin_rpc/client/kitex_gen/user/userservice"
 	"douyin_rpc/client/kitex_gen/video/feedservice"
 	common "douyin_rpc/common/config"
-	"douyin_rpc/server/cmd/user/config"
+	"douyin_rpc/server/cmd/relation/config"
 	"github.com/go-redis/redis/v8"
 	"gorm.io/gorm"
 )

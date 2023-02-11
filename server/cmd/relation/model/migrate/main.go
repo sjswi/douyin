@@ -1,7 +1,7 @@
 package main
 
 import (
-	"douyin_rpc/server/cmd/user/model"
+	"douyin_rpc/server/cmd/relation/model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -13,7 +13,7 @@ import (
 
 func main() {
 	// Defined by your database.
-	dsn := "root:123456@tcp(192.168.56.102:3306)/douyin_user?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "root:123456@tcp(192.168.56.102:3306)/douyin_relation?charset=utf8mb4&parseTime=True&loc=Local"
 
 	newLogger := logger.New(
 		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
@@ -35,6 +35,6 @@ func main() {
 		panic(err)
 	}
 
-	_ = db.AutoMigrate(&model.User{})
+	_ = db.AutoMigrate(&model.Relation{})
 
 }

@@ -3,7 +3,7 @@ package rpc
 import (
 	"douyin_rpc/client/kitex_gen/user/userservice"
 	"douyin_rpc/common/middleware"
-	"douyin_rpc/server/cmd/comment/global"
+	"douyin_rpc/server/cmd/relation/global"
 	consts "douyin_rpc/server/cmd/user/constant"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/klog"

@@ -1,4 +1,4 @@
-basePath: /douyin
+basePath: /
 definitions:
   api.Code:
     enum:

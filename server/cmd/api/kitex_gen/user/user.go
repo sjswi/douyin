@@ -14,10 +14,11 @@ import (
 type Code int64
 
 const (
-	Code_Success      Code = 1
-	Code_ParamInvalid Code = 2
-	Code_DBError      Code = 3
-	Code_ServerError  Code = 4
+	Code_Success      Code = 0
+	Code_ParamInvalid Code = 1
+	Code_DBError      Code = 2
+	Code_ServerError  Code = 3
+	Code_ErrorRequest Code = 4
 )
 
 func (p Code) String() string {
@@ -30,6 +31,8 @@ func (p Code) String() string {
 		return "DBError"
 	case Code_ServerError:
 		return "ServerError"
+	case Code_ErrorRequest:
+		return "ErrorRequest"
 	}
 	return "<UNSET>"
 }
@@ -44,6 +47,8 @@ func CodeFromString(s string) (Code, error) {
 		return Code_DBError, nil
 	case "ServerError":
 		return Code_ServerError, nil
+	case "ErrorRequest":
+		return Code_ErrorRequest, nil
 	}
 	return Code(0), fmt.Errorf("not a valid Code string")
 }

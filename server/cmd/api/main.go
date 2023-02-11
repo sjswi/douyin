@@ -3,12 +3,11 @@
 package main
 
 import (
+	_ "douyin_rpc/server/cmd/api/docs"
 	"douyin_rpc/server/cmd/api/global"
 	"douyin_rpc/server/cmd/api/initialize"
 	"douyin_rpc/server/cmd/api/initialize/rpc"
 	"fmt"
-
-	_ "douyin_rpc/server/cmd/api/docs"
 	"github.com/cloudwego/hertz/pkg/app/server"
 	"github.com/hertz-contrib/pprof"
 	"github.com/hertz-contrib/swagger"
@@ -25,9 +24,12 @@ import (
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 // @host 192.168.56.100:10000
-// @BasePath /douyin
+// @BasePath /
 func main() {
+	// kitex的log
 	initialize.InitLogger()
+	// hertz的log
+	initialize.InitHertzLogger()
 	r, info := initialize.InitNacos()
 	//tracer, cfg := hertztracing.NewServerTracer()
 	rpc.Init()
@@ -38,7 +40,6 @@ func main() {
 		server.WithRegistry(r, info),
 		server.WithHandleMethodNotAllowed(true),
 	)
-
 	// use pprof & tracer mw
 	pprof.Register(h)
 	//h.Use(hertztracing.ServerMiddleware(cfg))
