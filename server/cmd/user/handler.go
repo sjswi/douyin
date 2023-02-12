@@ -10,6 +10,7 @@ import (
 	"errors"
 	"fmt"
 	"gorm.io/gorm"
+	"strconv"
 	"sync"
 )
 
@@ -134,7 +135,7 @@ func (s *UserServiceImpl) User(ctx context.Context, req *user.UserRequest) (resp
 	}
 	resp = new(user.UserResponse)
 	resp.User = &user.User{
-		Id:            cache.ID,
+		Id:            strconv.FormatInt(cache.ID, 10),
 		Name:          cache.Name,
 		FollowCount:   0,
 		FollowerCount: 0,

@@ -42,8 +42,16 @@ func MessageAction(ctx context.Context, c *app.RequestContext) {
 	if err != nil {
 		return
 	}
-	actionType, err := strconv.ParseInt(req.ToUserID, 0, 32)
+	actionType, err := strconv.ParseInt(req.ActionType, 0, 32)
 	if err != nil {
+		return
+	}
+	if strconv.FormatInt(value.(int64), 10) == req.ToUserID {
+
+		c.JSON(consts.StatusConflict, &api.MessageActionResponse{
+			StatusCode: 1,
+			StatusMsg:  "你不能给自己发消息",
+		})
 		return
 	}
 	resp, err := global.MessageClient.MessageAction(ctx, &message.MessageActionRequest{
@@ -53,6 +61,9 @@ func MessageAction(ctx context.Context, c *app.RequestContext) {
 		Content:    req.Content,
 	})
 	if err != nil {
+		resp.StatusCode = 1
+		resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusConflict, resp)
 		return
 	}
 	//resp := new(api.MessageActionResponse)
@@ -92,6 +103,9 @@ func MessageList(ctx context.Context, c *app.RequestContext) {
 		ToUserId: toUserID,
 	})
 	if err != nil {
+		resp.StatusCode = 1
+		resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusConflict, resp)
 		return
 	}
 	//resp := new(api.MessageListResponse)

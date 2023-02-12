@@ -7,10 +7,13 @@ enum Code {
     ErrorRequest = 4;
 }
 struct Message{
-  1: i64 id;
+  1: string id;
   2: string content;
   3: string create_time;
+  4: string from_user_id;
+  5: string to_user_id;
 }
+
 
 
 struct MessageActionRequest{

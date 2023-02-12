@@ -100,7 +100,7 @@ func UpdateVideo(tx *gorm.DB, video *Video) error {
 // queryVideoByAuthorID 通过videoID查询video
 func queryVideoByAuthorID(tx *gorm.DB, authorID int64) ([]Video, error) {
 	var videos []Video
-	if err := tx.Table("video").Where("video_id=?", authorID).Find(&videos).Error; err != nil {
+	if err := tx.Table("video").Where("author_id=?", authorID).Find(&videos).Error; err != nil {
 		return nil, err
 	}
 	return videos, nil

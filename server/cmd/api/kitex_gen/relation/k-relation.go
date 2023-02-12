@@ -46,7 +46,7 @@ func (p *User) FastRead(buf []byte) (int, error) {
 		}
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				l, err = p.FastReadField1(buf[offset:])
 				offset += l
 				if err != nil {
@@ -153,7 +153,7 @@ ReadStructEndError:
 func (p *User) FastReadField1(buf []byte) (int, error) {
 	offset := 0
 
-	if v, l, err := bthrift.Binary.ReadI64(buf[offset:]); err != nil {
+	if v, l, err := bthrift.Binary.ReadString(buf[offset:]); err != nil {
 		return offset, err
 	} else {
 		offset += l
@@ -229,10 +229,10 @@ func (p *User) FastWriteNocopy(buf []byte, binaryWriter bthrift.BinaryWriter) in
 	offset := 0
 	offset += bthrift.Binary.WriteStructBegin(buf[offset:], "User")
 	if p != nil {
-		offset += p.fastWriteField1(buf[offset:], binaryWriter)
 		offset += p.fastWriteField3(buf[offset:], binaryWriter)
 		offset += p.fastWriteField4(buf[offset:], binaryWriter)
 		offset += p.fastWriteField5(buf[offset:], binaryWriter)
+		offset += p.fastWriteField1(buf[offset:], binaryWriter)
 		offset += p.fastWriteField2(buf[offset:], binaryWriter)
 	}
 	offset += bthrift.Binary.WriteFieldStop(buf[offset:])
@@ -257,8 +257,8 @@ func (p *User) BLength() int {
 
 func (p *User) fastWriteField1(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
-	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "id", thrift.I64, 1)
-	offset += bthrift.Binary.WriteI64(buf[offset:], p.Id)
+	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "id", thrift.STRING, 1)
+	offset += bthrift.Binary.WriteStringNocopy(buf[offset:], binaryWriter, p.Id)
 
 	offset += bthrift.Binary.WriteFieldEnd(buf[offset:])
 	return offset
@@ -302,8 +302,8 @@ func (p *User) fastWriteField5(buf []byte, binaryWriter bthrift.BinaryWriter) in
 
 func (p *User) field1Length() int {
 	l := 0
-	l += bthrift.Binary.FieldBeginLength("id", thrift.I64, 1)
-	l += bthrift.Binary.I64Length(p.Id)
+	l += bthrift.Binary.FieldBeginLength("id", thrift.STRING, 1)
+	l += bthrift.Binary.StringLengthNocopy(p.Id)
 
 	l += bthrift.Binary.FieldEndLength()
 	return l

@@ -6,6 +6,8 @@ import (
 	message "douyin_rpc/server/cmd/message/kitex_gen/message"
 	"douyin_rpc/server/cmd/message/model"
 	"gorm.io/gorm"
+	"strconv"
+	"sync"
 	"time"
 )
 
@@ -21,6 +23,7 @@ func (s *MessageServiceImpl) MessageAction(ctx context.Context, req *message.Mes
 		TargetID:   req.ToUserId,
 		CreateTime: time.Now().Unix(),
 	}
+	resp = new(message.MessageActionResponse)
 	//TODO
 	// 布隆过滤器过滤ID是否存在
 	// 现在查询数据库
@@ -31,7 +34,7 @@ func (s *MessageServiceImpl) MessageAction(ctx context.Context, req *message.Mes
 		}
 	}()
 	if req.ActionType == 1 {
-		err = model.CreateMessage(tx, message1)
+		err = model.CreateMessage(tx, &message1)
 		if err != nil {
 			return
 		}
@@ -58,18 +61,26 @@ func (s *MessageServiceImpl) MessageList(ctx context.Context, req *message.Messa
 		return
 	}
 	messages := append(messages1, messages2...)
+	resp = new(message.MessageListResponse)
 	// 4、构建返回值
+	var wg sync.WaitGroup
+	wg.Add(len(messages))
 	resp.MessageList = make([]*message.Message, len(messages))
 	for j := 0; j < len(messages); j++ {
 		i := j
 		go func() {
-			resp.MessageList[i].Id = messages[i].ID
-
-			resp.MessageList[i].Content = messages[i].Content
-			resp.MessageList[i].CreateTime = messages[i].CreatedAt.Format("2006-01-02 15:04:05")
+			defer wg.Done()
+			resp.MessageList[i] = &message.Message{
+				Id:         strconv.FormatInt(messages[i].ID, 10),
+				Content:    messages[i].Content,
+				CreateTime: messages[i].CreatedAt.Format("2006-01-02 15:04:05"),
+				FromUserId: strconv.FormatInt(messages[i].UserID, 10),
+				ToUserId:   strconv.FormatInt(messages[i].TargetID, 10),
+			}
 		}()
 
 	}
+	wg.Wait()
 	return
 }
 

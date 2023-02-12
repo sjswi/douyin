@@ -69,9 +69,11 @@ func (p *Code) Value() (driver.Value, error) {
 }
 
 type Message struct {
-	Id         int64  `thrift:"id,1" frugal:"1,default,i64" json:"id"`
+	Id         string `thrift:"id,1" frugal:"1,default,string" json:"id"`
 	Content    string `thrift:"content,2" frugal:"2,default,string" json:"content"`
 	CreateTime string `thrift:"create_time,3" frugal:"3,default,string" json:"create_time"`
+	FromUserId string `thrift:"from_user_id,4" frugal:"4,default,string" json:"from_user_id"`
+	ToUserId   string `thrift:"to_user_id,5" frugal:"5,default,string" json:"to_user_id"`
 }
 
 func NewMessage() *Message {
@@ -82,7 +84,7 @@ func (p *Message) InitDefault() {
 	*p = Message{}
 }
 
-func (p *Message) GetId() (v int64) {
+func (p *Message) GetId() (v string) {
 	return p.Id
 }
 
@@ -93,7 +95,15 @@ func (p *Message) GetContent() (v string) {
 func (p *Message) GetCreateTime() (v string) {
 	return p.CreateTime
 }
-func (p *Message) SetId(val int64) {
+
+func (p *Message) GetFromUserId() (v string) {
+	return p.FromUserId
+}
+
+func (p *Message) GetToUserId() (v string) {
+	return p.ToUserId
+}
+func (p *Message) SetId(val string) {
 	p.Id = val
 }
 func (p *Message) SetContent(val string) {
@@ -102,11 +112,19 @@ func (p *Message) SetContent(val string) {
 func (p *Message) SetCreateTime(val string) {
 	p.CreateTime = val
 }
+func (p *Message) SetFromUserId(val string) {
+	p.FromUserId = val
+}
+func (p *Message) SetToUserId(val string) {
+	p.ToUserId = val
+}
 
 var fieldIDToName_Message = map[int16]string{
 	1: "id",
 	2: "content",
 	3: "create_time",
+	4: "from_user_id",
+	5: "to_user_id",
 }
 
 func (p *Message) Read(iprot thrift.TProtocol) (err error) {
@@ -129,7 +147,7 @@ func (p *Message) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -151,6 +169,26 @@ func (p *Message) Read(iprot thrift.TProtocol) (err error) {
 		case 3:
 			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField3(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		case 4:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else {
+				if err = iprot.Skip(fieldTypeId); err != nil {
+					goto SkipFieldError
+				}
+			}
+		case 5:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField5(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else {
@@ -189,7 +227,7 @@ ReadStructEndError:
 }
 
 func (p *Message) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		p.Id = v
@@ -215,6 +253,24 @@ func (p *Message) ReadField3(iprot thrift.TProtocol) error {
 	return nil
 }
 
+func (p *Message) ReadField4(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.FromUserId = v
+	}
+	return nil
+}
+
+func (p *Message) ReadField5(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		p.ToUserId = v
+	}
+	return nil
+}
+
 func (p *Message) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
 	if err = oprot.WriteStructBegin("Message"); err != nil {
@@ -231,6 +287,14 @@ func (p *Message) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField3(oprot); err != nil {
 			fieldId = 3
+			goto WriteFieldError
+		}
+		if err = p.writeField4(oprot); err != nil {
+			fieldId = 4
+			goto WriteFieldError
+		}
+		if err = p.writeField5(oprot); err != nil {
+			fieldId = 5
 			goto WriteFieldError
 		}
 
@@ -253,10 +317,10 @@ WriteStructEndError:
 }
 
 func (p *Message) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
+	if err = oprot.WriteFieldBegin("id", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.Id); err != nil {
+	if err := oprot.WriteString(p.Id); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -303,6 +367,40 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
 }
 
+func (p *Message) writeField4(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("from_user_id", thrift.STRING, 4); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.FromUserId); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
+}
+
+func (p *Message) writeField5(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("to_user_id", thrift.STRING, 5); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.ToUserId); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
+}
+
 func (p *Message) String() string {
 	if p == nil {
 		return "<nil>"
@@ -325,12 +423,18 @@ func (p *Message) DeepEqual(ano *Message) bool {
 	if !p.Field3DeepEqual(ano.CreateTime) {
 		return false
 	}
+	if !p.Field4DeepEqual(ano.FromUserId) {
+		return false
+	}
+	if !p.Field5DeepEqual(ano.ToUserId) {
+		return false
+	}
 	return true
 }
 
-func (p *Message) Field1DeepEqual(src int64) bool {
+func (p *Message) Field1DeepEqual(src string) bool {
 
-	if p.Id != src {
+	if strings.Compare(p.Id, src) != 0 {
 		return false
 	}
 	return true
@@ -345,6 +449,20 @@ func (p *Message) Field2DeepEqual(src string) bool {
 func (p *Message) Field3DeepEqual(src string) bool {
 
 	if strings.Compare(p.CreateTime, src) != 0 {
+		return false
+	}
+	return true
+}
+func (p *Message) Field4DeepEqual(src string) bool {
+
+	if strings.Compare(p.FromUserId, src) != 0 {
+		return false
+	}
+	return true
+}
+func (p *Message) Field5DeepEqual(src string) bool {
+
+	if strings.Compare(p.ToUserId, src) != 0 {
 		return false
 	}
 	return true

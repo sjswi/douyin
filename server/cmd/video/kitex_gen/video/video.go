@@ -69,7 +69,7 @@ func (p *Code) Value() (driver.Value, error) {
 }
 
 type Video struct {
-	Id            int64  `thrift:"id,1" frugal:"1,default,i64" json:"id"`
+	Id            string `thrift:"id,1" frugal:"1,default,string" json:"id"`
 	Author        *User  `thrift:"author,2" frugal:"2,default,User" json:"author"`
 	PlayUrl       string `thrift:"play_url,3" frugal:"3,default,string" json:"play_url"`
 	CoverUrl      string `thrift:"cover_url,4" frugal:"4,default,string" json:"cover_url"`
@@ -87,7 +87,7 @@ func (p *Video) InitDefault() {
 	*p = Video{}
 }
 
-func (p *Video) GetId() (v int64) {
+func (p *Video) GetId() (v string) {
 	return p.Id
 }
 
@@ -123,7 +123,7 @@ func (p *Video) GetIsFavorite() (v bool) {
 func (p *Video) GetTitle() (v string) {
 	return p.Title
 }
-func (p *Video) SetId(val int64) {
+func (p *Video) SetId(val string) {
 	p.Id = val
 }
 func (p *Video) SetAuthor(val *User) {
@@ -183,7 +183,7 @@ func (p *Video) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -293,7 +293,7 @@ ReadStructEndError:
 }
 
 func (p *Video) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		p.Id = v
@@ -421,10 +421,10 @@ WriteStructEndError:
 }
 
 func (p *Video) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
+	if err = oprot.WriteFieldBegin("id", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.Id); err != nil {
+	if err := oprot.WriteString(p.Id); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -596,9 +596,9 @@ func (p *Video) DeepEqual(ano *Video) bool {
 	return true
 }
 
-func (p *Video) Field1DeepEqual(src int64) bool {
+func (p *Video) Field1DeepEqual(src string) bool {
 
-	if p.Id != src {
+	if strings.Compare(p.Id, src) != 0 {
 		return false
 	}
 	return true
@@ -654,7 +654,7 @@ func (p *Video) Field8DeepEqual(src string) bool {
 }
 
 type User struct {
-	Id            int64  `thrift:"id,1" frugal:"1,default,i64" json:"id"`
+	Id            string `thrift:"id,1" frugal:"1,default,string" json:"id"`
 	Name          string `thrift:"name,2" frugal:"2,default,string" json:"name"`
 	FollowCount   int64  `thrift:"follow_count,3" frugal:"3,default,i64" json:"follow_count"`
 	FollowerCount int64  `thrift:"follower_count,4" frugal:"4,default,i64" json:"follower_count"`
@@ -669,7 +669,7 @@ func (p *User) InitDefault() {
 	*p = User{}
 }
 
-func (p *User) GetId() (v int64) {
+func (p *User) GetId() (v string) {
 	return p.Id
 }
 
@@ -688,7 +688,7 @@ func (p *User) GetFollowerCount() (v int64) {
 func (p *User) GetIsFollow() (v bool) {
 	return p.IsFollow
 }
-func (p *User) SetId(val int64) {
+func (p *User) SetId(val string) {
 	p.Id = val
 }
 func (p *User) SetName(val string) {
@@ -732,7 +732,7 @@ func (p *User) Read(iprot thrift.TProtocol) (err error) {
 
 		switch fieldId {
 		case 1:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField1(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -812,7 +812,7 @@ ReadStructEndError:
 }
 
 func (p *User) ReadField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI64(); err != nil {
+	if v, err := iprot.ReadString(); err != nil {
 		return err
 	} else {
 		p.Id = v
@@ -902,10 +902,10 @@ WriteStructEndError:
 }
 
 func (p *User) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("id", thrift.I64, 1); err != nil {
+	if err = oprot.WriteFieldBegin("id", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.Id); err != nil {
+	if err := oprot.WriteString(p.Id); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1017,9 +1017,9 @@ func (p *User) DeepEqual(ano *User) bool {
 	return true
 }
 
-func (p *User) Field1DeepEqual(src int64) bool {
+func (p *User) Field1DeepEqual(src string) bool {
 
-	if p.Id != src {
+	if strings.Compare(p.Id, src) != 0 {
 		return false
 	}
 	return true

@@ -8,7 +8,7 @@ enum Code {
     ErrorRequest = 4;
 }
 struct User {
-    1: i64 id;
+    1: string id;
     2: string name;
     3: i64 follow_count;
     4: i64 follower_count;
@@ -16,7 +16,7 @@ struct User {
 }
 
 struct Comment {
-  1: i64 id;
+  1: string id;
   2: User user;
   3: string content;
   4: string create_date;

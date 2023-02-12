@@ -7,6 +7,7 @@ import (
 	relation "douyin_rpc/server/cmd/relation/kitex_gen/relation"
 	"douyin_rpc/server/cmd/relation/model"
 	"errors"
+	"strconv"
 	"sync"
 )
 
@@ -181,17 +182,20 @@ func getList(ctx context.Context, userId int64, userType int, authId int64) ([]*
 
 			// 此处为TargetID
 			userList[i] = new(relation.User)
+			var targetId int64
 			if userType == 2 {
-				userList[i].Id = relations[i].UserID
+				targetId = relations[i].UserID
+				userList[i].Id = strconv.FormatInt(relations[i].UserID, 10)
 			} else {
-				userList[i].Id = relations[i].TargetID
+				userList[i].Id = strconv.FormatInt(relations[i].TargetID, 10)
+				targetId = relations[i].UserID
 			}
 
 			var wg1 sync.WaitGroup
 			wg1.Add(3)
 			go func() {
 				user1, err1 := global.UserClient.GetUser(ctx, &user2.GetUserRequest{
-					UserId: userList[i].Id,
+					UserId: targetId,
 				})
 				if err1 != nil {
 					err = err1
@@ -201,7 +205,7 @@ func getList(ctx context.Context, userId int64, userType int, authId int64) ([]*
 			}()
 			go func() {
 				defer wg1.Done()
-				_, count1, count2, err1 := model.CountRelation(tx, userList[i].Id)
+				_, count1, count2, err1 := model.CountRelation(tx, targetId)
 				if err1 != nil {
 					err = err1
 					return
@@ -212,7 +216,7 @@ func getList(ctx context.Context, userId int64, userType int, authId int64) ([]*
 			go func() {
 				// 判断登录用户是否关注该用户
 				defer wg1.Done()
-				relation1, err1 := model.QueryRelationByUserIDAndTargetIDWithCache(tx, authId, userList[i].Id)
+				relation1, err1 := model.QueryRelationByUserIDAndTargetIDWithCache(tx, authId, targetId)
 				if err1 != nil {
 					err = err1
 					return

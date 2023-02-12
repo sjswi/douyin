@@ -10,6 +10,7 @@ import (
 	favorite "douyin_rpc/server/cmd/favorite/kitex_gen/favorite"
 	"douyin_rpc/server/cmd/favorite/model"
 	"errors"
+	"strconv"
 	"sync"
 )
 
@@ -146,13 +147,13 @@ func (s *FavoriteServiceImpl) FavoriteList(ctx context.Context, req *favorite.Fa
 
 			resp.VideoList[i] = &favorite.Video{
 				Author: &favorite.User{
-					Id:            author.User.Id,
+					Id:            strconv.FormatInt(author.User.Id, 10),
 					Name:          author.User.Name,
 					FollowCount:   0,
 					FollowerCount: 0,
 					IsFollow:      false,
 				},
-				Id:            videos.Video[0].Id,
+				Id:            strconv.FormatInt(videos.Video[0].Id, 10),
 				FavoriteCount: 0,
 				CommentCount:  0,
 				IsFavorite:    false,
@@ -166,7 +167,7 @@ func (s *FavoriteServiceImpl) FavoriteList(ctx context.Context, req *favorite.Fa
 
 			go func(followCount, followerCount *int64) {
 				// 查询FollowCount和FollowerCount
-				defer wg.Done()
+				defer wg1.Done()
 				count, err1 := global.RelationClient.GetCount(ctx, &relation2.GetCountRequest{UserId: author.User.Id})
 				if err1 != nil {
 					err = err1
@@ -177,7 +178,7 @@ func (s *FavoriteServiceImpl) FavoriteList(ctx context.Context, req *favorite.Fa
 			}(&resp.VideoList[i].Author.FollowCount, &resp.VideoList[i].Author.FollowerCount)
 			go func(favoriteCount *int64) {
 				// 查询FavoriteCount
-				defer wg.Done()
+				defer wg1.Done()
 				count, err1 := model.CountFavoriteByVideoID(tx, favorites[i].VideoID)
 				if err1 != nil {
 					err = err1
@@ -187,7 +188,7 @@ func (s *FavoriteServiceImpl) FavoriteList(ctx context.Context, req *favorite.Fa
 			}(&resp.VideoList[i].FavoriteCount)
 			go func(commentCount *int64) {
 				// 查询CommentCount
-				defer wg.Done()
+				defer wg1.Done()
 				count, err1 := global.CommentClient.GetCommentCount(ctx, &comment.GetCommentCountRequest{VideoId: favorites[i].VideoID})
 				if err1 != nil {
 					err = err1
@@ -197,7 +198,7 @@ func (s *FavoriteServiceImpl) FavoriteList(ctx context.Context, req *favorite.Fa
 			}(&resp.VideoList[i].CommentCount)
 			go func(isFavorite *bool) {
 				// 查询登录用户是否点赞该视频
-				defer wg.Done()
+				defer wg1.Done()
 				if req.AuthId != -1 {
 					cache, err1 := model.QueryFavoriteByUserIDAndVideoIDWithCache(tx, req.AuthId, favorites[i].VideoID)
 					if err1 != nil {
@@ -212,21 +213,21 @@ func (s *FavoriteServiceImpl) FavoriteList(ctx context.Context, req *favorite.Fa
 			}(&resp.VideoList[i].IsFavorite)
 			go func(isFollow *bool) {
 				//查询登录用户是否关注该视频作者
-				defer wg.Done()
+				defer wg1.Done()
 				if req.AuthId != -1 {
 					relation1, err1 := global.RelationClient.GetRelation(ctx, &relation2.GetRelationRequest{
 						Id:           0,
 						UserId:       req.AuthId,
 						TargetId:     author.User.Id,
 						RelationType: 0,
-						QueryType:    1,
+						QueryType:    4,
 					})
 					if err1 != nil {
 
 						err = err1
 						return
 					}
-					if relation1.Relations[0].Id != 0 {
+					if len(relation1.Relations) != 1 && relation1.Relations[0].Id != 0 {
 						*isFollow = true
 					}
 				}
@@ -241,7 +242,14 @@ func (s *FavoriteServiceImpl) FavoriteList(ctx context.Context, req *favorite.Fa
 
 // GetFavorite implements the FavoriteServiceImpl interface.
 func (s *FavoriteServiceImpl) GetFavorite(ctx context.Context, req *favorite.GetFavoriteRequest) (resp *favorite.GetFavoriteResponse, err error) {
+	resp = new(favorite.GetFavoriteResponse)
 	tx := global.DB.Debug()
+	/*
+	   query_type=1  根据id查询
+	   query_type=2  根据user_id查询
+	   query_type=3  根据video_id查询
+	   query_type=4  根据video_id和user_id查询
+	*/
 	if req.QueryType == 1 {
 		// 通过user_id和video_id查找
 		cache, err1 := model.QueryFavoriteByUserIDAndVideoIDWithCache(tx, req.UserId, req.VideoId)
@@ -315,6 +323,7 @@ func (s *FavoriteServiceImpl) GetFavorite(ctx context.Context, req *favorite.Get
 // GetFavoriteCount implements the FavoriteServiceImpl interface.
 func (s *FavoriteServiceImpl) GetFavoriteCount(ctx context.Context, req *favorite.GetFavoriteCountRequest) (resp *favorite.GetFavoriteCountResponse, err error) {
 	tx := global.DB.Debug()
+	resp = new(favorite.GetFavoriteCountResponse)
 	cache, err := model.CountFavoriteByVideoID(tx, req.VideoId)
 	if err != nil {
 		return nil, err

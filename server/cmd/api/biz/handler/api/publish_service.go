@@ -95,6 +95,11 @@ func PublishList(ctx context.Context, c *app.RequestContext) {
 		UserId: userID,
 	})
 	if err != nil {
+
+		resp.StatusCode = 4
+
+		resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusConflict, resp)
 		return
 	}
 	//resp := new(api.PublishActionResponse)

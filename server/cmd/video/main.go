@@ -3,6 +3,7 @@ package main
 import (
 	"douyin_rpc/server/cmd/video/constant"
 	"douyin_rpc/server/cmd/video/initialize"
+	"douyin_rpc/server/cmd/video/initialize/rpc"
 	video "douyin_rpc/server/cmd/video/kitex_gen/video/feedservice"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
@@ -17,6 +18,7 @@ func main() {
 	initialize.InitRedis()
 	initialize.InitLogger()
 	initialize.InitOSS()
+	rpc.Init()
 	//p := provider.NewOpenTelemetryProvider(
 	//	provider.WithServiceName(constant.DefaultName+"_"+constant.SERVICEName),
 	//	provider.WithExportEndpoint("http://192.168.56.102:14268/api/traces"),

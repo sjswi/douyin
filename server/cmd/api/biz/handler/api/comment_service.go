@@ -56,6 +56,7 @@ func CommentAction(ctx context.Context, c *app.RequestContext) {
 	}
 	resp := new(comment.CommentActionResponse)
 	//resp := new(api.CommentActionResponse)
+
 	resp, err = global.CommentClient.CommentAction(ctx, &comment.CommentActionRequest{
 		VideoId:     videoId,
 		AuthId:      value.(int64),
@@ -66,6 +67,7 @@ func CommentAction(ctx context.Context, c *app.RequestContext) {
 	if err != nil {
 		resp.StatusCode = 1
 		resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusConflict, resp)
 	}
 	//resp.Comment = api.NewComment()
 	//resp.Comment.ID = resp1.Comment.Id
@@ -112,7 +114,9 @@ func CommentList(ctx context.Context, c *app.RequestContext) {
 		VideoId: videoId,
 	})
 	if err != nil {
-		return
+		resp.StatusCode = 1
+		resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusConflict, resp)
 	}
 	//resp := new(api.CommentListResponse)
 

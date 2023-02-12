@@ -12,4 +12,7 @@ type ServerConfig struct {
 	FeedNumber      int                 `mapstructure:"feed_number" json:"feed_number"`
 	UserSrvInfo     config.RPCSrvConfig `mapstructure:"user_srv" json:"user_srv"`
 	RelationSrvInfo config.RPCSrvConfig `mapstructure:"relation_srv" json:"relation_srv"`
+
+	FavoriteSrvInfo config.RPCSrvConfig `mapstructure:"favorite_srv" json:"favorite_srv"`
+	CommentSrvInfo  config.RPCSrvConfig `mapstructure:"comment_srv" json:"comment_srv"`
 }

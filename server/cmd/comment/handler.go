@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	relation2 "douyin_rpc/client/kitex_gen/relation"
 	"douyin_rpc/client/kitex_gen/user"
 	"douyin_rpc/client/kitex_gen/video"
 	"douyin_rpc/server/cmd/comment/global"
@@ -11,6 +10,7 @@ import (
 	"douyin_rpc/server/cmd/comment/tools"
 	"errors"
 	"gorm.io/gorm"
+	"strconv"
 	"sync"
 	"time"
 )
@@ -63,7 +63,7 @@ func (s *CommentServiceImpl) CommentAction(ctx context.Context, req *comment.Com
 			return
 		}
 		resp.Comment = &comment.Comment{
-			Id: comment1.ID,
+			Id: strconv.FormatInt(comment1.ID, 10),
 			User: &comment.User{
 				Id:            user1.User.Id,
 				Name:          user1.User.Name,
@@ -81,7 +81,7 @@ func (s *CommentServiceImpl) CommentAction(ctx context.Context, req *comment.Com
 			return
 		}
 		resp.Comment = &comment.Comment{
-			Id: req.CommentId,
+			Id: strconv.FormatInt(req.CommentId, 10),
 			User: &comment.User{
 				Id:            user1.User.Id,
 				Name:          user1.User.Name,
@@ -120,7 +120,6 @@ func (s *CommentServiceImpl) CommentAction(ctx context.Context, req *comment.Com
 
 // CommentList implements the CommentServiceImpl interface.
 func (s *CommentServiceImpl) CommentList(ctx context.Context, req *comment.CommentListRequest) (resp *comment.CommentListResponse, err error) {
-	var errList error
 
 	tx := global.DB.Debug()
 	comments, err1 := model.QueryCommentByVideoIDWithCache(tx, req.VideoId)
@@ -128,7 +127,7 @@ func (s *CommentServiceImpl) CommentList(ctx context.Context, req *comment.Comme
 		err = err1
 		return
 	}
-
+	resp = new(comment.CommentListResponse)
 	var wg sync.WaitGroup
 	wg.Add(len(comments))
 	// 4、装配返回值
@@ -139,15 +138,18 @@ func (s *CommentServiceImpl) CommentList(ctx context.Context, req *comment.Comme
 			defer wg.Done()
 			//var relation models.Relation
 			//var user models.User
-			resp.CommentList[i].Id = comments[i].ID
-			resp.CommentList[i].Content = comments[i].Content
-			resp.CommentList[i].CreateDate = tools.GetMonthAndDay(comments[i].CreatedAt)
-			user1, err := global.UserClient.User(ctx, &user.UserRequest{
+			resp.CommentList[i] = &comment.Comment{
+				Id:         strconv.FormatInt(comments[i].ID, 10),
+				User:       nil,
+				Content:    comments[i].Content,
+				CreateDate: tools.GetMonthAndDay(comments[i].CreatedAt),
+			}
+			user1, err1 := global.UserClient.User(ctx, &user.UserRequest{
 				UserId: comments[i].UserID,
 				AuthId: req.AuthId,
 			})
-			if err != nil {
-				errList = err
+			if err1 != nil {
+				err = err1
 				return
 			}
 			resp.CommentList[i].User = &comment.User{
@@ -155,35 +157,19 @@ func (s *CommentServiceImpl) CommentList(ctx context.Context, req *comment.Comme
 				Name:          user1.User.Name,
 				FollowCount:   user1.User.FollowCount,
 				FollowerCount: user1.User.FollowerCount,
-				IsFollow:      false,
-			}
-			relation, err := global.RelationClient.GetRelation(ctx, &relation2.GetRelationRequest{
-				Id:           0,
-				UserId:       req.AuthId,
-				TargetId:     user1.User.Id,
-				RelationType: 0,
-				QueryType:    4, //根据user_id和target_id查询
-			})
-			if err != nil {
-				errList = err
-				return
-			}
-			if relation.Relations[0].Id != 0 {
-				resp.CommentList[i].User.IsFollow = true
+				IsFollow:      user1.User.IsFollow,
 			}
 		}()
 
 	}
 	wg.Wait()
-	if errList != nil {
-		err = errList
-		return
-	}
+
 	return
 }
 
 // GetComment implements the CommentServiceImpl interface.
 func (s *CommentServiceImpl) GetComment(ctx context.Context, req *comment.GetCommentRequest) (resp *comment.GetCommentResponse, err error) {
+	resp = new(comment.GetCommentResponse)
 	tx := global.DB.Debug()
 	if req.QueryType == 1 {
 		//  通过comment_id查询，几乎不会用到。只返回一个评论，因为评论id是不重复的
@@ -273,7 +259,8 @@ func (s *CommentServiceImpl) GetComment(ctx context.Context, req *comment.GetCom
 // GetCommentCount implements the CommentServiceImpl interface.
 func (s *CommentServiceImpl) GetCommentCount(ctx context.Context, req *comment.GetCommentCountRequest) (resp *comment.GetCommentCountResponse, err error) {
 	tx := global.DB.Debug()
+	resp = new(comment.GetCommentCountResponse)
 	id, err := model.CountCommentByVideoID(tx, req.VideoId)
-	resp.Count = *id
+	resp.Count = id
 	return
 }

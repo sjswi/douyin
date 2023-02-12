@@ -66,8 +66,9 @@ func Login(ctx context.Context, c *app.RequestContext) {
 		c.JSON(consts.StatusInternalServerError, response)
 		return
 	}
+	//strconv.FormatInt(resp.UserId, 10)
 	response.StatusCode = 0
-	response.UserID = resp.UserId
+	response.UserID = strconv.FormatInt(resp.UserId, 10)
 	response.Token = token
 	c.JSON(consts.StatusOK, response)
 }
@@ -123,7 +124,7 @@ func Register(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 	response.StatusCode = 0
-	response.UserID = resp.UserId
+	response.UserID = strconv.FormatInt(resp.UserId, 10)
 	response.Token = token
 	c.JSON(consts.StatusOK, response)
 }

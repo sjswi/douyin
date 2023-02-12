@@ -8,7 +8,7 @@ enum Code {
     ErrorRequest = 4;
 }
 struct Video {
-    1: i64 id;
+    1: string id;
     2: User author;
     3: string play_url;
     4: string cover_url;
@@ -18,7 +18,7 @@ struct Video {
     8: string title;
 }
 struct User {
-    1: i64 id;
+    1: string id;
     2: string name;
     3: i64 follow_count;
     4: i64 follower_count;

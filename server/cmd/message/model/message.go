@@ -149,50 +149,51 @@ func queryMessageByUserIDAndTargetID(tx *gorm.DB, userID, targetID int64) ([]Mes
 }
 
 func QueryMessageByUserIDAndTargetIDWithCache(tx *gorm.DB, userID, targetID int64) ([]Message, error) {
-	key := MessageCachePrefix + "UserID_" + strconv.Itoa(int(userID)) + "_TargetID_" + strconv.Itoa(int(targetID))
-	var result string
-	var messages []Message
-	var err error
-	// 查看key是否存在
-	//不存在
-	if !cache.Exist(key) {
-		messages, err = queryMessageByUserIDAndTargetID(tx, userID, targetID)
-		if err != nil {
-			return nil, err
-		}
-		// 从数据库查出，放进redis
-		err := cache.Set(key, messages)
-		if err != nil {
-			return nil, err
-		}
-		return messages, nil
-	}
-	//TODO
-	// lua脚本优化，保证原子性
-
-	//查询redis
-	if result, err = cache.Get(key); err != nil {
-		// 极端情况：在判断存在后查询前过期了
-		if err.Error() == "redis: nil" {
-			messages, err = queryMessageByUserIDAndTargetID(tx, userID, targetID)
-			if err != nil {
-				return nil, err
-			}
-			// 从数据库查出，放进redis
-			err := cache.Set(key, messages)
-			if err != nil {
-				return nil, err
-			}
-			return messages, nil
-		}
-		return nil, err
-	}
-	// 反序列化
-	err = json.Unmarshal(strings.StringToBytes(result), &messages)
-	if err != nil {
-		return nil, err
-	}
-	return messages, nil
+	return queryMessageByUserIDAndTargetID(tx, userID, targetID)
+	//key := MessageCachePrefix + "UserID_" + strconv.Itoa(int(userID)) + "_TargetID_" + strconv.Itoa(int(targetID))
+	//var result string
+	//var messages []Message
+	//var err error
+	//// 查看key是否存在
+	////不存在
+	//if !cache.Exist(key) {
+	//	messages, err = queryMessageByUserIDAndTargetID(tx, userID, targetID)
+	//	if err != nil {
+	//		return nil, err
+	//	}
+	//	// 从数据库查出，放进redis
+	//	err := cache.Set(key, messages)
+	//	if err != nil {
+	//		return nil, err
+	//	}
+	//	return messages, nil
+	//}
+	////TODO
+	//// lua脚本优化，保证原子性
+	//
+	////查询redis
+	//if result, err = cache.Get(key); err != nil {
+	//	// 极端情况：在判断存在后查询前过期了
+	//	if err.Error() == "redis: nil" {
+	//		messages, err = queryMessageByUserIDAndTargetID(tx, userID, targetID)
+	//		if err != nil {
+	//			return nil, err
+	//		}
+	//		// 从数据库查出，放进redis
+	//		err := cache.Set(key, messages)
+	//		if err != nil {
+	//			return nil, err
+	//		}
+	//		return messages, nil
+	//	}
+	//	return nil, err
+	//}
+	//// 反序列化
+	//err = json.Unmarshal(strings.StringToBytes(result), &messages)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//return messages, nil
 }
 
 func UpdateMessage(tx *gorm.DB, message Message) error {
@@ -202,7 +203,7 @@ func UpdateMessage(tx *gorm.DB, message Message) error {
 	return nil
 }
 
-func CreateMessage(tx *gorm.DB, message Message) error {
+func CreateMessage(tx *gorm.DB, message *Message) error {
 	if err := tx.Table("message").Create(&message).Error; err != nil {
 		return err
 	}
