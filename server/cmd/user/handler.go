@@ -30,10 +30,20 @@ func (s *UserServiceImpl) Login(ctx context.Context, req *user.LoginRequest) (re
 		err = errors.New("该用户不存在")
 		return
 	}
+
 	// 4、获取到盐值，加密后判断是否一致
 	if !tools.VerifyUserPassword(temp_user.Salt, req.Password, temp_user.Password) {
 		return nil, err
 	}
+	// 由于没有logout，因此我们每次登录删除之前记录的message的时间
+	go func() {
+		for {
+			if err1 := global.RocksCacheClient.RawSet(ctx, "message:message:User_ID:"+strconv.FormatInt(temp_user.ID, 10)+":start", "1", -1); err1 == nil {
+				break
+			}
+		}
+
+	}()
 	return &user.LoginResponse{
 		StatusCode: 0,
 		StatusMsg:  "",

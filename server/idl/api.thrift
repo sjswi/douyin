@@ -68,7 +68,7 @@ struct Comment {
 struct Message{
   1: string id;
   2: string content;
-  3: string create_time;
+  3: i64 create_time;
   4: string from_user_id;
   5: string to_user_id;
 }
@@ -271,5 +271,5 @@ struct MessageListResponse{
 
 service MessageService {
     MessageActionResponse MessageAction(1: MessageActionRequest req) (api.post="/douyin/message/action/");
-    MessageListResponse MessageList(1: MessageListRequest req) (api.get="/douyin/message/list/");
+    MessageListResponse MessageList(1: MessageListRequest req) (api.get="/douyin/message/chat/");
 }

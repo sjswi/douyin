@@ -315,3 +315,8 @@ func _register0Mw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _chatMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

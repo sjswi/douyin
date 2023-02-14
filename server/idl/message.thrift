@@ -9,7 +9,7 @@ enum Code {
 struct Message{
   1: string id;
   2: string content;
-  3: string create_time;
+  3: i64 create_time;
   4: string from_user_id;
   5: string to_user_id;
 }

@@ -71,7 +71,7 @@ func (p *Code) Value() (driver.Value, error) {
 type Message struct {
 	Id         string `thrift:"id,1" frugal:"1,default,string" json:"id"`
 	Content    string `thrift:"content,2" frugal:"2,default,string" json:"content"`
-	CreateTime string `thrift:"create_time,3" frugal:"3,default,string" json:"create_time"`
+	CreateTime int64  `thrift:"create_time,3" frugal:"3,default,i64" json:"create_time"`
 	FromUserId string `thrift:"from_user_id,4" frugal:"4,default,string" json:"from_user_id"`
 	ToUserId   string `thrift:"to_user_id,5" frugal:"5,default,string" json:"to_user_id"`
 }
@@ -92,7 +92,7 @@ func (p *Message) GetContent() (v string) {
 	return p.Content
 }
 
-func (p *Message) GetCreateTime() (v string) {
+func (p *Message) GetCreateTime() (v int64) {
 	return p.CreateTime
 }
 
@@ -109,7 +109,7 @@ func (p *Message) SetId(val string) {
 func (p *Message) SetContent(val string) {
 	p.Content = val
 }
-func (p *Message) SetCreateTime(val string) {
+func (p *Message) SetCreateTime(val int64) {
 	p.CreateTime = val
 }
 func (p *Message) SetFromUserId(val string) {
@@ -167,7 +167,7 @@ func (p *Message) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 3:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -245,7 +245,7 @@ func (p *Message) ReadField2(iprot thrift.TProtocol) error {
 }
 
 func (p *Message) ReadField3(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.CreateTime = v
@@ -351,10 +351,10 @@ WriteFieldEndError:
 }
 
 func (p *Message) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("create_time", thrift.STRING, 3); err != nil {
+	if err = oprot.WriteFieldBegin("create_time", thrift.I64, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.CreateTime); err != nil {
+	if err := oprot.WriteI64(p.CreateTime); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -446,9 +446,9 @@ func (p *Message) Field2DeepEqual(src string) bool {
 	}
 	return true
 }
-func (p *Message) Field3DeepEqual(src string) bool {
+func (p *Message) Field3DeepEqual(src int64) bool {
 
-	if strings.Compare(p.CreateTime, src) != 0 {
+	if p.CreateTime != src {
 		return false
 	}
 	return true

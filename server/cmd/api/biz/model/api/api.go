@@ -2522,7 +2522,7 @@ func (p *Comment) String() string {
 type Message struct {
 	ID         string `thrift:"id,1" form:"id" json:"id" query:"id"`
 	Content    string `thrift:"content,2" form:"content" json:"content" query:"content"`
-	CreateTime string `thrift:"create_time,3" form:"create_time" json:"create_time" query:"create_time"`
+	CreateTime int64  `thrift:"create_time,3" form:"create_time" json:"create_time" query:"create_time"`
 	FromUserID string `thrift:"from_user_id,4" form:"from_user_id" json:"from_user_id" query:"from_user_id"`
 	ToUserID   string `thrift:"to_user_id,5" form:"to_user_id" json:"to_user_id" query:"to_user_id"`
 }
@@ -2539,7 +2539,7 @@ func (p *Message) GetContent() (v string) {
 	return p.Content
 }
 
-func (p *Message) GetCreateTime() (v string) {
+func (p *Message) GetCreateTime() (v int64) {
 	return p.CreateTime
 }
 
@@ -2599,7 +2599,7 @@ func (p *Message) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 3:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -2677,7 +2677,7 @@ func (p *Message) ReadField2(iprot thrift.TProtocol) error {
 }
 
 func (p *Message) ReadField3(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
+	if v, err := iprot.ReadI64(); err != nil {
 		return err
 	} else {
 		p.CreateTime = v
@@ -2783,10 +2783,10 @@ WriteFieldEndError:
 }
 
 func (p *Message) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("create_time", thrift.STRING, 3); err != nil {
+	if err = oprot.WriteFieldBegin("create_time", thrift.I64, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.CreateTime); err != nil {
+	if err := oprot.WriteI64(p.CreateTime); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {

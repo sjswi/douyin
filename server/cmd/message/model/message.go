@@ -1,9 +1,13 @@
 package model
 
 import (
+	"context"
+	"douyin_rpc/server/cmd/message/global"
 	"github.com/bwmarrin/snowflake"
 	"github.com/cloudwego/kitex/pkg/klog"
+	"github.com/go-redis/redis/v8"
 	"gorm.io/gorm"
+	"strconv"
 )
 
 type Message struct {
@@ -24,7 +28,33 @@ func (b *Message) BeforeCreate(_ *gorm.DB) (err error) {
 	return nil
 }
 
-const MessageCachePrefix string = "message:message_"
+const MessageCachePrefix string = "message:message:"
+
+//var mutex sync.Mutex
+//var update_keys []string
+//
+//func DeleteCache() {
+//	mutex.Lock()
+//	temp := update_keys[:]
+//	update_keys = update_keys[:0]
+//	mutex.Unlock()
+//	for {
+//		err := global.RocksCacheClient.TagAsDeletedBatch(temp)
+//		if err == nil {
+//			break
+//		}
+//	}
+//
+//	return
+//}
+
+//func updateKeys(message *Message) {
+//	key1 := MessageCachePrefix + "User_ID:" + strconv.FormatInt(message.ID, 10)
+//	key2 := MessageCachePrefix + "Name:" + message.Name
+//	mutex.Lock()
+//	update_keys = append(update_keys, []string{key1, key2}...)
+//	mutex.Unlock()
+//}
 
 //
 //func queryMessageByUserID(tx *gorm.DB, userID int64) ([]Message, error) {
@@ -138,12 +168,112 @@ const MessageCachePrefix string = "message:message_"
 //	return Messages, nil
 //}
 
+// 问题：
+//	 1、前端没有传时间的情况下，每次获取消息都是获取全部数据，而前端中还有之前的数据只是需要最新的而已
+//   2、
+//
 func queryMessageByUserIDAndTargetID(tx *gorm.DB, userID, targetID int64) ([]Message, error) {
-	var messages []Message
-	if err := tx.Table("message").Where("user_id=? and target_id=?", userID, targetID).Find(&messages).Error; err != nil {
+	var messages1, messages2 []Message
+	//messageTime:=int64(-1)
+	// 登入用户查询聊天记录
+	//var messages []Message
+	_, err := global.RocksCacheClient.RawGet(context.Background(), "message:message:User_ID:"+strconv.FormatInt(userID, 10)+":start")
+	key := MessageCachePrefix + "User_ID:" + strconv.FormatInt(userID, 10) + ":Target_ID:" + strconv.FormatInt(targetID, 10) + ":time"
+	if err == redis.Nil {
+		// 非第一次登录，查询上一次查询的时间
+
+		fetch, err := global.RocksCacheClient.Fetch(key, -1, func() (string, error) {
+			// 没有查到
+			if err := tx.Table("message").Where("user_id=? and target_id=?", userID, targetID).Find(&messages1).Order("create_time").Error; err != nil {
+				return "", err
+			}
+			if err := tx.Table("message").Where("user_id=? and target_id=?", targetID, userID).Find(&messages2).Order("create_time").Error; err != nil {
+				return "", err
+			}
+			if len(messages1) > 0 && len(messages2) > 0 {
+				if messages1[len(messages1)-1].CreateTime > messages2[len(messages2)-1].CreateTime {
+					return strconv.FormatInt(messages1[len(messages1)-1].CreateTime, 10), nil
+				} else {
+					return strconv.FormatInt(messages2[len(messages2)-1].CreateTime, 10), nil
+				}
+			} else if len(messages1) == 0 {
+				return strconv.FormatInt(messages2[len(messages2)-1].CreateTime, 10), nil
+			} else if len(messages2) == 0 {
+				return strconv.FormatInt(messages1[len(messages1)-1].CreateTime, 10), nil
+			} else {
+				return "", nil
+			}
+
+		})
+
+		if err != nil {
+			return nil, err
+		}
+		messages1 = append(messages1, messages2...)
+
+		if messages1 != nil {
+			return messages1, nil
+		}
+		//查询成功
+		messageTime, err := strconv.ParseInt(fetch, 0, 64)
+		if err := tx.Table("message").Where("user_id=? and target_id=?", userID, targetID).Where("create_time > ?", messageTime).Find(&messages1).Order("create_time").Error; err != nil {
+			return nil, err
+		}
+		if err := tx.Table("message").Where("user_id=? and target_id=?", userID, targetID).Where("create_time > ?", messageTime).Find(&messages2).Order("create_time").Error; err != nil {
+			return nil, err
+		}
+		count := 0
+		for {
+			if global.RocksCacheClient.RawSet(context.Background(), key, strconv.FormatInt(messages1[len(messages1)-1].CreateTime, 10), -1) == nil {
+				break
+			}
+			if count > 10 {
+				break
+			}
+			count += 1
+		}
+
+	}
+	// 第一次登录，不需要时间
+
+	// 1、删除第一次登录标记
+	global.RocksCacheClient.TagAsDeleted("message:message:User_ID:" + strconv.FormatInt(userID, 10) + ":start")
+	// 2、删除上一次的时间标记
+	global.RocksCacheClient.TagAsDeleted(key)
+	// 查询数据库不加时间
+
+	if err := tx.Table("message").Where("user_id=? and target_id=?", userID, targetID).Find(&messages1).Order("create_time").Error; err != nil {
 		return nil, err
 	}
-	return messages, nil
+	if err := tx.Table("message").Where("user_id=? and target_id=?", targetID, userID).Find(&messages2).Order("create_time").Error; err != nil {
+		return nil, err
+	}
+	latestime := "-1"
+	if len(messages1) > 0 && len(messages2) > 0 {
+		if messages1[len(messages1)-1].CreateTime > messages2[len(messages2)-1].CreateTime {
+			latestime = strconv.FormatInt(messages1[len(messages1)-1].CreateTime, 10)
+		} else {
+			latestime = strconv.FormatInt(messages2[len(messages2)-1].CreateTime, 10)
+		}
+	} else if len(messages1) == 0 {
+		latestime = strconv.FormatInt(messages2[len(messages2)-1].CreateTime, 10)
+	} else if len(messages2) == 0 {
+		latestime = strconv.FormatInt(messages1[len(messages1)-1].CreateTime, 10)
+	}
+
+	count := 0
+	for {
+		if err = global.RocksCacheClient.RawSet(context.Background(), key, latestime, -1); err == nil {
+			break
+		}
+		if count > 10 {
+			break
+		}
+		count += 1
+	}
+	messages1 = append(messages1, messages2[:]...)
+	// 更新数据库时间
+	return messages1, nil
 }
 
 func QueryMessageByUserIDAndTargetIDWithCache(tx *gorm.DB, userID, targetID int64) ([]Message, error) {

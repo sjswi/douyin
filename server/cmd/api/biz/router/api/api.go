@@ -52,8 +52,8 @@ func Register(r *server.Hertz) {
 				_action1.POST("/", append(_message_ctionMw(), api.MessageAction)...)
 			}
 			{
-				_list1 := _message.Group("/list", _list1Mw()...)
-				_list1.GET("/", append(_messagelistMw(), api.MessageList)...)
+				_chat := _message.Group("/chat", _chatMw()...)
+				_chat.GET("/", append(_messagelistMw(), api.MessageList)...)
 			}
 		}
 		{
@@ -63,8 +63,8 @@ func Register(r *server.Hertz) {
 				_action2.POST("/", append(_publish_ctionMw(), api.PublishAction)...)
 			}
 			{
-				_list2 := _publish.Group("/list", _list2Mw()...)
-				_list2.GET("/", append(_publishlistMw(), api.PublishList)...)
+				_list1 := _publish.Group("/list", _list1Mw()...)
+				_list1.GET("/", append(_publishlistMw(), api.PublishList)...)
 			}
 		}
 		{
@@ -76,22 +76,22 @@ func Register(r *server.Hertz) {
 			{
 				_follow := _relation.Group("/follow", _followMw()...)
 				{
-					_list3 := _follow.Group("/list", _list3Mw()...)
-					_list3.GET("/", append(_followlistMw(), api.FollowList)...)
+					_list2 := _follow.Group("/list", _list2Mw()...)
+					_list2.GET("/", append(_followlistMw(), api.FollowList)...)
 				}
 			}
 			{
 				_follower := _relation.Group("/follower", _followerMw()...)
 				{
-					_list4 := _follower.Group("/list", _list4Mw()...)
-					_list4.GET("/", append(_followerlistMw(), api.FollowerList)...)
+					_list3 := _follower.Group("/list", _list3Mw()...)
+					_list3.GET("/", append(_followerlistMw(), api.FollowerList)...)
 				}
 			}
 			{
 				_friend := _relation.Group("/friend", _friendMw()...)
 				{
-					_list5 := _friend.Group("/list", _list5Mw()...)
-					_list5.GET("/", append(_friendlistMw(), api.FriendList)...)
+					_list4 := _friend.Group("/list", _list4Mw()...)
+					_list4.GET("/", append(_friendlistMw(), api.FriendList)...)
 				}
 			}
 		}

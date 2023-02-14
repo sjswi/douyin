@@ -52,15 +52,11 @@ func (s *MessageServiceImpl) MessageAction(ctx context.Context, req *message.Mes
 // MessageList implements the MessageServiceImpl interface.
 func (s *MessageServiceImpl) MessageList(ctx context.Context, req *message.MessageListRequest) (resp *message.MessageListResponse, err error) {
 	tx := global.DB.Debug()
-	messages1, err := model.QueryMessageByUserIDAndTargetIDWithCache(tx, req.AuthId, req.ToUserId)
+	messages, err := model.QueryMessageByUserIDAndTargetIDWithCache(tx, req.AuthId, req.ToUserId)
 	if err != nil {
 		return
 	}
-	messages2, err := model.QueryMessageByUserIDAndTargetIDWithCache(tx, req.ToUserId, req.AuthId)
-	if err != nil {
-		return
-	}
-	messages := append(messages1, messages2...)
+
 	resp = new(message.MessageListResponse)
 	// 4、构建返回值
 	var wg sync.WaitGroup
@@ -73,7 +69,7 @@ func (s *MessageServiceImpl) MessageList(ctx context.Context, req *message.Messa
 			resp.MessageList[i] = &message.Message{
 				Id:         strconv.FormatInt(messages[i].ID, 10),
 				Content:    messages[i].Content,
-				CreateTime: messages[i].CreatedAt.Format("2006-01-02 15:04:05"),
+				CreateTime: messages[i].CreateTime,
 				FromUserId: strconv.FormatInt(messages[i].UserID, 10),
 				ToUserId:   strconv.FormatInt(messages[i].TargetID, 10),
 			}
