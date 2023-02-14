@@ -9,6 +9,8 @@ import (
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/loadbalance"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
+	"github.com/kitex-contrib/obs-opentelemetry/provider"
+	"github.com/kitex-contrib/obs-opentelemetry/tracing"
 	nacos "github.com/kitex-contrib/registry-nacos/resolver"
 	"github.com/nacos-group/nacos-sdk-go/clients"
 	"github.com/nacos-group/nacos-sdk-go/common/constant"
@@ -43,13 +45,13 @@ func initComment() {
 	if err != nil {
 		klog.Fatalf("new consul client failed: %s", err.Error())
 	}
-	//// init OpenTelemetry
-	//provider.NewOpenTelemetryProvider(
-	//	provider.WithServiceName(global.ServerConfig.UserSrvInfo.Name),
-	//	provider.WithExportEndpoint(global.ServerConfig.OtelInfo.EndPoint),
-	//	provider.WithInsecure(),
-	//)
-
+	// init OpenTelemetry
+	provider.NewOpenTelemetryProvider(
+		provider.WithServiceName(global.ServerConfig.CommentSrvInfo.Name),
+		provider.WithExportEndpoint(global.ServerConfig.OtelInfo.EndPoint),
+		provider.WithInsecure(),
+	)
+	//circuitbreak.GenServiceCBKeyFunc()
 	// create a new client
 	c, err := commentservice.NewClient(
 		global.ServerConfig.CommentSrvInfo.Name,
@@ -58,7 +60,9 @@ func initComment() {
 		client.WithMuxConnection(1),                                // multiplexing
 		client.WithMiddleware(middleware.CommonMiddleware),
 		client.WithInstanceMW(middleware.ClientMiddleware),
-		//client.WithSuite(tracing.NewClientSuite()),
+		//client.WithCircuitBreaker(circuitbreak.NewCBSuite(circuitbreak.GenServiceCBKeyFunc)),
+
+		client.WithSuite(tracing.NewClientSuite()),
 		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: global.ServerConfig.CommentSrvInfo.Name}),
 	)
 	if err != nil {

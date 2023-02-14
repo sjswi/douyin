@@ -9,19 +9,19 @@ import (
 	"douyin_rpc/server/cmd/video/config"
 	"douyin_rpc/server/cmd/video/kitex_gen/video/feedservice"
 	"douyin_rpc/server/cmd/video/storage"
-	"github.com/go-redis/redis/v8"
+	"github.com/dtm-labs/rockscache"
 	"gorm.io/gorm"
 )
 
 var (
-	DB             *gorm.DB
-	ServerConfig   config.ServerConfig
-	NacosConfig    common.NacosConfig
-	Redis          *redis.Client
-	UserClient     userservice.Client
-	VideoClient    feedservice.Client
-	FavoriteClient favoriteservice.Client
-	CommentClient  commentservice.Client
-	RelationClient relationservice.Client
-	OSS            *storage.OSSClient
+	DB               *gorm.DB
+	ServerConfig     config.ServerConfig
+	NacosConfig      common.NacosConfig
+	UserClient       userservice.Client
+	VideoClient      feedservice.Client
+	FavoriteClient   favoriteservice.Client
+	CommentClient    commentservice.Client
+	RelationClient   relationservice.Client
+	OSS              *storage.OSSClient
+	RocksCacheClient *rockscache.Client
 )

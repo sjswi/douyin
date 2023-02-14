@@ -1,12 +1,16 @@
 package main
 
 import (
+	"context"
 	"douyin_rpc/server/cmd/favorite/constant"
+	"douyin_rpc/server/cmd/favorite/global"
 	"douyin_rpc/server/cmd/favorite/initialize"
 	"douyin_rpc/server/cmd/favorite/initialize/rpc"
 	favorite "douyin_rpc/server/cmd/favorite/kitex_gen/favorite/favoriteservice"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
+	"github.com/kitex-contrib/obs-opentelemetry/provider"
+	"github.com/kitex-contrib/obs-opentelemetry/tracing"
 	"log"
 	"net"
 )
@@ -17,12 +21,12 @@ func main() {
 	initialize.InitRedis()
 	initialize.InitLogger()
 	rpc.Init()
-	//p := provider.NewOpenTelemetryProvider(
-	//	provider.WithServiceName(constant.DefaultName+"_"+constant.SERVICEName),
-	//	provider.WithExportEndpoint("192.168.56.102:14268"),
-	//	provider.WithInsecure(),
-	//)
-	//defer p.Shutdown(context.Background())
+	p := provider.NewOpenTelemetryProvider(
+		provider.WithServiceName(constant.DefaultName+"_"+constant.SERVICEName),
+		provider.WithExportEndpoint(global.ServerConfig.OtelInfo.EndPoint),
+		provider.WithInsecure(),
+	)
+	defer p.Shutdown(context.Background())
 	addr, err := net.ResolveTCPAddr("tcp", "0.0.0.0:10002")
 	if err != nil {
 		return
@@ -31,7 +35,7 @@ func main() {
 		server.WithRegistry(r),
 		server.WithServiceAddr(addr),
 		server.WithRegistryInfo(info),
-		//server.WithSuite(tracing.NewServerSuite()),
+		server.WithSuite(tracing.NewServerSuite()),
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: constant.DefaultName + "_" + constant.SERVICEName}),
 	)
 

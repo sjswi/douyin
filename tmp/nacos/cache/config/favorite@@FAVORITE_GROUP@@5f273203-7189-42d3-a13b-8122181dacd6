@@ -2,7 +2,7 @@
   "name": "douyin_favorite",
   "host": "192.168.56.100",
   "otel": {
-    "endpoint": "http://192.168.56.102:14268/api/traces"
+    "endpoint": "192.168.56.102:4317"
   },
   "mysql": {
     "host": "192.168.56.102",

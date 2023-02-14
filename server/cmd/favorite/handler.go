@@ -106,6 +106,7 @@ func (s *FavoriteServiceImpl) FavoriteAction(ctx context.Context, req *favorite.
 	//		}
 	//	}
 	//}()
+	go model.DeleteCache()
 	return
 }
 

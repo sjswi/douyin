@@ -1,10 +1,15 @@
 package model
 
 import (
+	"douyin_rpc/server/cmd/relation/global"
 	"github.com/bwmarrin/snowflake"
+	"github.com/bytedance/sonic"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
+	"strconv"
+	"sync"
+	"time"
 )
 
 // Relation TODO
@@ -27,8 +32,25 @@ func (b *Relation) BeforeCreate(_ *gorm.DB) (err error) {
 	return nil
 }
 
-const RelationCachePrefix string = "relation:relation_"
+const RelationCachePrefix string = "relation:relation:"
 
+var mutex sync.Mutex
+var update_keys []string
+
+func DeleteCache() {
+	mutex.Lock()
+	temp := update_keys[:]
+	update_keys = update_keys[:0]
+	mutex.Unlock()
+	for {
+		err := global.RocksCacheClient.TagAsDeletedBatch(temp)
+		if err == nil {
+			break
+		}
+	}
+
+	return
+}
 func queryRelationByUserID(tx *gorm.DB, userID int64) ([]Relation, error) {
 	var relations []Relation
 	if err := tx.Table("relation").Where("exist=1").Where("type=1 or type=2").Where("user_id=?", userID).Find(&relations).Error; err != nil {
@@ -38,7 +60,32 @@ func queryRelationByUserID(tx *gorm.DB, userID int64) ([]Relation, error) {
 }
 
 func QueryRelationByUserIDWithCache(tx *gorm.DB, userID int64) ([]Relation, error) {
-	return queryRelationByUserID(tx, userID)
+	key := RelationCachePrefix + "User_ID_:" + strconv.FormatInt(userID, 10)
+	var relations []Relation
+	var err error
+	fetch, err := global.RocksCacheClient.Fetch(key, 1*time.Hour, func() (string, error) {
+		relations, err = queryRelationByUserID(tx, userID)
+		if err != nil {
+			return "", nil
+		}
+		data, err := sonic.Marshal(relations)
+		if err != nil {
+			return "", err
+		}
+		return string(data), nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	if relations != nil {
+		return relations, nil
+	}
+	err = sonic.Unmarshal([]byte(fetch), &relations)
+	if err != nil {
+		return nil, err
+	}
+	return relations, nil
+	//return queryRelationByUserID(tx, userID)
 	//key := RelationCachePrefix + "UserID_" + strconv.Itoa(int(userID))
 	//// 查看key是否存在
 	////不存在
@@ -109,51 +156,32 @@ func QueryRelationIsFriend(tx *gorm.DB, userId int64) ([]Relation, error) {
 	return returnR[:j], nil
 }
 func QueryRelationByTargetIDWithCache(tx *gorm.DB, targetID int64) ([]Relation, error) {
-	return queryRelationByTargetID(tx, targetID)
-	//key := RelationCachePrefix + "TargetID_" + strconv.Itoa(int(targetID))
-	//// 查看key是否存在
-	////不存在
-	//var result string
-	//var relations []Relation
-	//var err error
-	//if !cache.Exist(key) {
-	//	relations, err = queryRelationByTargetID(tx, targetID)
-	//	if err != nil {
-	//		return nil, err
-	//	}
-	//	// 从数据库查出，放进redis
-	//	err := cache.Set(key, relations)
-	//	if err != nil {
-	//		return nil, err
-	//	}
-	//	return relations, nil
-	//}
-	////TODO
-	//// lua脚本优化，保证原子性
-	//
-	////查询redis
-	//if result, err = cache.Get(key); err != nil {
-	//	// 极端情况：在判断存在后查询前过期了
-	//	if err.Error() == "redis: nil" {
-	//		relations, err = queryRelationByTargetID(tx, targetID)
-	//		if err != nil {
-	//			return nil, err
-	//		}
-	//		// 从数据库查出，放进redis
-	//		err := cache.Set(key, relations)
-	//		if err != nil {
-	//			return nil, err
-	//		}
-	//		return relations, nil
-	//	}
-	//	return nil, err
-	//}
-	//// 反序列化
-	//err = json.Unmarshal(strings.StringToBytes(result), &relations)
-	//if err != nil {
-	//	return nil, err
-	//}
-	//return relations, nil
+	key := RelationCachePrefix + "Target_ID:" + strconv.FormatInt(targetID, 10)
+	var relations []Relation
+	var err error
+	fetch, err := global.RocksCacheClient.Fetch(key, 1*time.Hour, func() (string, error) {
+		relations, err = queryRelationByTargetID(tx, targetID)
+		if err != nil {
+			return "", nil
+		}
+		data, err := sonic.Marshal(relations)
+		if err != nil {
+			return "", err
+		}
+		return string(data), nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	if relations != nil {
+		return relations, nil
+	}
+	err = sonic.Unmarshal([]byte(fetch), &relations)
+	if err != nil {
+		return nil, err
+	}
+	return relations, nil
+
 }
 
 func queryRelationByUserIDAndTargetID(tx *gorm.DB, userID, targetID int64) (*Relation, error) {
@@ -176,7 +204,32 @@ func CountRelation(tx *gorm.DB, userID int64) (friendCount, followCount, followe
 	return
 }
 func QueryRelationByUserIDAndTargetIDWithCache(tx *gorm.DB, userID, targetID int64) (*Relation, error) {
-	return queryRelationByUserIDAndTargetID(tx, userID, targetID)
+	key := RelationCachePrefix + "User_ID:" + strconv.FormatInt(userID, 10) + ":Target_ID:" + strconv.FormatInt(targetID, 10)
+	var relation *Relation
+	var err error
+	fetch, err := global.RocksCacheClient.Fetch(key, 1*time.Hour, func() (string, error) {
+		relation, err = queryRelationByUserIDAndTargetID(tx, userID, targetID)
+		if err != nil {
+			return "", nil
+		}
+		data, err := sonic.Marshal(relation)
+		if err != nil {
+			return "", err
+		}
+		return string(data), nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	if relation != nil {
+		return relation, nil
+	}
+	err = sonic.Unmarshal([]byte(fetch), &relation)
+	if err != nil {
+		return nil, err
+	}
+	return relation, nil
+	//return queryRelationByUserIDAndTargetID(tx, userID, targetID)
 	//key := RelationCachePrefix + "UserID_" + strconv.Itoa(int(userID)) + "_TargetID_" + strconv.Itoa(int(targetID))
 	//var result string
 	//var relation *Relation
@@ -227,6 +280,7 @@ func UpdateRelation(tx *gorm.DB, relation Relation) error {
 	if err := tx.Save(&relation).Error; err != nil {
 		return err
 	}
+	updateKeys(relation)
 	return nil
 }
 
@@ -234,9 +288,19 @@ func CreateRelation(tx *gorm.DB, relation Relation) error {
 	if err := tx.Table("relation").Create(&relation).Error; err != nil {
 		return err
 	}
+	updateKeys(relation)
 	return nil
 }
-
+func updateKeys(relation Relation) {
+	key1 := RelationCachePrefix + "User_ID:" + strconv.FormatInt(relation.UserID, 10) + ":Target_ID:" + strconv.FormatInt(relation.TargetID, 10)
+	key2 := RelationCachePrefix + "User_ID_:" + strconv.FormatInt(relation.UserID, 10)
+	key3 := RelationCachePrefix + "User_ID_:" + strconv.FormatInt(relation.TargetID, 10)
+	key4 := RelationCachePrefix + "Target_ID:" + strconv.FormatInt(relation.TargetID, 10)
+	key5 := RelationCachePrefix + "Target_ID:" + strconv.FormatInt(relation.UserID, 10)
+	mutex.Lock()
+	update_keys = append(update_keys, []string{key1, key4, key3, key2, key5}...)
+	mutex.Unlock()
+}
 func UpdateOrCreateRelation(tx *gorm.DB, relation Relation) error {
 	if err := tx.Table("relation").Clauses(clause.OnConflict{
 		Columns:      []clause.Column{{Name: "user_id"}, {Name: "target_id"}},
@@ -249,5 +313,6 @@ func UpdateOrCreateRelation(tx *gorm.DB, relation Relation) error {
 	}).Create(&relation).Error; err != nil {
 		return err
 	}
+	updateKeys(relation)
 	return nil
 }

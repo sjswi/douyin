@@ -82,6 +82,7 @@ func (s *UserServiceImpl) Register(ctx context.Context, req *user.RegisterReques
 
 		return nil, err
 	}
+	go model.DeleteCache()
 	return &user.RegisterResponse{
 		StatusCode: 0,
 		StatusMsg:  "",

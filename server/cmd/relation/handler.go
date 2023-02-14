@@ -134,20 +134,7 @@ func (s *RelationServiceImpl) Action(ctx context.Context, req *relation.Relation
 		tx.Rollback()
 		return
 	}
-	//go func() {
-	//	key1 := models.UserCachePrefix + "ID_" + strconv.Itoa(int(user.ID))
-	//	key2 := models.UserCachePrefix + "Name_" + user.Name
-	//	key3 := models.UserCachePrefix + "ID_" + strconv.Itoa(int(targetUser.ID))
-	//	key4 := models.UserCachePrefix + "Name_" + targetUser.Name
-	//	key5 := models.RelationCachePrefix + "UserID_" + strconv.Itoa(int(user.ID)) + "_TargetID_" + strconv.Itoa(int(targetUser.ID))
-	//	key6 := models.RelationCachePrefix + "UserID_" + strconv.Itoa(int(targetUser.ID)) + "_TargetID_" + strconv.Itoa(int(user.ID))
-	//	for {
-	//		err := cache.Delete([]string{key1, key2, key3, key4, key6, key5})
-	//		if err == nil {
-	//			break
-	//		}
-	//	}
-	//}()
+	go model.DeleteCache()
 	return
 }
 func getList(ctx context.Context, userId int64, userType int, authId int64) ([]*relation.User, error) {

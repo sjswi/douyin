@@ -3,13 +3,13 @@ package global
 import (
 	common "douyin_rpc/common/config"
 	"douyin_rpc/server/cmd/user/config"
-	"github.com/go-redis/redis/v8"
+	"github.com/dtm-labs/rockscache"
 	"gorm.io/gorm"
 )
 
 var (
-	DB           *gorm.DB
-	ServerConfig config.ServerConfig
-	NacosConfig  common.NacosConfig
-	Redis        *redis.Client
+	DB               *gorm.DB
+	ServerConfig     config.ServerConfig
+	NacosConfig      common.NacosConfig
+	RocksCacheClient *rockscache.Client
 )

@@ -45,7 +45,7 @@ const (
 	FreePortAddress  = "localhost:0"
 	SERVICEName      = "user"
 	DefaultLicNumber = "100000000001"
-	DefaultName      = "DouYin"
+	DefaultName      = "douyin"
 	DefaultGender    = 1
 	DefaultBirth     = 631152000000
 )

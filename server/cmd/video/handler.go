@@ -21,11 +21,20 @@ type FeedServiceImpl struct{}
 // Feed implements the FeedServiceImpl interface.
 func (s *FeedServiceImpl) Feed(ctx context.Context, req *video.FeedRequest) (resp *video.FeedResponse, err error) {
 	tx := global.DB.Debug()
-	latestTime := time.Unix(req.LatestTime, 0)
-	if err != nil {
-		return nil, err
+	var videos []model.Video
+	if req.LatestTime == -1 {
+		videos, err = model.FeedWithoutTime(tx)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		latestTime := time.Unix(req.LatestTime, 0)
+		if err != nil {
+			return nil, err
+		}
+		videos, err = model.Feed(tx, latestTime)
 	}
-	videos, err := model.Feed(tx, latestTime)
+
 	if err != nil {
 		return
 	}
@@ -42,7 +51,7 @@ func (s *FeedServiceImpl) Feed(ctx context.Context, req *video.FeedRequest) (res
 			author, err1 := global.UserClient.GetUser(ctx, &user.GetUserRequest{
 				UserId:    videos[i].AuthorID,
 				Username:  "",
-				QueryType: 0, // 0根据id查询，1根据名字查询
+				QueryType: 1, // 0根据id查询，1根据名字查询
 			})
 			if err1 != nil {
 				err = err1
@@ -70,7 +79,7 @@ func (s *FeedServiceImpl) Feed(ctx context.Context, req *video.FeedRequest) (res
 
 			go func(followCount, followerCount *int64) {
 				// 查询FollowCount和FollowerCount
-				defer wg.Done()
+				defer wg1.Done()
 				count, err1 := global.RelationClient.GetCount(ctx, &relation2.GetCountRequest{UserId: author.User.Id})
 				if err1 != nil {
 					err = err1
@@ -91,7 +100,7 @@ func (s *FeedServiceImpl) Feed(ctx context.Context, req *video.FeedRequest) (res
 			}(&resp.VideoList[i].FavoriteCount)
 			go func(commentCount *int64) {
 				// 查询CommentCount
-				defer wg.Done()
+				defer wg1.Done()
 				count, err1 := global.CommentClient.GetCommentCount(ctx, &comment.GetCommentCountRequest{VideoId: videos[i].ID})
 				if err1 != nil {
 					err = err1
@@ -101,7 +110,7 @@ func (s *FeedServiceImpl) Feed(ctx context.Context, req *video.FeedRequest) (res
 			}(&resp.VideoList[i].CommentCount)
 			go func(isFavorite *bool) {
 				// 查询登录用户是否点赞该视频
-				defer wg.Done()
+				defer wg1.Done()
 				if req.AuthId != -1 {
 					cache, err1 := global.FavoriteClient.GetFavorite(ctx, &favorite.GetFavoriteRequest{
 						Id:        0,
@@ -121,14 +130,14 @@ func (s *FeedServiceImpl) Feed(ctx context.Context, req *video.FeedRequest) (res
 			}(&resp.VideoList[i].IsFavorite)
 			go func(isFollow *bool) {
 				//查询登录用户是否关注该视频作者
-				defer wg.Done()
+				defer wg1.Done()
 				if req.AuthId != -1 {
 					relation1, err1 := global.RelationClient.GetRelation(ctx, &relation2.GetRelationRequest{
 						Id:           0,
 						UserId:       req.AuthId,
 						TargetId:     author.User.Id,
 						RelationType: 0,
-						QueryType:    1,
+						QueryType:    4,
 					})
 					if err1 != nil {
 

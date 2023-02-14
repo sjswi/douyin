@@ -117,7 +117,6 @@ func _feed0Mw() []app.HandlerFunc {
 	// your code...
 	return []app.HandlerFunc{
 		middleware.Recovery(),
-		middleware.JWTAuth(),
 	}
 }
 

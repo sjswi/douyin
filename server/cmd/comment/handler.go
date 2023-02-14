@@ -99,22 +99,7 @@ func (s *CommentServiceImpl) CommentAction(ctx context.Context, req *comment.Com
 
 		return
 	}
-	//TODO
-	// 事务提交后删除缓存
-	//go func() {
-	//	key1 := models.CommentCachePrefix + "ID_" + strconv.Itoa(int(c.Comment.ID))
-	//	key2 := models.CommentCachePrefix + "UserID_" + strconv.Itoa(int(c.Comment.User.ID))
-	//	key3 := models.CommentCachePrefix + "VideoID_" + strconv.Itoa(int(c.VideoId))
-	//	key4 := models.VideoCachePrefix + "AuthorID_" + strconv.Itoa(videoAuthorId)
-	//	key5 := models.VideoCachePrefix + "ID_" + strconv.Itoa(int(c.VideoId))
-	//	for {
-	//		err := cache.Delete([]string{key1, key2, key3, key4, key5})
-	//		if err == nil {
-	//			break
-	//		}
-	//	}
-	//}()
-
+	go model.DeleteCache()
 	return
 }
 

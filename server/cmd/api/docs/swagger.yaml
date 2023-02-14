@@ -2,6 +2,7 @@ basePath: /
 definitions:
   api.Code:
     enum:
+    - 0
     - 1
     - 2
     - 3
@@ -12,6 +13,7 @@ definitions:
     - Code_ParamInvalid
     - Code_DBError
     - Code_ServerError
+    - Code_ErrorRequest
   api.RelationFollowListResponse:
     properties:
       status_code:
@@ -52,7 +54,7 @@ definitions:
       follower_count:
         type: integer
       id:
-        type: integer
+        type: string
       is_follow:
         type: boolean
       name:
@@ -60,6 +62,7 @@ definitions:
     type: object
   comment.Code:
     enum:
+    - 0
     - 1
     - 2
     - 3
@@ -70,6 +73,7 @@ definitions:
     - Code_ParamInvalid
     - Code_DBError
     - Code_ServerError
+    - Code_ErrorRequest
   comment.Comment:
     properties:
       content:
@@ -77,7 +81,7 @@ definitions:
       create_date:
         type: string
       id:
-        type: integer
+        type: string
       user:
         $ref: '#/definitions/comment.User'
     type: object
@@ -108,7 +112,7 @@ definitions:
       follower_count:
         type: integer
       id:
-        type: integer
+        type: string
       is_follow:
         type: boolean
       name:
@@ -116,6 +120,7 @@ definitions:
     type: object
   favorite.Code:
     enum:
+    - 0
     - 1
     - 2
     - 3
@@ -126,6 +131,7 @@ definitions:
     - Code_ParamInvalid
     - Code_DBError
     - Code_ServerError
+    - Code_ErrorRequest
   favorite.FavoriteActionRequest:
     properties:
       action_type:
@@ -153,7 +159,7 @@ definitions:
       follower_count:
         type: integer
       id:
-        type: integer
+        type: string
       is_follow:
         type: boolean
       name:
@@ -170,7 +176,7 @@ definitions:
       favorite_count:
         type: integer
       id:
-        type: integer
+        type: string
       is_favorite:
         type: boolean
       play_url:
@@ -180,6 +186,7 @@ definitions:
     type: object
   message.Code:
     enum:
+    - 0
     - 1
     - 2
     - 3
@@ -190,14 +197,19 @@ definitions:
     - Code_ParamInvalid
     - Code_DBError
     - Code_ServerError
+    - Code_ErrorRequest
   message.Message:
     properties:
       content:
         type: string
       create_time:
         type: string
+      from_user_id:
+        type: string
       id:
-        type: integer
+        type: string
+      to_user_id:
+        type: string
     type: object
   message.MessageActionResponse:
     properties:
@@ -219,6 +231,7 @@ definitions:
     type: object
   relation.Code:
     enum:
+    - 0
     - 1
     - 2
     - 3
@@ -229,6 +242,7 @@ definitions:
     - Code_ParamInvalid
     - Code_DBError
     - Code_ServerError
+    - Code_ErrorRequest
   relation.RelationActionResponse:
     properties:
       status_code:
@@ -238,6 +252,7 @@ definitions:
     type: object
   user.Code:
     enum:
+    - 0
     - 1
     - 2
     - 3
@@ -248,6 +263,7 @@ definitions:
     - Code_ParamInvalid
     - Code_DBError
     - Code_ServerError
+    - Code_ErrorRequest
   user.LoginResponse:
     properties:
       status_code:
@@ -273,7 +289,7 @@ definitions:
       follower_count:
         type: integer
       id:
-        type: integer
+        type: string
       is_follow:
         type: boolean
       name:
@@ -290,6 +306,7 @@ definitions:
     type: object
   video.Code:
     enum:
+    - 0
     - 1
     - 2
     - 3
@@ -300,6 +317,7 @@ definitions:
     - Code_ParamInvalid
     - Code_DBError
     - Code_ServerError
+    - Code_ErrorRequest
   video.FeedResponse:
     properties:
       next_time:
@@ -338,7 +356,7 @@ definitions:
       follower_count:
         type: integer
       id:
-        type: integer
+        type: string
       is_follow:
         type: boolean
       name:
@@ -355,7 +373,7 @@ definitions:
       favorite_count:
         type: integer
       id:
-        type: integer
+        type: string
       is_favorite:
         type: boolean
       play_url:
@@ -506,7 +524,7 @@ paths:
       consumes:
       - application/x-json-stream
       parameters:
-      - description: 用户id
+      - description: 视频的最新时间
         in: query
         name: latest_time
         type: integer

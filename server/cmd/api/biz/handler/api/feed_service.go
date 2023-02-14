@@ -18,7 +18,7 @@ import (
 // @Tags feed
 // @version 1.0
 // @Accept application/x-json-stream
-// @Param latest_time query int false "用户id"
+// @Param latest_time query int false "视频的最新时间"
 // @Param token query string false "token"
 // @Success 200 object video.FeedResponse 成功后返回值
 // @Failure 409 object video.FeedResponse 失败后返回值
@@ -32,19 +32,25 @@ func Feed(ctx context.Context, c *app.RequestContext) {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
+
 	value, exist := c.Get("accountID")
 	if !exist {
-		return
+		value = int64(-1)
 	}
-	parse, err := time.Parse("2006-01-02 15:04:05", req.LatestTime)
-	if err != nil {
-		return
+	latest_time := int64(-1)
+	parse, err1 := time.Parse("2006-01-02 15:04:05", req.LatestTime)
+	if err1 == nil {
+		latest_time = parse.Unix()
 	}
 	resp, err := global.VideoClient.Feed(ctx, &video.FeedRequest{
 		AuthId:     value.(int64),
-		LatestTime: parse.Unix(),
+		LatestTime: latest_time,
 	})
 	if err != nil {
+		resp.StatusCode = 4
+
+		resp.StatusMsg = err.Error()
+		c.JSON(consts.StatusConflict, resp)
 		return
 	}
 	//resp := new(api.FeedResponse)

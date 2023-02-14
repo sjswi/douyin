@@ -4,43 +4,48 @@
     <option name="openedFilesInfos">
       <list>
         <OpenedFileInfo>
-          <option name="caretOffset" value="2227" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/message/handler.go" />
+          <option name="caretOffset" value="1800" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/user/handler.go" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="293" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/message/main.go" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="1826" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/message/initialize/nacos.go" />
+          <option name="caretOffset" value="2488" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/user/model/user.go" />
         </OpenedFileInfo>
         <OpenedFileInfo>
           <option name="caretOffset" value="0" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/api/biz/handler/api/publish_service.go" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="6221" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/favorite/handler.go" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="0" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/favorite/main.go" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="fileUrl" value="das://29704e40-10e2-4f06-9fe3-5215f648da56/schema/douyin_user/table/user" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="5031" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/message/model/message.go" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="32897" />
-          <option name="fileUrl" value="file://$USER_HOME$/golang/go/src/runtime/panic.go" />
+          <option name="caretOffset" value="4216" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/favorite/model/favorite.go" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="2697" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/api/biz/handler/api/message_service.go" />
+          <option name="caretOffset" value="2645" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/favorite/handler.go" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="6618" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/comment/handler.go" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="5547" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/comment/model/comment.go" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="0" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/server/cmd/relation/handler.go" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="699" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/otel_config.yaml" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="233" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/prometheus_config.yaml" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="0" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/README.md" />
         </OpenedFileInfo>
       </list>
     </option>

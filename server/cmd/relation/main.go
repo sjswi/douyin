@@ -1,12 +1,15 @@
 package main
 
 import (
+	"context"
 	"douyin_rpc/server/cmd/relation/constant"
+	"douyin_rpc/server/cmd/relation/global"
 	"douyin_rpc/server/cmd/relation/initialize"
 	"douyin_rpc/server/cmd/relation/initialize/rpc"
 	relation "douyin_rpc/server/cmd/relation/kitex_gen/relation/relationservice"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
+	"github.com/kitex-contrib/obs-opentelemetry/provider"
 	"github.com/kitex-contrib/obs-opentelemetry/tracing"
 	"log"
 	"net"
@@ -18,12 +21,12 @@ func main() {
 	initialize.InitRedis()
 	initialize.InitLogger()
 	rpc.Init()
-	//p := provider.NewOpenTelemetryProvider(
-	//	provider.WithServiceName(constant.DefaultName+"_"+constant.SERVICEName),
-	//	provider.WithExportEndpoint("http://192.168.56.102:14268/api/traces"),
-	//	provider.WithInsecure(),
-	//)
-	//defer p.Shutdown(context.Background())
+	p := provider.NewOpenTelemetryProvider(
+		provider.WithServiceName(constant.DefaultName+"_"+constant.SERVICEName),
+		provider.WithExportEndpoint(global.ServerConfig.OtelInfo.EndPoint),
+		provider.WithInsecure(),
+	)
+	defer p.Shutdown(context.Background())
 	addr, err := net.ResolveTCPAddr("tcp", "0.0.0.0:10004")
 	if err != nil {
 		return

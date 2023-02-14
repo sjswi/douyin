@@ -223,7 +223,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "用户id",
+                        "description": "视频的最新时间",
                         "name": "latest_time",
                         "in": "query"
                     },
@@ -775,6 +775,7 @@ const docTemplate = `{
         "api.Code": {
             "type": "integer",
             "enum": [
+                0,
                 1,
                 2,
                 3,
@@ -784,7 +785,8 @@ const docTemplate = `{
                 "Code_Success",
                 "Code_ParamInvalid",
                 "Code_DBError",
-                "Code_ServerError"
+                "Code_ServerError",
+                "Code_ErrorRequest"
             ]
         },
         "api.RelationFollowListResponse": {
@@ -848,7 +850,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "is_follow": {
                     "type": "boolean"
@@ -861,6 +863,7 @@ const docTemplate = `{
         "comment.Code": {
             "type": "integer",
             "enum": [
+                0,
                 1,
                 2,
                 3,
@@ -870,7 +873,8 @@ const docTemplate = `{
                 "Code_Success",
                 "Code_ParamInvalid",
                 "Code_DBError",
-                "Code_ServerError"
+                "Code_ServerError",
+                "Code_ErrorRequest"
             ]
         },
         "comment.Comment": {
@@ -883,7 +887,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "user": {
                     "$ref": "#/definitions/comment.User"
@@ -931,7 +935,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "is_follow": {
                     "type": "boolean"
@@ -944,6 +948,7 @@ const docTemplate = `{
         "favorite.Code": {
             "type": "integer",
             "enum": [
+                0,
                 1,
                 2,
                 3,
@@ -953,7 +958,8 @@ const docTemplate = `{
                 "Code_Success",
                 "Code_ParamInvalid",
                 "Code_DBError",
-                "Code_ServerError"
+                "Code_ServerError",
+                "Code_ErrorRequest"
             ]
         },
         "favorite.FavoriteActionRequest": {
@@ -997,7 +1003,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "is_follow": {
                     "type": "boolean"
@@ -1023,7 +1029,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "is_favorite": {
                     "type": "boolean"
@@ -1039,6 +1045,7 @@ const docTemplate = `{
         "message.Code": {
             "type": "integer",
             "enum": [
+                0,
                 1,
                 2,
                 3,
@@ -1048,7 +1055,8 @@ const docTemplate = `{
                 "Code_Success",
                 "Code_ParamInvalid",
                 "Code_DBError",
-                "Code_ServerError"
+                "Code_ServerError",
+                "Code_ErrorRequest"
             ]
         },
         "message.Message": {
@@ -1060,8 +1068,14 @@ const docTemplate = `{
                 "create_time": {
                     "type": "string"
                 },
+                "from_user_id": {
+                    "type": "string"
+                },
                 "id": {
-                    "type": "integer"
+                    "type": "string"
+                },
+                "to_user_id": {
+                    "type": "string"
                 }
             }
         },
@@ -1096,6 +1110,7 @@ const docTemplate = `{
         "relation.Code": {
             "type": "integer",
             "enum": [
+                0,
                 1,
                 2,
                 3,
@@ -1105,7 +1120,8 @@ const docTemplate = `{
                 "Code_Success",
                 "Code_ParamInvalid",
                 "Code_DBError",
-                "Code_ServerError"
+                "Code_ServerError",
+                "Code_ErrorRequest"
             ]
         },
         "relation.RelationActionResponse": {
@@ -1122,6 +1138,7 @@ const docTemplate = `{
         "user.Code": {
             "type": "integer",
             "enum": [
+                0,
                 1,
                 2,
                 3,
@@ -1131,7 +1148,8 @@ const docTemplate = `{
                 "Code_Success",
                 "Code_ParamInvalid",
                 "Code_DBError",
-                "Code_ServerError"
+                "Code_ServerError",
+                "Code_ErrorRequest"
             ]
         },
         "user.LoginResponse": {
@@ -1172,7 +1190,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "is_follow": {
                     "type": "boolean"
@@ -1199,6 +1217,7 @@ const docTemplate = `{
         "video.Code": {
             "type": "integer",
             "enum": [
+                0,
                 1,
                 2,
                 3,
@@ -1208,7 +1227,8 @@ const docTemplate = `{
                 "Code_Success",
                 "Code_ParamInvalid",
                 "Code_DBError",
-                "Code_ServerError"
+                "Code_ServerError",
+                "Code_ErrorRequest"
             ]
         },
         "video.FeedResponse": {
@@ -1269,7 +1289,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "is_follow": {
                     "type": "boolean"
@@ -1295,7 +1315,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "is_favorite": {
                     "type": "boolean"

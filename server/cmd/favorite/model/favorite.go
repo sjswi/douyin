@@ -1,10 +1,15 @@
 package model
 
 import (
+	"douyin_rpc/server/cmd/favorite/global"
 	"github.com/bwmarrin/snowflake"
+	"github.com/bytedance/sonic"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
+	"strconv"
+	"sync"
+	"time"
 )
 
 type Favorite struct {
@@ -24,7 +29,7 @@ func (b *Favorite) BeforeCreate(_ *gorm.DB) (err error) {
 	return nil
 }
 
-const FavoriteCachePrefix string = "favorite:favorite_"
+const FavoriteCachePrefix string = "favorite:favorite:"
 
 func queryFavoriteByUserID(tx *gorm.DB, userID int64) ([]Favorite, error) {
 	var Favorites []Favorite
@@ -35,51 +40,32 @@ func queryFavoriteByUserID(tx *gorm.DB, userID int64) ([]Favorite, error) {
 }
 
 func QueryFavoriteByUserIDWithCache(tx *gorm.DB, userID int64) ([]Favorite, error) {
-	return queryFavoriteByUserID(tx, userID)
-	//key := FavoriteCachePrefix + "UserID_" + strconv.Itoa(int(userID))
-	//// 查看key是否存在
-	////不存在
-	//
-	//var result string
-	//var Favorites []Favorite
-	//var err error
-	//if !cache.Exist(key) {
-	//	Favorites, err = queryFavoriteByUserID(tx, userID)
-	//	if err != nil {
-	//		return nil, err
-	//	}
-	//	// 从数据库查出，放进redis
-	//	err := cache.Set(key, Favorites)
-	//	if err != nil {
-	//		return nil, err
-	//	}
-	//	return Favorites, nil
-	//}
-	////TODO
-	//// lua脚本优化，保证原子性
-	////查询redis
-	//if result, err = cache.Get(key); err != nil {
-	//	// 极端情况：在判断存在后查询前过期了
-	//	if err.Error() == "redis: nil" {
-	//		Favorites, err = queryFavoriteByUserID(tx, userID)
-	//		if err != nil {
-	//			return nil, err
-	//		}
-	//		// 从数据库查出，放进redis
-	//		err := cache.Set(key, Favorites)
-	//		if err != nil {
-	//			return nil, err
-	//		}
-	//		return Favorites, nil
-	//	}
-	//	return nil, err
-	//}
-	//// 反序列化
-	//err = json.Unmarshal(strings.StringToBytes(result), &Favorites)
-	//if err != nil {
-	//	return nil, err
-	//}
-	//return Favorites, nil
+	key := FavoriteCachePrefix + "User_ID_::" + strconv.FormatInt(userID, 10)
+	var favorites []Favorite
+	var err error
+	fetch, err := global.RocksCacheClient.Fetch(key, 1*time.Hour, func() (string, error) {
+		favorites, err = queryFavoriteByUserID(tx, userID)
+		if err != nil {
+			return "", err
+		}
+		data, err := sonic.Marshal(favorites)
+		if err != nil {
+			return "", err
+		}
+		return string(data), nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	if favorites != nil {
+		return favorites, nil
+	}
+	err = sonic.Unmarshal([]byte(fetch), &favorites)
+	if err != nil {
+		return nil, err
+	}
+	return favorites, nil
+
 }
 
 func queryFavoriteByVideoID(tx *gorm.DB, videoID int64) ([]Favorite, error) {
@@ -97,51 +83,32 @@ func CountFavoriteByVideoID(tx *gorm.DB, videoID int64) (int64, error) {
 	return count, nil
 }
 func QueryFavoriteByVideoIDWithCache(tx *gorm.DB, videoID int64) ([]Favorite, error) {
-	return queryFavoriteByVideoID(tx, videoID)
-	//key := FavoriteCachePrefix + "videoID_" + strconv.Itoa(int(videoID))
-	//// 查看key是否存在
-	////不存在
-	//var result string
-	//var Favorites []Favorite
-	//var err error
-	//if !cache.Exist(key) {
-	//	Favorites, err = queryFavoriteByVideoID(tx, videoID)
-	//	if err != nil {
-	//		return nil, err
-	//	}
-	//	// 从数据库查出，放进redis
-	//	err := cache.Set(key, Favorites)
-	//	if err != nil {
-	//		return nil, err
-	//	}
-	//	return Favorites, nil
-	//}
-	////TODO
-	//// lua脚本优化，保证原子性
-	//
-	////查询redis
-	//if result, err = cache.Get(key); err != nil {
-	//	// 极端情况：在判断存在后查询前过期了
-	//	if err.Error() == "redis: nil" {
-	//		Favorites, err = queryFavoriteByVideoID(tx, videoID)
-	//		if err != nil {
-	//			return nil, err
-	//		}
-	//		// 从数据库查出，放进redis
-	//		err := cache.Set(key, Favorites)
-	//		if err != nil {
-	//			return nil, err
-	//		}
-	//		return Favorites, nil
-	//	}
-	//	return nil, err
-	//}
-	//// 反序列化
-	//err = json.Unmarshal(strings.StringToBytes(result), &Favorites)
-	//if err != nil {
-	//	return nil, err
-	//}
-	//return Favorites, nil
+	key := FavoriteCachePrefix + "Video_ID:" + strconv.FormatInt(videoID, 10)
+	var favorites []Favorite
+	var err error
+	fetch, err := global.RocksCacheClient.Fetch(key, 1*time.Hour, func() (string, error) {
+		favorites, err = queryFavoriteByVideoID(tx, videoID)
+		if err != nil {
+			return "", err
+		}
+		data, err := sonic.Marshal(favorites)
+		if err != nil {
+			return "", err
+		}
+		return string(data), nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	if favorites != nil {
+		return favorites, nil
+	}
+	err = sonic.Unmarshal([]byte(fetch), &favorites)
+	if err != nil {
+		return nil, err
+	}
+	return favorites, nil
+
 }
 
 func queryFavoriteByUserIDAndVideoID(tx *gorm.DB, userID, videoID int64) (*Favorite, error) {
@@ -153,66 +120,75 @@ func queryFavoriteByUserIDAndVideoID(tx *gorm.DB, userID, videoID int64) (*Favor
 }
 
 func QueryFavoriteByUserIDAndVideoIDWithCache(tx *gorm.DB, userID, videoID int64) (*Favorite, error) {
-	return queryFavoriteByUserIDAndVideoID(tx, userID, videoID)
-	//key := FavoriteCachePrefix + "UserID_" + strconv.Itoa(int(userID)) + "_VideoID_" + strconv.Itoa(int(videoID))
-	//var result string
-	//var Favorite *Favorite
-	//var err error
-	//// 查看key是否存在
-	////不存在
-	//if !cache.Exist(key) {
-	//	Favorite, err = queryFavoriteByUserIDAndVideoID(tx, userID, videoID)
-	//	if err != nil {
-	//		return nil, err
-	//	}
-	//	// 从数据库查出，放进redis
-	//	err := cache.Set(key, Favorite)
-	//	if err != nil {
-	//		return nil, err
-	//	}
-	//	return Favorite, nil
-	//}
-	////TODO
-	//// lua脚本优化，保证原子性
-	//
-	////查询redis
-	//if result, err = cache.Get(key); err != nil {
-	//	// 极端情况：在判断存在后查询前过期了
-	//	if err.Error() == "redis: nil" {
-	//		Favorite, err = queryFavoriteByUserIDAndVideoID(tx, userID, videoID)
-	//		if err != nil {
-	//			return nil, err
-	//		}
-	//		// 从数据库查出，放进redis
-	//		err := cache.Set(key, Favorite)
-	//		if err != nil {
-	//			return nil, err
-	//		}
-	//		return Favorite, nil
-	//	}
-	//	return nil, err
-	//}
-	//// 反序列化
-	//err = json.Unmarshal(strings.StringToBytes(result), &Favorite)
-	//if err != nil {
-	//	return nil, err
-	//}
-	//return Favorite, nil
+	key := FavoriteCachePrefix + "User_ID:" + strconv.FormatInt(userID, 10) + ":Video_ID:" + strconv.FormatInt(videoID, 10)
+	var favorite *Favorite
+	var err error
+	fetch, err := global.RocksCacheClient.Fetch(key, 1*time.Hour, func() (string, error) {
+		favorite, err = queryFavoriteByUserIDAndVideoID(tx, userID, videoID)
+		if err != nil {
+			return "", err
+		}
+		data, err := sonic.Marshal(favorite)
+		if err != nil {
+			return "", err
+		}
+		return string(data), nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	if favorite != nil {
+		return favorite, nil
+	}
+	err = sonic.Unmarshal([]byte(fetch), &favorite)
+	if err != nil {
+		return nil, err
+	}
+	return favorite, nil
+
 }
 
+var mutex sync.Mutex
+var update_keys []string
+
+func DeleteCache() {
+	mutex.Lock()
+	temp := update_keys[:]
+	update_keys = update_keys[:0]
+	mutex.Unlock()
+	for {
+		err := global.RocksCacheClient.TagAsDeletedBatch(temp)
+		if err == nil {
+			break
+		}
+	}
+
+	return
+}
 func UpdateFavorite(tx *gorm.DB, favorite Favorite) error {
 	//TODO
 	// 删除缓存
 	if err := tx.Save(&favorite).Error; err != nil {
 		return err
 	}
+	updateKeys(favorite)
 	return nil
 }
-
+func updateKeys(favorite Favorite) {
+	key1 := FavoriteCachePrefix + "User_ID:" + strconv.FormatInt(favorite.UserID, 10) + ":Video_ID:" + strconv.FormatInt(favorite.VideoID, 10)
+	key2 := FavoriteCachePrefix + "User_ID_:" + strconv.FormatInt(favorite.UserID, 10)
+	key3 := FavoriteCachePrefix + "User_ID_:" + strconv.FormatInt(favorite.VideoID, 10)
+	key4 := FavoriteCachePrefix + "Video_ID:" + strconv.FormatInt(favorite.VideoID, 10)
+	key5 := FavoriteCachePrefix + "Video_ID:" + strconv.FormatInt(favorite.UserID, 10)
+	mutex.Lock()
+	update_keys = append(update_keys, []string{key1, key4, key3, key2, key5}...)
+	mutex.Unlock()
+}
 func CreateFavorite(tx *gorm.DB, favorite Favorite) error {
 	if err := tx.Table("favorite").Create(&favorite).Error; err != nil {
 		return err
 	}
+	updateKeys(favorite)
 	return nil
 }
 
@@ -228,5 +204,6 @@ func UpdateOrCreateFavorite(tx *gorm.DB, favorite Favorite) error {
 	}).Create(&favorite).Error; err != nil {
 		return err
 	}
+	updateKeys(favorite)
 	return nil
 }
